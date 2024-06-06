@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.core.mapper.GasTourReconcileMapper">
+
+    <resultMap type="GasTourReconcile" id="GasTourReconcileResult">
+        <result property="id"    column="id"    />
+        <result property="gasId"    column="gas_id"    />
+        <result property="tourPerson"    column="tour_person"    />
+        <result property="tourTime"    column="tour_time"    />
+        <result property="addLiquidMeasureCount"    column="add_liquid_measure_count"    />
+        <result property="amountCount"    column="amount_count"    />
+        <result property="amountReceivable"    column="amount_receivable"    />
+        <result property="fundsReceived"    column="funds_received"    />
+        <result property="dealCount"    column="deal_count"    />
+        <result property="collectionChannelSummary"    column="collection_channel_summary"    />
+        <result property="gunNumberSummary"    column="gun_number_summary"    />
+        <result property="groupSummary"    column="group_summary"    />
+        <result property="fleetSummary"    column="fleet_summary"    />
+        <result property="unitPriceSummary"    column="unit_price_summary"    />
+        <result property="inventory"    column="inventory"    />
+        <result property="leaderSignature"    column="leader_signature"    />
+        <result property="agentSignature"    column="agent_signature"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="isDeleted"    column="is_deleted"    />
+    </resultMap>
+
+    <sql id="selectGasTourReconcileVo">
+        select id, gas_id, tour_person, tour_time, add_liquid_measure_count, amount_count, amount_receivable, funds_received, deal_count, collection_channel_summary, gun_number_summary, group_summary, fleet_summary, unit_price_summary, inventory, leader_signature, agent_signature, create_user, create_time, update_time, update_user, is_deleted from gas_tour_reconcile
+    </sql>
+
+    <select id="selectGasTourReconcileList" parameterType="GasTourReconcile" resultMap="GasTourReconcileResult">
+        <include refid="selectGasTourReconcileVo"/>
+        <where>
+            <if test="gasId != null  and gasId != ''"> and gas_id = #{gasId}</if>
+            <if test="tourPerson != null  and tourPerson != ''"> and tour_person = #{tourPerson}</if>
+            <if test="tourTime != null  and tourTime != ''"> and tour_time = #{tourTime}</if>
+            <if test="addLiquidMeasureCount != null  and addLiquidMeasureCount != ''"> and add_liquid_measure_count = #{addLiquidMeasureCount}</if>
+            <if test="amountCount != null  and amountCount != ''"> and amount_count = #{amountCount}</if>
+            <if test="amountReceivable != null  and amountReceivable != ''"> and amount_receivable = #{amountReceivable}</if>
+            <if test="fundsReceived != null  and fundsReceived != ''"> and funds_received = #{fundsReceived}</if>
+            <if test="dealCount != null  and dealCount != ''"> and deal_count = #{dealCount}</if>
+            <if test="collectionChannelSummary != null  and collectionChannelSummary != ''"> and collection_channel_summary = #{collectionChannelSummary}</if>
+            <if test="gunNumberSummary != null  and gunNumberSummary != ''"> and gun_number_summary = #{gunNumberSummary}</if>
+            <if test="groupSummary != null  and groupSummary != ''"> and group_summary = #{groupSummary}</if>
+            <if test="fleetSummary != null  and fleetSummary != ''"> and fleet_summary = #{fleetSummary}</if>
+            <if test="unitPriceSummary != null  and unitPriceSummary != ''"> and unit_price_summary = #{unitPriceSummary}</if>
+            <if test="inventory != null  and inventory != ''"> and inventory = #{inventory}</if>
+            <if test="leaderSignature != null  and leaderSignature != ''"> and leader_signature = #{leaderSignature}</if>
+            <if test="agentSignature != null  and agentSignature != ''"> and agent_signature = #{agentSignature}</if>
+            <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
+            <if test="updateUser != null  and updateUser != ''"> and update_user = #{updateUser}</if>
+            <if test="isDeleted != null "> and is_deleted = #{isDeleted}</if>
+        </where>
+    </select>
+
+    <select id="selectGasTourReconcileById" parameterType="Long" resultMap="GasTourReconcileResult">
+        <include refid="selectGasTourReconcileVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertGasTourReconcile" parameterType="GasTourReconcile" useGeneratedKeys="true" keyProperty="id">
+        insert into gas_tour_reconcile
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gasId != null">gas_id,</if>
+            <if test="tourPerson != null">tour_person,</if>
+            <if test="tourTime != null">tour_time,</if>
+            <if test="addLiquidMeasureCount != null">add_liquid_measure_count,</if>
+            <if test="amountCount != null">amount_count,</if>
+            <if test="amountReceivable != null">amount_receivable,</if>
+            <if test="fundsReceived != null">funds_received,</if>
+            <if test="dealCount != null">deal_count,</if>
+            <if test="collectionChannelSummary != null">collection_channel_summary,</if>
+            <if test="gunNumberSummary != null">gun_number_summary,</if>
+            <if test="groupSummary != null">group_summary,</if>
+            <if test="fleetSummary != null">fleet_summary,</if>
+            <if test="unitPriceSummary != null">unit_price_summary,</if>
+            <if test="inventory != null">inventory,</if>
+            <if test="leaderSignature != null">leader_signature,</if>
+            <if test="agentSignature != null">agent_signature,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateUser != null">update_user,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gasId != null">#{gasId},</if>
+            <if test="tourPerson != null">#{tourPerson},</if>
+            <if test="tourTime != null">#{tourTime},</if>
+            <if test="addLiquidMeasureCount != null">#{addLiquidMeasureCount},</if>
+            <if test="amountCount != null">#{amountCount},</if>
+            <if test="amountReceivable != null">#{amountReceivable},</if>
+            <if test="fundsReceived != null">#{fundsReceived},</if>
+            <if test="dealCount != null">#{dealCount},</if>
+            <if test="collectionChannelSummary != null">#{collectionChannelSummary},</if>
+            <if test="gunNumberSummary != null">#{gunNumberSummary},</if>
+            <if test="groupSummary != null">#{groupSummary},</if>
+            <if test="fleetSummary != null">#{fleetSummary},</if>
+            <if test="unitPriceSummary != null">#{unitPriceSummary},</if>
+            <if test="inventory != null">#{inventory},</if>
+            <if test="leaderSignature != null">#{leaderSignature},</if>
+            <if test="agentSignature != null">#{agentSignature},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+        </trim>
+    </insert>
+
+    <update id="updateGasTourReconcile" parameterType="GasTourReconcile">
+        update gas_tour_reconcile
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gasId != null">gas_id = #{gasId},</if>
+            <if test="tourPerson != null">tour_person = #{tourPerson},</if>
+            <if test="tourTime != null">tour_time = #{tourTime},</if>
+            <if test="addLiquidMeasureCount != null">add_liquid_measure_count = #{addLiquidMeasureCount},</if>
+            <if test="amountCount != null">amount_count = #{amountCount},</if>
+            <if test="amountReceivable != null">amount_receivable = #{amountReceivable},</if>
+            <if test="fundsReceived != null">funds_received = #{fundsReceived},</if>
+            <if test="dealCount != null">deal_count = #{dealCount},</if>
+            <if test="collectionChannelSummary != null">collection_channel_summary = #{collectionChannelSummary},</if>
+            <if test="gunNumberSummary != null">gun_number_summary = #{gunNumberSummary},</if>
+            <if test="groupSummary != null">group_summary = #{groupSummary},</if>
+            <if test="fleetSummary != null">fleet_summary = #{fleetSummary},</if>
+            <if test="unitPriceSummary != null">unit_price_summary = #{unitPriceSummary},</if>
+            <if test="inventory != null">inventory = #{inventory},</if>
+            <if test="leaderSignature != null">leader_signature = #{leaderSignature},</if>
+            <if test="agentSignature != null">agent_signature = #{agentSignature},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGasTourReconcileById" parameterType="Long">
+        delete from gas_tour_reconcile where id = #{id}
+    </delete>
+
+    <delete id="deleteGasTourReconcileByIds" parameterType="String">
+        delete from gas_tour_reconcile where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

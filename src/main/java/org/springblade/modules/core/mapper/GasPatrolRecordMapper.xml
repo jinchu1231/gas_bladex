@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.core.mapper.GasPatrolRecordMapper">
+
+    <resultMap type="GasPatrolRecord" id="GasPatrolRecordResult">
+        <result property="id"    column="id"    />
+        <result property="gasId"    column="gas_id"    />
+        <result property="fillTime"    column="fill_time"    />
+        <result property="fillDate"    column="fill_date"    />
+        <result property="workShift"    column="work_shift"    />
+        <result property="storageTankO"    column="storage_tank_o"    />
+        <result property="storageTankT"    column="storage_tank_t"    />
+        <result property="beforePumpO"    column="before_pump_o"    />
+        <result property="afterPumpO"    column="after_pump_o"    />
+        <result property="beforePumpT"    column="before_pump_t"    />
+        <result property="afterPumpT"    column="after_pump_t"    />
+        <result property="instrumentWind"    column="instrument_wind"    />
+        <result property="liquidFillingMachine"    column="liquid_filling_machine"    />
+        <result property="storageTankTh"    column="storage_tank_th"    />
+        <result property="liquidStorageArea"    column="liquid_storage_area"    />
+        <result property="liquidAddingZone"    column="liquid_adding_zone"    />
+        <result property="voltage"    column="voltage"    />
+        <result property="airCompressorDrainage"    column="air_compressor_drainage"    />
+        <result property="circumstancesPatrolSituation"    column="circumstances_patrol_situation"    />
+        <result property="fireproofingPatrolSituation"    column="fireproofing_patrol_situation"    />
+        <result property="fillPerson"    column="fill_person"    />
+        <result property="problemDescription"    column="problem_description"    />
+        <result property="siteDisposalMeasures"    column="site_disposal_measures"    />
+        <result property="resultOfDisposal"    column="result_of_disposal"    />
+        <result property="hiddenDangerDesc"    column="hidden_danger_desc"    />
+        <result property="hiddenDangerAntiaircraftMeasure"    column="hidden_danger_antiaircraft_measure"    />
+        <result property="principal"    column="principal"    />
+        <result property="reviewPerson"    column="review_person"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="isDeleted"    column="is_deleted"    />
+    </resultMap>
+
+    <sql id="selectGasPatrolRecordVo">
+        select id, gas_id, fill_time, fill_date, work_shift, storage_tank_o, storage_tank_t, before_pump_o, after_pump_o, before_pump_t, after_pump_t, instrument_wind, liquid_filling_machine, storage_tank_th, liquid_storage_area, liquid_adding_zone, voltage, air_compressor_drainage, circumstances_patrol_situation, fireproofing_patrol_situation, fill_person, problem_description, site_disposal_measures, result_of_disposal, hidden_danger_desc, hidden_danger_antiaircraft_measure, principal, review_person, create_user, create_time, update_time, update_user, is_deleted from gas_patrol_record
+    </sql>
+
+    <select id="selectGasPatrolRecordList" parameterType="GasPatrolRecord" resultMap="GasPatrolRecordResult">
+        <include refid="selectGasPatrolRecordVo"/>
+        <where>
+            <if test="gasId != null  and gasId != ''"> and gas_id = #{gasId}</if>
+            <if test="fillTime != null  and fillTime != ''"> and fill_time = #{fillTime}</if>
+            <if test="fillDate != null  and fillDate != ''"> and fill_date = #{fillDate}</if>
+            <if test="workShift != null "> and work_shift = #{workShift}</if>
+            <if test="storageTankO != null  and storageTankO != ''"> and storage_tank_o = #{storageTankO}</if>
+            <if test="storageTankT != null  and storageTankT != ''"> and storage_tank_t = #{storageTankT}</if>
+            <if test="beforePumpO != null  and beforePumpO != ''"> and before_pump_o = #{beforePumpO}</if>
+            <if test="afterPumpO != null  and afterPumpO != ''"> and after_pump_o = #{afterPumpO}</if>
+            <if test="beforePumpT != null  and beforePumpT != ''"> and before_pump_t = #{beforePumpT}</if>
+            <if test="afterPumpT != null  and afterPumpT != ''"> and after_pump_t = #{afterPumpT}</if>
+            <if test="instrumentWind != null  and instrumentWind != ''"> and instrument_wind = #{instrumentWind}</if>
+            <if test="liquidFillingMachine != null  and liquidFillingMachine != ''"> and liquid_filling_machine = #{liquidFillingMachine}</if>
+            <if test="storageTankTh != null  and storageTankTh != ''"> and storage_tank_th = #{storageTankTh}</if>
+            <if test="liquidStorageArea != null  and liquidStorageArea != ''"> and liquid_storage_area = #{liquidStorageArea}</if>
+            <if test="liquidAddingZone != null  and liquidAddingZone != ''"> and liquid_adding_zone = #{liquidAddingZone}</if>
+            <if test="voltage != null  and voltage != ''"> and voltage = #{voltage}</if>
+            <if test="airCompressorDrainage != null  and airCompressorDrainage != ''"> and air_compressor_drainage = #{airCompressorDrainage}</if>
+            <if test="circumstancesPatrolSituation != null  and circumstancesPatrolSituation != ''"> and circumstances_patrol_situation = #{circumstancesPatrolSituation}</if>
+            <if test="fireproofingPatrolSituation != null  and fireproofingPatrolSituation != ''"> and fireproofing_patrol_situation = #{fireproofingPatrolSituation}</if>
+            <if test="fillPerson != null  and fillPerson != ''"> and fill_person = #{fillPerson}</if>
+            <if test="problemDescription != null  and problemDescription != ''"> and problem_description = #{problemDescription}</if>
+            <if test="siteDisposalMeasures != null  and siteDisposalMeasures != ''"> and site_disposal_measures = #{siteDisposalMeasures}</if>
+            <if test="resultOfDisposal != null  and resultOfDisposal != ''"> and result_of_disposal = #{resultOfDisposal}</if>
+            <if test="hiddenDangerDesc != null  and hiddenDangerDesc != ''"> and hidden_danger_desc = #{hiddenDangerDesc}</if>
+            <if test="hiddenDangerAntiaircraftMeasure != null  and hiddenDangerAntiaircraftMeasure != ''"> and hidden_danger_antiaircraft_measure = #{hiddenDangerAntiaircraftMeasure}</if>
+            <if test="principal != null  and principal != ''"> and principal = #{principal}</if>
+            <if test="reviewPerson != null  and reviewPerson != ''"> and review_person = #{reviewPerson}</if>
+            <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
+            <if test="updateUser != null  and updateUser != ''"> and update_user = #{updateUser}</if>
+            <if test="isDeleted != null "> and is_deleted = #{isDeleted}</if>
+        </where>
+    </select>
+
+    <select id="selectGasPatrolRecordById" parameterType="Long" resultMap="GasPatrolRecordResult">
+        <include refid="selectGasPatrolRecordVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertGasPatrolRecord" parameterType="GasPatrolRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into gas_patrol_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gasId != null">gas_id,</if>
+            <if test="fillTime != null">fill_time,</if>
+            <if test="fillDate != null">fill_date,</if>
+            <if test="workShift != null">work_shift,</if>
+            <if test="storageTankO != null">storage_tank_o,</if>
+            <if test="storageTankT != null">storage_tank_t,</if>
+            <if test="beforePumpO != null">before_pump_o,</if>
+            <if test="afterPumpO != null">after_pump_o,</if>
+            <if test="beforePumpT != null">before_pump_t,</if>
+            <if test="afterPumpT != null">after_pump_t,</if>
+            <if test="instrumentWind != null">instrument_wind,</if>
+            <if test="liquidFillingMachine != null">liquid_filling_machine,</if>
+            <if test="storageTankTh != null">storage_tank_th,</if>
+            <if test="liquidStorageArea != null">liquid_storage_area,</if>
+            <if test="liquidAddingZone != null">liquid_adding_zone,</if>
+            <if test="voltage != null">voltage,</if>
+            <if test="airCompressorDrainage != null">air_compressor_drainage,</if>
+            <if test="circumstancesPatrolSituation != null">circumstances_patrol_situation,</if>
+            <if test="fireproofingPatrolSituation != null">fireproofing_patrol_situation,</if>
+            <if test="fillPerson != null">fill_person,</if>
+            <if test="problemDescription != null">problem_description,</if>
+            <if test="siteDisposalMeasures != null">site_disposal_measures,</if>
+            <if test="resultOfDisposal != null">result_of_disposal,</if>
+            <if test="hiddenDangerDesc != null">hidden_danger_desc,</if>
+            <if test="hiddenDangerAntiaircraftMeasure != null">hidden_danger_antiaircraft_measure,</if>
+            <if test="principal != null">principal,</if>
+            <if test="reviewPerson != null">review_person,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateUser != null">update_user,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gasId != null">#{gasId},</if>
+            <if test="fillTime != null">#{fillTime},</if>
+            <if test="fillDate != null">#{fillDate},</if>
+            <if test="workShift != null">#{workShift},</if>
+            <if test="storageTankO != null">#{storageTankO},</if>
+            <if test="storageTankT != null">#{storageTankT},</if>
+            <if test="beforePumpO != null">#{beforePumpO},</if>
+            <if test="afterPumpO != null">#{afterPumpO},</if>
+            <if test="beforePumpT != null">#{beforePumpT},</if>
+            <if test="afterPumpT != null">#{afterPumpT},</if>
+            <if test="instrumentWind != null">#{instrumentWind},</if>
+            <if test="liquidFillingMachine != null">#{liquidFillingMachine},</if>
+            <if test="storageTankTh != null">#{storageTankTh},</if>
+            <if test="liquidStorageArea != null">#{liquidStorageArea},</if>
+            <if test="liquidAddingZone != null">#{liquidAddingZone},</if>
+            <if test="voltage != null">#{voltage},</if>
+            <if test="airCompressorDrainage != null">#{airCompressorDrainage},</if>
+            <if test="circumstancesPatrolSituation != null">#{circumstancesPatrolSituation},</if>
+            <if test="fireproofingPatrolSituation != null">#{fireproofingPatrolSituation},</if>
+            <if test="fillPerson != null">#{fillPerson},</if>
+            <if test="problemDescription != null">#{problemDescription},</if>
+            <if test="siteDisposalMeasures != null">#{siteDisposalMeasures},</if>
+            <if test="resultOfDisposal != null">#{resultOfDisposal},</if>
+            <if test="hiddenDangerDesc != null">#{hiddenDangerDesc},</if>
+            <if test="hiddenDangerAntiaircraftMeasure != null">#{hiddenDangerAntiaircraftMeasure},</if>
+            <if test="principal != null">#{principal},</if>
+            <if test="reviewPerson != null">#{reviewPerson},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+        </trim>
+    </insert>
+
+    <update id="updateGasPatrolRecord" parameterType="GasPatrolRecord">
+        update gas_patrol_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gasId != null">gas_id = #{gasId},</if>
+            <if test="fillTime != null">fill_time = #{fillTime},</if>
+            <if test="fillDate != null">fill_date = #{fillDate},</if>
+            <if test="workShift != null">work_shift = #{workShift},</if>
+            <if test="storageTankO != null">storage_tank_o = #{storageTankO},</if>
+            <if test="storageTankT != null">storage_tank_t = #{storageTankT},</if>
+            <if test="beforePumpO != null">before_pump_o = #{beforePumpO},</if>
+            <if test="afterPumpO != null">after_pump_o = #{afterPumpO},</if>
+            <if test="beforePumpT != null">before_pump_t = #{beforePumpT},</if>
+            <if test="afterPumpT != null">after_pump_t = #{afterPumpT},</if>
+            <if test="instrumentWind != null">instrument_wind = #{instrumentWind},</if>
+            <if test="liquidFillingMachine != null">liquid_filling_machine = #{liquidFillingMachine},</if>
+            <if test="storageTankTh != null">storage_tank_th = #{storageTankTh},</if>
+            <if test="liquidStorageArea != null">liquid_storage_area = #{liquidStorageArea},</if>
+            <if test="liquidAddingZone != null">liquid_adding_zone = #{liquidAddingZone},</if>
+            <if test="voltage != null">voltage = #{voltage},</if>
+            <if test="airCompressorDrainage != null">air_compressor_drainage = #{airCompressorDrainage},</if>
+            <if test="circumstancesPatrolSituation != null">circumstances_patrol_situation = #{circumstancesPatrolSituation},</if>
+            <if test="fireproofingPatrolSituation != null">fireproofing_patrol_situation = #{fireproofingPatrolSituation},</if>
+            <if test="fillPerson != null">fill_person = #{fillPerson},</if>
+            <if test="problemDescription != null">problem_description = #{problemDescription},</if>
+            <if test="siteDisposalMeasures != null">site_disposal_measures = #{siteDisposalMeasures},</if>
+            <if test="resultOfDisposal != null">result_of_disposal = #{resultOfDisposal},</if>
+            <if test="hiddenDangerDesc != null">hidden_danger_desc = #{hiddenDangerDesc},</if>
+            <if test="hiddenDangerAntiaircraftMeasure != null">hidden_danger_antiaircraft_measure = #{hiddenDangerAntiaircraftMeasure},</if>
+            <if test="principal != null">principal = #{principal},</if>
+            <if test="reviewPerson != null">review_person = #{reviewPerson},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGasPatrolRecordById" parameterType="Long">
+        delete from gas_patrol_record where id = #{id}
+    </delete>
+
+    <delete id="deleteGasPatrolRecordByIds" parameterType="String">
+        delete from gas_patrol_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

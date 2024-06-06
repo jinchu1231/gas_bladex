@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.core.mapper.GasDeviceRecordMapper">
+
+    <resultMap type="GasDeviceRecord" id="GasDeviceRecordResult">
+        <result property="id"    column="id"    />
+        <result property="inspectData"    column="inspect_data"    />
+        <result property="inspectPerson"    column="inspect_person"    />
+        <result property="inspectDevice"    column="inspect_device"    />
+        <result property="inspectProtector"    column="inspect_protector"    />
+        <result property="inspectCircumstances"    column="inspect_circumstances"    />
+        <result property="inspectWarning"    column="inspect_warning"    />
+        <result property="inspectComplaintReport"    column="inspect_complaint_report"    />
+        <result property="inspectPublicSentiment"    column="inspect_public_sentiment"    />
+        <result property="inspectPersonResult"    column="inspect_person_result"    />
+        <result property="inspectDeviceResult"    column="inspect_device_result"    />
+        <result property="inspectProtectorResult"    column="inspect_protector_result"    />
+        <result property="inspectCircumstancesResult"    column="inspect_circumstances_result"    />
+        <result property="inspectWarningResult"    column="inspect_warning_result"    />
+        <result property="inspectComplaintReportResult"    column="inspect_complaint_report_result"    />
+        <result property="inspectPublicSentimentResult"    column="inspect_public_sentiment_result"    />
+        <result property="inspectPersonRemark"    column="inspect_person_remark"    />
+        <result property="inspectDeviceRemark"    column="inspect_device_remark"    />
+        <result property="inspectProtectorRemark"    column="inspect_protector_remark"    />
+        <result property="inspectCircumstancesRemark"    column="inspect_circumstances_remark"    />
+        <result property="inspectWarningRemark"    column="inspect_warning_remark"    />
+        <result property="inspectComplaintReportRemark"    column="inspect_complaint_report_remark"    />
+        <result property="inspectPublicSentimentRemark"    column="inspect_public_sentiment_remark"    />
+        <result property="takeSteps"    column="take_steps"    />
+        <result property="safetyOfficer"    column="safety_officer"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="isDeleted"    column="is_deleted"    />
+    </resultMap>
+
+    <sql id="selectGasDeviceRecordVo">
+        select id, inspect_data, inspect_person, inspect_device, inspect_protector, inspect_circumstances, inspect_warning, inspect_complaint_report, inspect_public_sentiment, inspect_person_result, inspect_device_result, inspect_protector_result, inspect_circumstances_result, inspect_warning_result, inspect_complaint_report_result, inspect_public_sentiment_result, inspect_person_remark, inspect_device_remark, inspect_protector_remark, inspect_circumstances_remark, inspect_warning_remark, inspect_complaint_report_remark, inspect_public_sentiment_remark, take_steps, safety_officer, create_user, create_time, update_time, update_user, is_deleted from gas_device_record
+    </sql>
+
+    <select id="selectGasDeviceRecordList" parameterType="GasDeviceRecord" resultMap="GasDeviceRecordResult">
+        <include refid="selectGasDeviceRecordVo"/>
+        <where>
+            <if test="inspectData != null  and inspectData != ''"> and inspect_data = #{inspectData}</if>
+            <if test="inspectPerson != null  and inspectPerson != ''"> and inspect_person = #{inspectPerson}</if>
+            <if test="inspectDevice != null  and inspectDevice != ''"> and inspect_device = #{inspectDevice}</if>
+            <if test="inspectProtector != null  and inspectProtector != ''"> and inspect_protector = #{inspectProtector}</if>
+            <if test="inspectCircumstances != null  and inspectCircumstances != ''"> and inspect_circumstances = #{inspectCircumstances}</if>
+            <if test="inspectWarning != null  and inspectWarning != ''"> and inspect_warning = #{inspectWarning}</if>
+            <if test="inspectComplaintReport != null  and inspectComplaintReport != ''"> and inspect_complaint_report = #{inspectComplaintReport}</if>
+            <if test="inspectPublicSentiment != null  and inspectPublicSentiment != ''"> and inspect_public_sentiment = #{inspectPublicSentiment}</if>
+            <if test="inspectPersonResult != null  and inspectPersonResult != ''"> and inspect_person_result = #{inspectPersonResult}</if>
+            <if test="inspectDeviceResult != null  and inspectDeviceResult != ''"> and inspect_device_result = #{inspectDeviceResult}</if>
+            <if test="inspectProtectorResult != null  and inspectProtectorResult != ''"> and inspect_protector_result = #{inspectProtectorResult}</if>
+            <if test="inspectCircumstancesResult != null  and inspectCircumstancesResult != ''"> and inspect_circumstances_result = #{inspectCircumstancesResult}</if>
+            <if test="inspectWarningResult != null  and inspectWarningResult != ''"> and inspect_warning_result = #{inspectWarningResult}</if>
+            <if test="inspectComplaintReportResult != null  and inspectComplaintReportResult != ''"> and inspect_complaint_report_result = #{inspectComplaintReportResult}</if>
+            <if test="inspectPublicSentimentResult != null  and inspectPublicSentimentResult != ''"> and inspect_public_sentiment_result = #{inspectPublicSentimentResult}</if>
+            <if test="inspectPersonRemark != null  and inspectPersonRemark != ''"> and inspect_person_remark = #{inspectPersonRemark}</if>
+            <if test="inspectDeviceRemark != null  and inspectDeviceRemark != ''"> and inspect_device_remark = #{inspectDeviceRemark}</if>
+            <if test="inspectProtectorRemark != null  and inspectProtectorRemark != ''"> and inspect_protector_remark = #{inspectProtectorRemark}</if>
+            <if test="inspectCircumstancesRemark != null  and inspectCircumstancesRemark != ''"> and inspect_circumstances_remark = #{inspectCircumstancesRemark}</if>
+            <if test="inspectWarningRemark != null  and inspectWarningRemark != ''"> and inspect_warning_remark = #{inspectWarningRemark}</if>
+            <if test="inspectComplaintReportRemark != null  and inspectComplaintReportRemark != ''"> and inspect_complaint_report_remark = #{inspectComplaintReportRemark}</if>
+            <if test="inspectPublicSentimentRemark != null  and inspectPublicSentimentRemark != ''"> and inspect_public_sentiment_remark = #{inspectPublicSentimentRemark}</if>
+            <if test="takeSteps != null  and takeSteps != ''"> and take_steps = #{takeSteps}</if>
+            <if test="safetyOfficer != null  and safetyOfficer != ''"> and safety_officer = #{safetyOfficer}</if>
+            <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
+            <if test="updateUser != null  and updateUser != ''"> and update_user = #{updateUser}</if>
+            <if test="isDeleted != null "> and is_deleted = #{isDeleted}</if>
+        </where>
+    </select>
+
+    <select id="selectGasDeviceRecordById" parameterType="Long" resultMap="GasDeviceRecordResult">
+        <include refid="selectGasDeviceRecordVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertGasDeviceRecord" parameterType="GasDeviceRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into gas_device_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="inspectData != null">inspect_data,</if>
+            <if test="inspectPerson != null">inspect_person,</if>
+            <if test="inspectDevice != null">inspect_device,</if>
+            <if test="inspectProtector != null">inspect_protector,</if>
+            <if test="inspectCircumstances != null">inspect_circumstances,</if>
+            <if test="inspectWarning != null">inspect_warning,</if>
+            <if test="inspectComplaintReport != null">inspect_complaint_report,</if>
+            <if test="inspectPublicSentiment != null">inspect_public_sentiment,</if>
+            <if test="inspectPersonResult != null">inspect_person_result,</if>
+            <if test="inspectDeviceResult != null">inspect_device_result,</if>
+            <if test="inspectProtectorResult != null">inspect_protector_result,</if>
+            <if test="inspectCircumstancesResult != null">inspect_circumstances_result,</if>
+            <if test="inspectWarningResult != null">inspect_warning_result,</if>
+            <if test="inspectComplaintReportResult != null">inspect_complaint_report_result,</if>
+            <if test="inspectPublicSentimentResult != null">inspect_public_sentiment_result,</if>
+            <if test="inspectPersonRemark != null">inspect_person_remark,</if>
+            <if test="inspectDeviceRemark != null">inspect_device_remark,</if>
+            <if test="inspectProtectorRemark != null">inspect_protector_remark,</if>
+            <if test="inspectCircumstancesRemark != null">inspect_circumstances_remark,</if>
+            <if test="inspectWarningRemark != null">inspect_warning_remark,</if>
+            <if test="inspectComplaintReportRemark != null">inspect_complaint_report_remark,</if>
+            <if test="inspectPublicSentimentRemark != null">inspect_public_sentiment_remark,</if>
+            <if test="takeSteps != null">take_steps,</if>
+            <if test="safetyOfficer != null">safety_officer,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateUser != null">update_user,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="inspectData != null">#{inspectData},</if>
+            <if test="inspectPerson != null">#{inspectPerson},</if>
+            <if test="inspectDevice != null">#{inspectDevice},</if>
+            <if test="inspectProtector != null">#{inspectProtector},</if>
+            <if test="inspectCircumstances != null">#{inspectCircumstances},</if>
+            <if test="inspectWarning != null">#{inspectWarning},</if>
+            <if test="inspectComplaintReport != null">#{inspectComplaintReport},</if>
+            <if test="inspectPublicSentiment != null">#{inspectPublicSentiment},</if>
+            <if test="inspectPersonResult != null">#{inspectPersonResult},</if>
+            <if test="inspectDeviceResult != null">#{inspectDeviceResult},</if>
+            <if test="inspectProtectorResult != null">#{inspectProtectorResult},</if>
+            <if test="inspectCircumstancesResult != null">#{inspectCircumstancesResult},</if>
+            <if test="inspectWarningResult != null">#{inspectWarningResult},</if>
+            <if test="inspectComplaintReportResult != null">#{inspectComplaintReportResult},</if>
+            <if test="inspectPublicSentimentResult != null">#{inspectPublicSentimentResult},</if>
+            <if test="inspectPersonRemark != null">#{inspectPersonRemark},</if>
+            <if test="inspectDeviceRemark != null">#{inspectDeviceRemark},</if>
+            <if test="inspectProtectorRemark != null">#{inspectProtectorRemark},</if>
+            <if test="inspectCircumstancesRemark != null">#{inspectCircumstancesRemark},</if>
+            <if test="inspectWarningRemark != null">#{inspectWarningRemark},</if>
+            <if test="inspectComplaintReportRemark != null">#{inspectComplaintReportRemark},</if>
+            <if test="inspectPublicSentimentRemark != null">#{inspectPublicSentimentRemark},</if>
+            <if test="takeSteps != null">#{takeSteps},</if>
+            <if test="safetyOfficer != null">#{safetyOfficer},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+        </trim>
+    </insert>
+
+    <update id="updateGasDeviceRecord" parameterType="GasDeviceRecord">
+        update gas_device_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="inspectData != null">inspect_data = #{inspectData},</if>
+            <if test="inspectPerson != null">inspect_person = #{inspectPerson},</if>
+            <if test="inspectDevice != null">inspect_device = #{inspectDevice},</if>
+            <if test="inspectProtector != null">inspect_protector = #{inspectProtector},</if>
+            <if test="inspectCircumstances != null">inspect_circumstances = #{inspectCircumstances},</if>
+            <if test="inspectWarning != null">inspect_warning = #{inspectWarning},</if>
+            <if test="inspectComplaintReport != null">inspect_complaint_report = #{inspectComplaintReport},</if>
+            <if test="inspectPublicSentiment != null">inspect_public_sentiment = #{inspectPublicSentiment},</if>
+            <if test="inspectPersonResult != null">inspect_person_result = #{inspectPersonResult},</if>
+            <if test="inspectDeviceResult != null">inspect_device_result = #{inspectDeviceResult},</if>
+            <if test="inspectProtectorResult != null">inspect_protector_result = #{inspectProtectorResult},</if>
+            <if test="inspectCircumstancesResult != null">inspect_circumstances_result = #{inspectCircumstancesResult},</if>
+            <if test="inspectWarningResult != null">inspect_warning_result = #{inspectWarningResult},</if>
+            <if test="inspectComplaintReportResult != null">inspect_complaint_report_result = #{inspectComplaintReportResult},</if>
+            <if test="inspectPublicSentimentResult != null">inspect_public_sentiment_result = #{inspectPublicSentimentResult},</if>
+            <if test="inspectPersonRemark != null">inspect_person_remark = #{inspectPersonRemark},</if>
+            <if test="inspectDeviceRemark != null">inspect_device_remark = #{inspectDeviceRemark},</if>
+            <if test="inspectProtectorRemark != null">inspect_protector_remark = #{inspectProtectorRemark},</if>
+            <if test="inspectCircumstancesRemark != null">inspect_circumstances_remark = #{inspectCircumstancesRemark},</if>
+            <if test="inspectWarningRemark != null">inspect_warning_remark = #{inspectWarningRemark},</if>
+            <if test="inspectComplaintReportRemark != null">inspect_complaint_report_remark = #{inspectComplaintReportRemark},</if>
+            <if test="inspectPublicSentimentRemark != null">inspect_public_sentiment_remark = #{inspectPublicSentimentRemark},</if>
+            <if test="takeSteps != null">take_steps = #{takeSteps},</if>
+            <if test="safetyOfficer != null">safety_officer = #{safetyOfficer},</if>
+            <if test="createUser != null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGasDeviceRecordById" parameterType="Long">
+        delete from gas_device_record where id = #{id}
+    </delete>
+
+    <delete id="deleteGasDeviceRecordByIds" parameterType="String">
+        delete from gas_device_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
