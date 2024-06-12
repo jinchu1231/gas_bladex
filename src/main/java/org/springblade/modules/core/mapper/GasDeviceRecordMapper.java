@@ -1,8 +1,10 @@
 package org.springblade.modules.core.mapper;
 
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springblade.modules.core.entity.GasDeviceRecord;
+import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
 
 import java.util.List;
 
@@ -12,7 +14,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2024-05-20
  */
-public interface GasDeviceRecordMapper {
+public interface GasDeviceRecordMapper extends BaseMapper<GasDeviceRecord> {
     /**
      * 查询特种设备安全检查记录
      *
@@ -60,4 +62,6 @@ public interface GasDeviceRecordMapper {
      * @return 结果
      */
     public int deleteGasDeviceRecordByIds(String[] ids);
+
+    List<GasDeviceRecord> selectGasDeviceRecordAllList();
 }

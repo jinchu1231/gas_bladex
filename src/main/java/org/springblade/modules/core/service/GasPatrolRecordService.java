@@ -4,6 +4,7 @@ package org.springblade.modules.core.service;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.modules.core.entity.GasPatrolRecord;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2024-05-20
  */
-public interface GasPatrolRecordService
+public interface GasPatrolRecordService extends IService<GasPatrolRecord>
 {
     /**
      * 查询加气站巡查记录
@@ -63,4 +64,6 @@ public interface GasPatrolRecordService
      * @return 结果
      */
     public int deleteGasPatrolRecordById(Long id);
+
+	List<GasPatrolRecord> selectGasPatrolRecordAllList();
 }

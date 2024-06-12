@@ -1,7 +1,9 @@
 package org.springblade.modules.core.mapper;
 
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springblade.modules.core.entity.GasDeviceRecord;
 import org.springblade.modules.core.entity.GasPatrolRecord;
 
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2024-05-20
  */
-public interface GasPatrolRecordMapper
+public interface GasPatrolRecordMapper extends BaseMapper<GasPatrolRecord>
 {
     /**
      * 查询加气站巡查记录
@@ -61,4 +63,6 @@ public interface GasPatrolRecordMapper
      * @return 结果
      */
     public int deleteGasPatrolRecordByIds(String[] ids);
+
+    List<GasPatrolRecord> selectGasPatrolRecordAllList();
 }

@@ -191,9 +191,9 @@ blade:
     #单用户登录范围
     single-level: all
     #token签名 使用 @org.springblade.test.SignKeyGenerator 获取
-    sign-key: 请配置32位签名
+    sign-key: WagtE1l3WGDu0MqoAXoNGJrOCdDxJsAE
     #token加密 使用 @org.springblade.test.CryptoKeyGenerator 获取
-    crypto-key: 请配置cryptoKey
+    crypto-key: O8Pyvn97VygWWQySRtiKYZ1DF7Xb9WCt
   #接口配置
   api:
     #报文加密配置
@@ -201,9 +201,9 @@ blade:
       #启用报文加密配置
       enabled: false
       #使用 @org.springblade.test.CryptoKeyGenerator 获取,需和前端保持一致
-      aes-key: 请配置aesKey
+      aes-key: QaCfgxos75b9X9jgBkTC9kQtKnt65dMb
       #使用 @org.springblade.test.CryptoKeyGenerator 获取,需和前端保持一致
-      des-key: 请配置desKey
+      des-key: CB4ouVnJ29kcoX6K
   #jackson配置
   jackson:
     #null自动转空值

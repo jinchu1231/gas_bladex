@@ -2,6 +2,7 @@ package org.springblade.modules.core.service.impl;
 
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.modules.core.entity.GasDeviceRecord;
 import org.springblade.modules.core.mapper.GasDeviceRecordMapper;
 import org.springblade.modules.core.service.GasDeviceRecordService;
@@ -20,7 +21,7 @@ import java.util.List;
  * @date 2024-05-20
  */
 @Service
-public class GasDeviceRecordServiceImpl implements GasDeviceRecordService {
+public class GasDeviceRecordServiceImpl extends ServiceImpl<GasDeviceRecordMapper, GasDeviceRecord> implements GasDeviceRecordService {
     @Autowired
     private GasDeviceRecordMapper gasDeviceRecordMapper;
 
@@ -97,4 +98,9 @@ public class GasDeviceRecordServiceImpl implements GasDeviceRecordService {
     {
         return gasDeviceRecordMapper.deleteGasDeviceRecordById(id);
     }
+
+	@Override
+	public List<GasDeviceRecord> selectGasDeviceRecordAllList() {
+		return gasDeviceRecordMapper.selectGasDeviceRecordAllList();
+	}
 }

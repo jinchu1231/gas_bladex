@@ -1,6 +1,9 @@
 package org.springblade.modules.core.entity;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.fastjson2.JSONObject;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
 
@@ -17,10 +20,14 @@ public class GasTourReconcile {
     private static final long serialVersionUID = 1L;
 
     /** id */
+	@TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /** 加气站id */
     private String gasId;
+
+	/** 加气站名称 */
+	private String gasName;
 
     /** 交班人 */
     private String tourPerson;
@@ -42,6 +49,21 @@ public class GasTourReconcile {
 
     /** 总交易数(笔) */
     private String dealCount;
+
+	/** 充值数据-总充值额(元)*/
+	private String totalRechargeAmount;
+
+	/** 充充值数据-应收额(元)*/
+	private String amountReceivableT;
+
+	/** 充值数据-实收金额(元)*/
+	private String fundsReceivedT;
+
+	/** 充值数据-总交易数(笔)*/
+	private String dealCountT;
+
+	/** 充值数据-扣款金额(元)*/
+	private String amountDeducted;
 
     /** 收款渠道汇总 */
     private String collectionChannelSummary;
@@ -96,6 +118,11 @@ public class GasTourReconcile {
         this.amountReceivable = dto.getAmountReceivable();
         this.fundsReceived = dto.getFundsReceived();
         this.dealCount = dto.getDealCount();
+        this.totalRechargeAmount = dto.getTotalRechargeAmount();
+        this.amountReceivableT = dto.getAmountReceivableT();
+        this.fundsReceivedT = dto.getFundsReceivedT();
+        this.dealCountT = dto.getDealCountT();
+        this.amountDeducted = dto.getAmountDeducted();
         this.collectionChannelSummary = JSONObject.toJSONString(dto.getCollectionChannelSummaryList());
         this.gunNumberSummary = JSONObject.toJSONString(dto.getGunNumberSummaryList());
         this.groupSummary = JSONObject.toJSONString(dto.getGroupSummaryList());

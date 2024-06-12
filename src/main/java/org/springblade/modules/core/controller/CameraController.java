@@ -25,7 +25,7 @@ import javax.validation.Valid;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/gas/camera")
-@Api(value = "危化品车辆日统计表", tags = "危化品车辆日统计表接口")
+@Api(value = "萤石api", tags = "萤石视频接口")
 public class CameraController{
 
     @Autowired

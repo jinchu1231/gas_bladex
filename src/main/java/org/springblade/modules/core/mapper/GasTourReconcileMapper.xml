@@ -30,13 +30,14 @@
     </resultMap>
 
     <sql id="selectGasTourReconcileVo">
-        select id, gas_id, tour_person, tour_time, add_liquid_measure_count, amount_count, amount_receivable, funds_received, deal_count, collection_channel_summary, gun_number_summary, group_summary, fleet_summary, unit_price_summary, inventory, leader_signature, agent_signature, create_user, create_time, update_time, update_user, is_deleted from gas_tour_reconcile
+        select id, gas_id, gas_name, tour_person, tour_time, add_liquid_measure_count, amount_count, amount_receivable, funds_received, deal_count, total_recharge_amount, amount_receivable_t, funds_received_t, deal_count_t, amount_deducted, collection_channel_summary, gun_number_summary, group_summary, fleet_summary, unit_price_summary, inventory, leader_signature, agent_signature, create_user, create_time, update_time, update_user, is_deleted from gas_tour_reconcile
     </sql>
 
     <select id="selectGasTourReconcileList" parameterType="GasTourReconcile" resultMap="GasTourReconcileResult">
         <include refid="selectGasTourReconcileVo"/>
         <where>
             <if test="gasId != null  and gasId != ''"> and gas_id = #{gasId}</if>
+            <if test="gasName != null  and gasName != ''"> and gas_name = #{gasName}</if>
             <if test="tourPerson != null  and tourPerson != ''"> and tour_person = #{tourPerson}</if>
             <if test="tourTime != null  and tourTime != ''"> and tour_time = #{tourTime}</if>
             <if test="addLiquidMeasureCount != null  and addLiquidMeasureCount != ''"> and add_liquid_measure_count = #{addLiquidMeasureCount}</if>
@@ -63,10 +64,16 @@
         where id = #{id}
     </select>
 
+    <select id="selectAllGasTourReconcileList" resultType="org.springblade.modules.core.entity.GasTourReconcile">
+        <include refid="selectGasTourReconcileVo"/>
+        where is_deleted = 0 order by create_time desc
+    </select>
+
     <insert id="insertGasTourReconcile" parameterType="GasTourReconcile" useGeneratedKeys="true" keyProperty="id">
         insert into gas_tour_reconcile
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="gasId != null">gas_id,</if>
+            <if test="gasName != null">gas_name,</if>
             <if test="tourPerson != null">tour_person,</if>
             <if test="tourTime != null">tour_time,</if>
             <if test="addLiquidMeasureCount != null">add_liquid_measure_count,</if>
@@ -74,6 +81,11 @@
             <if test="amountReceivable != null">amount_receivable,</if>
             <if test="fundsReceived != null">funds_received,</if>
             <if test="dealCount != null">deal_count,</if>
+            <if test="totalRechargeAmount != null">total_recharge_amount,</if>
+            <if test="amountReceivableT != null">amount_receivable_t,</if>
+            <if test="fundsReceivedT != null">funds_received_t,</if>
+            <if test="dealCountT != null">deal_count_t,</if>
+            <if test="amountDeducted != null">amount_deducted,</if>
             <if test="collectionChannelSummary != null">collection_channel_summary,</if>
             <if test="gunNumberSummary != null">gun_number_summary,</if>
             <if test="groupSummary != null">group_summary,</if>
@@ -90,6 +102,7 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="gasId != null">#{gasId},</if>
+            <if test="gasName != null">#{gasName},</if>
             <if test="tourPerson != null">#{tourPerson},</if>
             <if test="tourTime != null">#{tourTime},</if>
             <if test="addLiquidMeasureCount != null">#{addLiquidMeasureCount},</if>
@@ -97,6 +110,11 @@
             <if test="amountReceivable != null">#{amountReceivable},</if>
             <if test="fundsReceived != null">#{fundsReceived},</if>
             <if test="dealCount != null">#{dealCount},</if>
+            <if test="totalRechargeAmount != null">#{totalRechargeAmount},</if>
+            <if test="amountReceivableT != null">#{amountReceivableT},</if>
+            <if test="fundsReceivedT != null">#{fundsReceivedT},</if>
+            <if test="dealCountT != null">#{dealCountT},</if>
+            <if test="amountDeducted != null">#{amountDeducted},</if>
             <if test="collectionChannelSummary != null">#{collectionChannelSummary},</if>
             <if test="gunNumberSummary != null">#{gunNumberSummary},</if>
             <if test="groupSummary != null">#{groupSummary},</if>
@@ -117,6 +135,7 @@
         update gas_tour_reconcile
         <trim prefix="SET" suffixOverrides=",">
             <if test="gasId != null">gas_id = #{gasId},</if>
+            <if test="gasName != null">gas_name = #{gasName},</if>
             <if test="tourPerson != null">tour_person = #{tourPerson},</if>
             <if test="tourTime != null">tour_time = #{tourTime},</if>
             <if test="addLiquidMeasureCount != null">add_liquid_measure_count = #{addLiquidMeasureCount},</if>
@@ -124,6 +143,11 @@
             <if test="amountReceivable != null">amount_receivable = #{amountReceivable},</if>
             <if test="fundsReceived != null">funds_received = #{fundsReceived},</if>
             <if test="dealCount != null">deal_count = #{dealCount},</if>
+            <if test="totalRechargeAmount != null">total_recharge_amount = #{totalRechargeAmount},</if>
+            <if test="amountReceivableT != null">amount_receivable_t = #{amountReceivableT},</if>
+            <if test="fundsReceivedT != null">funds_received_t = #{fundsReceivedT},</if>
+            <if test="dealCountT != null">deal_count_t = #{dealCountT},</if>
+            <if test="amountDeducted != null">amount_deducted = #{amountDeducted},</if>
             <if test="collectionChannelSummary != null">collection_channel_summary = #{collectionChannelSummary},</if>
             <if test="gunNumberSummary != null">gun_number_summary = #{gunNumberSummary},</if>
             <if test="groupSummary != null">group_summary = #{groupSummary},</if>

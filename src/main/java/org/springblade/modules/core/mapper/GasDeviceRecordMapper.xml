@@ -38,12 +38,14 @@
     </resultMap>
 
     <sql id="selectGasDeviceRecordVo">
-        select id, inspect_data, inspect_person, inspect_device, inspect_protector, inspect_circumstances, inspect_warning, inspect_complaint_report, inspect_public_sentiment, inspect_person_result, inspect_device_result, inspect_protector_result, inspect_circumstances_result, inspect_warning_result, inspect_complaint_report_result, inspect_public_sentiment_result, inspect_person_remark, inspect_device_remark, inspect_protector_remark, inspect_circumstances_remark, inspect_warning_remark, inspect_complaint_report_remark, inspect_public_sentiment_remark, take_steps, safety_officer, create_user, create_time, update_time, update_user, is_deleted from gas_device_record
+        select id,gas_id,gas_name, inspect_data, inspect_person, inspect_device, inspect_protector, inspect_circumstances, inspect_warning, inspect_complaint_report, inspect_public_sentiment, inspect_person_result, inspect_device_result, inspect_protector_result, inspect_circumstances_result, inspect_warning_result, inspect_complaint_report_result, inspect_public_sentiment_result, inspect_person_remark, inspect_device_remark, inspect_protector_remark, inspect_circumstances_remark, inspect_warning_remark, inspect_complaint_report_remark, inspect_public_sentiment_remark, take_steps, safety_officer, create_user, create_time, update_time, update_user, is_deleted from gas_device_record
     </sql>
 
     <select id="selectGasDeviceRecordList" parameterType="GasDeviceRecord" resultMap="GasDeviceRecordResult">
         <include refid="selectGasDeviceRecordVo"/>
         <where>
+            <if test="gasId != null  and gasId != ''"> and gas_id = #{gasId}</if>
+            <if test="gasName != null  and gasName != ''"> and gas_name = #{gasName}</if>
             <if test="inspectData != null  and inspectData != ''"> and inspect_data = #{inspectData}</if>
             <if test="inspectPerson != null  and inspectPerson != ''"> and inspect_person = #{inspectPerson}</if>
             <if test="inspectDevice != null  and inspectDevice != ''"> and inspect_device = #{inspectDevice}</if>
@@ -78,10 +80,16 @@
         <include refid="selectGasDeviceRecordVo"/>
         where id = #{id}
     </select>
+    <select id="selectGasDeviceRecordAllList" resultType="org.springblade.modules.core.entity.GasDeviceRecord">
+        <include refid="selectGasDeviceRecordVo"/>
+        where is_deleted = 0 order by create_time desc
+    </select>
 
     <insert id="insertGasDeviceRecord" parameterType="GasDeviceRecord" useGeneratedKeys="true" keyProperty="id">
         insert into gas_device_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gasId != null">gas_id,</if>
+            <if test="gasName != null">gas_name,</if>
             <if test="inspectData != null">inspect_data,</if>
             <if test="inspectPerson != null">inspect_person,</if>
             <if test="inspectDevice != null">inspect_device,</if>
@@ -113,6 +121,8 @@
             <if test="isDeleted != null">is_deleted,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gasId != null">#{gasId},</if>
+            <if test="gasName != null">#{gasName},</if>
             <if test="inspectData != null">#{inspectData},</if>
             <if test="inspectPerson != null">#{inspectPerson},</if>
             <if test="inspectDevice != null">#{inspectDevice},</if>
@@ -148,6 +158,8 @@
     <update id="updateGasDeviceRecord" parameterType="GasDeviceRecord">
         update gas_device_record
         <trim prefix="SET" suffixOverrides=",">
+            <if test="gasId != null">gas_id = #{gasId},</if>
+            <if test="gasName != null">gas_name = #{gasName},</if>
             <if test="inspectData != null">inspect_data = #{inspectData},</if>
             <if test="inspectPerson != null">inspect_person = #{inspectPerson},</if>
             <if test="inspectDevice != null">inspect_device = #{inspectDevice},</if>

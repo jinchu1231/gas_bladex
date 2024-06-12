@@ -2,8 +2,10 @@ package org.springblade.modules.core.service;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
+import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2024-05-20
  */
-public interface GasTourReconcileService
+public interface GasTourReconcileService extends IService<GasTourReconcile>
 {
     /**
      * 查询交班对账
@@ -62,4 +64,7 @@ public interface GasTourReconcileService
      * @return 结果
      */
     public int deleteGasTourReconcileById(Long id);
+
+
+	List<GasTourReconcileExcelDto> selectAllGasTourReconcileList();
 }

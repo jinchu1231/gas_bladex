@@ -1,21 +1,23 @@
 package org.springblade.modules.core.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
 import org.springblade.modules.core.entity.GasPatrolRecord;
 import org.springblade.modules.core.entity.GasTourReconcile;
+import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
 import org.springblade.modules.core.service.GasTourReconcileService;
+import org.springblade.modules.core.util.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -45,17 +47,6 @@ public class GasTourReconcileController {
     }
 
     /**
-     * 导出交班对账列表
-     */
-    /*@PostMapping("/export")
-    public R export(GasTourReconcile gasTourReconcile)
-    {
-        List<GasTourReconcileDto> list = gasTourReconcileService.selectGasTourReconcileList(gasTourReconcile);
-        ExcelUtil<GasTourReconcileDto> util = new ExcelUtil<GasTourReconcileDto>(GasTourReconcileDto.class);
-        return util.exportExcel(list, "交班对账数据");
-    }*/
-
-    /**
      * 新增保存交班对账
      */
     @PostMapping("/save")
@@ -82,4 +73,31 @@ public class GasTourReconcileController {
     {
         return R.data(gasTourReconcileService.deleteGasTourReconcileByIds(ids));
     }
+
+	/**
+	 * 下载Excel模板
+	 *
+	 * @param response response
+	 */
+	@GetMapping(value = "/downloadTemplate", produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "下载模板", httpMethod = "GET")
+	public void downloadTemplate(HttpServletResponse response) {
+		ExcelUtil.download(response, "temp" + File.separator + "交班对账.xlsx");
+	}
+
+	/**
+	 * 导出交班对账列表
+	 */
+	@GetMapping("/export")
+	public void export(HttpServletResponse response) {
+		List<GasTourReconcileExcelDto> dtos = gasTourReconcileService.selectAllGasTourReconcileList();
+		ExcelUtil.export(response, "交班对账", "交班对账数据表", dtos, GasTourReconcileExcelDto.class);
+	}
+
+/*	@PostMapping("write-notice")
+	public R writeNotice(MultipartFile file) {
+		List<GasTourReconcileExcelDto> list = ExcelUtil.read(file, GasTourReconcileExcelDto.class);
+		//需要将dto中的汇总数据转换成json格式后再进行保存
+		return R.data(gasTourReconcileService.saveBatch(list));
+	}*/
 }

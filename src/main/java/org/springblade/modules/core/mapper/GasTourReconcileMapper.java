@@ -1,8 +1,11 @@
 package org.springblade.modules.core.mapper;
 
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springblade.modules.core.dto.GasTourReconcileDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
+import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
 
 import java.util.List;
 
@@ -12,7 +15,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2024-05-20
  */
-public interface GasTourReconcileMapper
+public interface GasTourReconcileMapper extends BaseMapper<GasTourReconcile>
 {
     /**
      * 查询交班对账
@@ -61,4 +64,11 @@ public interface GasTourReconcileMapper
      * @return 结果
      */
     public int deleteGasTourReconcileByIds(String[] ids);
+
+	/**
+	 * 查询交班对账列表
+	 *
+	 * @return 交班对账集合
+	 */
+	public List<GasTourReconcile> selectAllGasTourReconcileList();
 }

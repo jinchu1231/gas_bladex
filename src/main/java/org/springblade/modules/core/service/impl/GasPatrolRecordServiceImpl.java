@@ -3,6 +3,7 @@ package org.springblade.modules.core.service.impl;
 
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springblade.modules.core.entity.GasPatrolRecord;
 import org.springblade.modules.core.mapper.GasPatrolRecordMapper;
 import org.springblade.modules.core.service.GasPatrolRecordService;
@@ -19,7 +20,7 @@ import java.util.List;
  * @date 2024-05-20
  */
 @Service
-public class GasPatrolRecordServiceImpl implements GasPatrolRecordService {
+public class GasPatrolRecordServiceImpl extends ServiceImpl<GasPatrolRecordMapper, GasPatrolRecord> implements GasPatrolRecordService {
     @Autowired
     private GasPatrolRecordMapper gasPatrolRecordMapper;
 
@@ -97,4 +98,9 @@ public class GasPatrolRecordServiceImpl implements GasPatrolRecordService {
     {
         return gasPatrolRecordMapper.deleteGasPatrolRecordById(id);
     }
+
+	@Override
+	public List<GasPatrolRecord> selectGasPatrolRecordAllList() {
+		return gasPatrolRecordMapper.selectGasPatrolRecordAllList();
+	}
 }

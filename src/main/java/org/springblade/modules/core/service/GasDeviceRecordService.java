@@ -2,7 +2,9 @@ package org.springblade.modules.core.service;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.modules.core.entity.GasDeviceRecord;
+import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
 
 import java.util.List;
 
@@ -12,7 +14,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2024-05-20
  */
-public interface GasDeviceRecordService{
+public interface GasDeviceRecordService extends IService<GasDeviceRecord> {
     /**
      * 查询特种设备安全检查记录
      *
@@ -60,4 +62,6 @@ public interface GasDeviceRecordService{
      * @return 结果
      */
     public int deleteGasDeviceRecordById(Long id);
+
+	List<GasDeviceRecord> selectGasDeviceRecordAllList();
 }

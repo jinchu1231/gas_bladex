@@ -41,13 +41,14 @@
     </resultMap>
 
     <sql id="selectGasPatrolRecordVo">
-        select id, gas_id, fill_time, fill_date, work_shift, storage_tank_o, storage_tank_t, before_pump_o, after_pump_o, before_pump_t, after_pump_t, instrument_wind, liquid_filling_machine, storage_tank_th, liquid_storage_area, liquid_adding_zone, voltage, air_compressor_drainage, circumstances_patrol_situation, fireproofing_patrol_situation, fill_person, problem_description, site_disposal_measures, result_of_disposal, hidden_danger_desc, hidden_danger_antiaircraft_measure, principal, review_person, create_user, create_time, update_time, update_user, is_deleted from gas_patrol_record
+        select id, gas_id,gas_name, fill_time, fill_date, work_shift, storage_tank_o, storage_tank_t, before_pump_o, after_pump_o, before_pump_t, after_pump_t, instrument_wind, liquid_filling_machine, storage_tank_th, liquid_storage_area, liquid_adding_zone, voltage, air_compressor_drainage, circumstances_patrol_situation, fireproofing_patrol_situation, fill_person, problem_description, site_disposal_measures, result_of_disposal, hidden_danger_desc, hidden_danger_antiaircraft_measure, principal, review_person, create_user, create_time, update_time, update_user, is_deleted from gas_patrol_record
     </sql>
 
     <select id="selectGasPatrolRecordList" parameterType="GasPatrolRecord" resultMap="GasPatrolRecordResult">
         <include refid="selectGasPatrolRecordVo"/>
         <where>
             <if test="gasId != null  and gasId != ''"> and gas_id = #{gasId}</if>
+            <if test="gasName != null  and gasName != ''"> and gas_name = #{gasName}</if>
             <if test="fillTime != null  and fillTime != ''"> and fill_time = #{fillTime}</if>
             <if test="fillDate != null  and fillDate != ''"> and fill_date = #{fillDate}</if>
             <if test="workShift != null "> and work_shift = #{workShift}</if>
@@ -84,11 +85,16 @@
         <include refid="selectGasPatrolRecordVo"/>
         where id = #{id}
     </select>
+    <select id="selectGasPatrolRecordAllList" resultType="org.springblade.modules.core.entity.GasPatrolRecord">
+        <include refid="selectGasPatrolRecordVo"/>
+        where is_deleted = 0 order by create_time desc
+    </select>
 
     <insert id="insertGasPatrolRecord" parameterType="GasPatrolRecord" useGeneratedKeys="true" keyProperty="id">
         insert into gas_patrol_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="gasId != null">gas_id,</if>
+            <if test="gasName != null">gas_name,</if>
             <if test="fillTime != null">fill_time,</if>
             <if test="fillDate != null">fill_date,</if>
             <if test="workShift != null">work_shift,</if>
@@ -123,6 +129,7 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="gasId != null">#{gasId},</if>
+            <if test="gasName != null">#{gasName},</if>
             <if test="fillTime != null">#{fillTime},</if>
             <if test="fillDate != null">#{fillDate},</if>
             <if test="workShift != null">#{workShift},</if>
@@ -161,6 +168,7 @@
         update gas_patrol_record
         <trim prefix="SET" suffixOverrides=",">
             <if test="gasId != null">gas_id = #{gasId},</if>
+            <if test="gasName != null">gas_name = #{gasName},</if>
             <if test="fillTime != null">fill_time = #{fillTime},</if>
             <if test="fillDate != null">fill_date = #{fillDate},</if>
             <if test="workShift != null">work_shift = #{workShift},</if>
