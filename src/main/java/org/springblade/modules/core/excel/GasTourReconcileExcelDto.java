@@ -134,11 +134,11 @@ public class GasTourReconcileExcelDto {
 	@ExcelProperty({"车队汇总","车队名称"})
 	@ColumnWidth(30)
 	private String nameOfFleet;
-	//加液金额(元)
-	@ExcelProperty({"车队汇总","加液金额(元)"})
+	//车-加液金额(元)
+	@ExcelProperty({"车队汇总","车-加液金额(元)"})
 	private String amountOfLiquidFillingTH;
-	//加液量(公斤)
-	@ExcelProperty({"车队汇总","加液量(公斤)"})
+	//车-加液量(公斤)
+	@ExcelProperty({"车队汇总","车-加液量(公斤)"})
 	private String amountOfLiquidAddedTH;
 	//充值金额(元)
 	@ExcelProperty({"车队汇总","充值金额(元)"})

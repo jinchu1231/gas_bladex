@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
+import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
 
 import java.util.Date;
 
@@ -135,4 +136,32 @@ public class GasTourReconcile {
         this.updateUser = dto.getUpdateUser();
         this.isDeleted = dto.getIsDeleted();
     }
+
+	public GasTourReconcile(GasTourReconcileExcelDto dto){
+		this.id = dto.getId();
+		this.gasId = dto.getGasId();
+		this.tourPerson = dto.getTourPerson();
+		this.tourTime = dto.getTourTime();
+		this.addLiquidMeasureCount = dto.getAddLiquidMeasureCount();
+		this.amountCount = dto.getAmountCount();
+		this.amountReceivable = dto.getAmountReceivable();
+		this.fundsReceived = dto.getFundsReceived();
+		this.dealCount = dto.getDealCount();
+		this.totalRechargeAmount = dto.getTotalRechargeAmount();
+		this.amountReceivableT = dto.getAmountReceivableT();
+		this.fundsReceivedT = dto.getFundsReceivedT();
+		this.dealCountT = dto.getDealCountT();
+		this.amountDeducted = dto.getAmountDeducted();
+		this.collectionChannelSummary = JSONObject.toJSONString(dto.getCollectionChannelSummaryList());
+		this.gunNumberSummary = JSONObject.toJSONString(dto.getGunNumberSummaryList());
+		this.groupSummary = JSONObject.toJSONString(dto.getGroupSummaryList());
+		this.fleetSummary = JSONObject.toJSONString(dto.getFleetSummaryList());
+		this.unitPriceSummary = JSONObject.toJSONString(dto.getUnitPriceSummaryList());
+		this.inventory = dto.getInventory();
+		this.leaderSignature = dto.getLeaderSignature();
+		this.agentSignature = dto.getAgentSignature();
+		this.createUser = dto.getCreateUser();
+		this.updateUser = dto.getUpdateUser();
+		this.isDeleted = dto.getIsDeleted();
+	}
 }

@@ -6,8 +6,8 @@ import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
-import org.springblade.modules.core.entity.GasPatrolRecord;
 import org.springblade.modules.core.entity.GasTourReconcile;
+import org.springblade.modules.core.entity.tour.*;
 import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
 import org.springblade.modules.core.service.GasTourReconcileService;
 import org.springblade.modules.core.util.ExcelUtil;
@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -94,10 +95,100 @@ public class GasTourReconcileController {
 		ExcelUtil.export(response, "交班对账", "交班对账数据表", dtos, GasTourReconcileExcelDto.class);
 	}
 
-/*	@PostMapping("write-notice")
+	@PostMapping("write-notice")
 	public R writeNotice(MultipartFile file) {
 		List<GasTourReconcileExcelDto> list = ExcelUtil.read(file, GasTourReconcileExcelDto.class);
+
+		List<GasTourReconcile> gasDeviceRecordList = new ArrayList<>();
 		//需要将dto中的汇总数据转换成json格式后再进行保存
-		return R.data(gasTourReconcileService.saveBatch(list));
-	}*/
+		list.forEach(dto -> {
+			//收款渠道汇总 数据处理
+			String[] split = dto.getModeOfPayment().split("\n");
+			String[] split1 = dto.getPaymentAmount().split("\n");
+			List<CollectionChannelSummary> channelSummaryList = new ArrayList<>();
+			for (int i = 0; i < split.length; i++) {
+				CollectionChannelSummary collectionChannelSummary = new CollectionChannelSummary();
+				collectionChannelSummary.setModeOfPayment(split[i]);
+				collectionChannelSummary.setPaymentAmount(split1[i]);
+				channelSummaryList.add(collectionChannelSummary);
+			}
+			dto.setCollectionChannelSummaryList(channelSummaryList);
+
+			//枪号汇总 数据处理
+			String[] gun = dto.getGunMark().split("\n");
+			String[] amount = dto.getAmountOfLiquidAdded().split("\n");
+			String[] amountF = dto.getAmountOfLiquidFilling().split("\n");
+			String[] fre = dto.getFrequency().split("\n");
+			List<GunNumberSummary> gunNumberSummaryList = new ArrayList<>();
+			for (int i = 0; i < gun.length; i++) {
+				GunNumberSummary gunNumberSummary = new GunNumberSummary();
+				gunNumberSummary.setGunMark(gun[i]);
+				gunNumberSummary.setAmountOfLiquidAdded(amount[i]);
+				gunNumberSummary.setAmountOfLiquidFilling(amountF[i]);
+				gunNumberSummary.setFrequency(fre[i]);
+				gunNumberSummaryList.add(gunNumberSummary);
+			}
+			dto.setGunNumberSummaryList(gunNumberSummaryList);
+
+			//班组汇总 数据处理
+			String[] classN = dto.getClassNumber().split("\n");
+			String[] freq = dto.getFrequencyT().split("\n");
+			String[] amountT = dto.getAmountOfLiquidAddedT().split("\n");
+			String[] amountFT = dto.getAmountOfLiquidFillingT().split("\n");
+			List<GroupSummary> groupSummaryList = new ArrayList<>();
+			for (int i = 0; i < classN.length; i++) {
+				GroupSummary groupSummary = new GroupSummary();
+				groupSummary.setClassNumber(classN[i]);
+				groupSummary.setFrequency(freq[i]);
+				groupSummary.setAmountOfLiquidAdded(amountT[i]);
+				groupSummary.setAmountOfLiquidFilling(amountFT[i]);
+				groupSummaryList.add(groupSummary);
+			}
+			dto.setGroupSummaryList(groupSummaryList);
+
+			//车队汇总 数据处理
+			String[] name = dto.getNameOfFleet().split("\n");
+			String[] amountFTh = dto.getAmountOfLiquidFillingTH().split("\n");
+			String[] amountTh = dto.getAmountOfLiquidAddedTH().split("\n");
+			String[] rec = dto.getRechargeAmount().split("\n");
+			String[] rem = dto.getRemainingSum().split("\n");
+			String[] fle = dto.getFleetRemainingSum().split("\n");
+			List<FleetSummary> fleetSummaryList = new ArrayList<>();
+			for (int i = 0; i < name.length; i++) {
+				FleetSummary fleetSummary = new FleetSummary();
+				fleetSummary.setNameOfFleet(name[i]);
+				fleetSummary.setAmountOfLiquidFilling(amountFTh[i]);
+				fleetSummary.setAmountOfLiquidAdded(amountTh[i]);
+				fleetSummary.setRechargeAmount(rec[i]);
+				fleetSummary.setRemainingSum(rem[i]);
+				fleetSummary.setFleetRemainingSum(fle[i]);
+				fleetSummaryList.add(fleetSummary);
+			}
+			dto.setFleetSummaryList(fleetSummaryList);
+
+			//单价汇总 数据处理
+			String[] sym = dto.getSymbolName().split("\n");
+			String[] sti = dto.getStickerPrice().split("\n");
+			String[] wei = dto.getWeight().split("\n");
+			String[] amountR = dto.getAmountOfReceipt().split("\n");
+			String[] amountP = dto.getAmountPaid().split("\n");
+			String[] freTH = dto.getFrequencyTH().split("\n");
+			List<UnitPriceSummary> unitPriceSummaryList = new ArrayList<>();
+			for (int i = 0; i < sym.length; i++) {
+				UnitPriceSummary unitPriceSummary = new UnitPriceSummary();
+				unitPriceSummary.setSymbolName(sym[i]);
+				unitPriceSummary.setStickerPrice(sti[i]);
+				unitPriceSummary.setWeight(wei[i]);
+				unitPriceSummary.setAmountOfReceipt(amountR[i]);
+				unitPriceSummary.setAmountPaid(amountP[i]);
+				unitPriceSummary.setFrequency(freTH[i]);
+				unitPriceSummaryList.add(unitPriceSummary);
+			}
+			dto.setUnitPriceSummaryList(unitPriceSummaryList);
+
+			GasTourReconcile gasTourReconcile = new GasTourReconcile(dto);
+			gasDeviceRecordList.add(gasTourReconcile);
+		});
+		return R.data(gasTourReconcileService.saveBatch(gasDeviceRecordList));
+	}
 }
