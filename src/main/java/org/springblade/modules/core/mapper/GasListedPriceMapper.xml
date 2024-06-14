@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.core.mapper.GasListedPriceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="listedPriceResultMap" type="org.springblade.modules.core.entity.GasListedPriceEntity">
+        <result column="id" property="id"/>
+        <result column="gas_id" property="gasId"/>
+        <result column="gas_name" property="gasName"/>
+        <result column="day" property="day"/>
+        <result column="listed_price" property="listedPrice"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectListedPricePage" resultMap="listedPriceResultMap">
+        select * from gas_listed_price where is_deleted = 0
+        <if test="vo.gasId != null and vo.gasId != ''">
+           and gas_id = #{vo.gasId}
+        </if>
+        <if test="vo.gasName != null and vo.gasName != ''">
+           and gas_name = #{vo.gasName}
+        </if>
+        <if test="vo.day != null and vo.day != ''">
+            and day = #{vo.day}
+        </if>
+    </select>
+
+
+    <select id="exportListedPrice" resultType="org.springblade.modules.core.excel.GasListedPriceExcel">
+        SELECT * FROM gas_listed_price ${ew.customSqlSegment}
+    </select>
+
+</mapper>

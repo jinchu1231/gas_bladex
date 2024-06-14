@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.core.mapper.FluidFieldBaseInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="baseInfoResultMap" type="org.springblade.modules.core.entity.FluidFieldBaseInfo">
+        <id column="id" property="id"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="flu_name" property="fluName"/>
+        <result column="flu_profile" property="fluProfile"/>
+        <result column="flu_number" property="fluNumber"/>
+        <result column="flu_long" property="fluLong"/>
+        <result column="flu_lat" property="fluLat"/>
+        <result column="flu_img" property="fluImg"/>
+        <result column="remark" property="remark"/>
+        <result column="on_off" property="onOff"/>
+    </resultMap>
+
+
+    <select id="getBaseInfoList" resultMap="baseInfoResultMap">
+        select * from fluid_field_base_info where is_deleted = 0
+    </select>
+
+</mapper>

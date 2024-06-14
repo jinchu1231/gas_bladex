@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.core.mapper.ListedPriceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="listedPriceResultMap" type="org.springblade.modules.core.entity.ListedPriceEntity">
+        <result column="id" property="id"/>
+        <result column="fluid" property="fluid"/>
+        <result column="fluid_name" property="fluidName"/>
+        <result column="day" property="day"/>
+        <result column="listed_price" property="listedPrice"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectListedPricePage" resultMap="listedPriceResultMap">
+        select * from fluid_listed_price where is_deleted = 0
+        <if test="vo.fluid != null and vo.fluid != ''">
+            and fluid = #{vo.fluid}
+        </if>
+        <if test="vo.fluidName != null and vo.fluidName != ''">
+            and fluid_name = #{vo.fluidName}
+        </if>
+        <if test="vo.day != null and vo.day != ''">
+            and day = #{vo.day}
+        </if>
+    </select>
+
+
+    <select id="exportListedPrice" resultType="org.springblade.modules.core.excel.ListedPriceExcel">
+        SELECT * FROM fluid_listed_price ${ew.customSqlSegment}
+    </select>
+
+</mapper>

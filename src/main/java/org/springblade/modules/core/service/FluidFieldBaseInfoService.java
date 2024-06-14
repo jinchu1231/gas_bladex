@@ -2,8 +2,8 @@ package org.springblade.modules.core.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springblade.modules.core.dto.GasBaseInfoDto;
-import org.springblade.modules.core.entity.GasBaseInfo;
+import org.springblade.modules.core.dto.FluidFieldBaseInfoDto;
+import org.springblade.modules.core.entity.FluidFieldBaseInfo;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ import java.util.List;
  * @author Blade
  * @since 2022-09-14
  */
-public interface GasBaseInfoService extends IService<GasBaseInfo> {
+public interface FluidFieldBaseInfoService extends IService<FluidFieldBaseInfo> {
 
     /**
      * 获取加气站基础信息
      */
-    List<GasBaseInfoDto> getBaseInfoList();
+    List<FluidFieldBaseInfoDto> getBaseInfoList();
 
 }
