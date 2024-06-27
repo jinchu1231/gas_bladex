@@ -4,6 +4,7 @@ package org.springblade.modules.core.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
+import org.springblade.modules.core.dto.tour.GasTourReconcileSaveDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
 import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
 
@@ -23,7 +24,7 @@ public interface GasTourReconcileService extends IService<GasTourReconcile>
      * @param id 交班对账主键
      * @return 交班对账
      */
-    public GasTourReconcile selectGasTourReconcileById(Long id);
+    public GasTourReconcileSaveDto selectGasTourReconcileById(Long id);
 
     /**
      * 查询交班对账列表
@@ -31,7 +32,7 @@ public interface GasTourReconcileService extends IService<GasTourReconcile>
      * @param gasTourReconcile 交班对账
      * @return 交班对账集合
      */
-    public List<GasTourReconcileDto> selectGasTourReconcileList(IPage<GasTourReconcile> page, GasTourReconcile gasTourReconcile);
+    public IPage<GasTourReconcile> selectGasTourReconcileList(IPage<GasTourReconcile> page, GasTourReconcile gasTourReconcile);
 
     /**
      * 新增交班对账
@@ -39,7 +40,7 @@ public interface GasTourReconcileService extends IService<GasTourReconcile>
      * @param dto 交班对账
      * @return 结果
      */
-    public int insertGasTourReconcile(GasTourReconcileDto dto);
+    public int insertGasTourReconcile(GasTourReconcileSaveDto dto);
 
     /**
      * 修改交班对账
@@ -47,15 +48,7 @@ public interface GasTourReconcileService extends IService<GasTourReconcile>
      * @param dto 交班对账
      * @return 结果
      */
-    public int updateGasTourReconcile(GasTourReconcileDto dto);
-
-    /**
-     * 批量删除交班对账
-     *
-     * @param ids 需要删除的交班对账主键集合
-     * @return 结果
-     */
-    public int deleteGasTourReconcileByIds(String ids);
+    public int updateGasTourReconcile(GasTourReconcileSaveDto dto);
 
     /**
      * 删除交班对账信息
@@ -63,7 +56,7 @@ public interface GasTourReconcileService extends IService<GasTourReconcile>
      * @param id 交班对账主键
      * @return 结果
      */
-    public int deleteGasTourReconcileById(Long id);
+    public int deleteGasTourReconcileById(String id);
 
 
 	List<GasTourReconcileExcelDto> selectAllGasTourReconcileList();

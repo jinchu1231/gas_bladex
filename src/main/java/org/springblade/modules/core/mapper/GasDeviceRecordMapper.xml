@@ -6,28 +6,11 @@
 
     <resultMap type="GasDeviceRecord" id="GasDeviceRecordResult">
         <result property="id"    column="id"    />
+        <result property="gasId"    column="gas_id"    />
+        <result property="gasName"    column="gas_name"    />
+        <result property="content"    column="content"    />
+        <result property="inspectName"    column="inspect_name"    />
         <result property="inspectData"    column="inspect_data"    />
-        <result property="inspectPerson"    column="inspect_person"    />
-        <result property="inspectDevice"    column="inspect_device"    />
-        <result property="inspectProtector"    column="inspect_protector"    />
-        <result property="inspectCircumstances"    column="inspect_circumstances"    />
-        <result property="inspectWarning"    column="inspect_warning"    />
-        <result property="inspectComplaintReport"    column="inspect_complaint_report"    />
-        <result property="inspectPublicSentiment"    column="inspect_public_sentiment"    />
-        <result property="inspectPersonResult"    column="inspect_person_result"    />
-        <result property="inspectDeviceResult"    column="inspect_device_result"    />
-        <result property="inspectProtectorResult"    column="inspect_protector_result"    />
-        <result property="inspectCircumstancesResult"    column="inspect_circumstances_result"    />
-        <result property="inspectWarningResult"    column="inspect_warning_result"    />
-        <result property="inspectComplaintReportResult"    column="inspect_complaint_report_result"    />
-        <result property="inspectPublicSentimentResult"    column="inspect_public_sentiment_result"    />
-        <result property="inspectPersonRemark"    column="inspect_person_remark"    />
-        <result property="inspectDeviceRemark"    column="inspect_device_remark"    />
-        <result property="inspectProtectorRemark"    column="inspect_protector_remark"    />
-        <result property="inspectCircumstancesRemark"    column="inspect_circumstances_remark"    />
-        <result property="inspectWarningRemark"    column="inspect_warning_remark"    />
-        <result property="inspectComplaintReportRemark"    column="inspect_complaint_report_remark"    />
-        <result property="inspectPublicSentimentRemark"    column="inspect_public_sentiment_remark"    />
         <result property="takeSteps"    column="take_steps"    />
         <result property="safetyOfficer"    column="safety_officer"    />
         <result property="createUser"    column="create_user"    />
@@ -38,51 +21,42 @@
     </resultMap>
 
     <sql id="selectGasDeviceRecordVo">
-        select id,gas_id,gas_name, inspect_data, inspect_person, inspect_device, inspect_protector, inspect_circumstances, inspect_warning, inspect_complaint_report, inspect_public_sentiment, inspect_person_result, inspect_device_result, inspect_protector_result, inspect_circumstances_result, inspect_warning_result, inspect_complaint_report_result, inspect_public_sentiment_result, inspect_person_remark, inspect_device_remark, inspect_protector_remark, inspect_circumstances_remark, inspect_warning_remark, inspect_complaint_report_remark, inspect_public_sentiment_remark, take_steps, safety_officer, create_user, create_time, update_time, update_user, is_deleted from gas_device_record
+        select id,gas_id,gas_name,content,inspect_name,inspect_data, take_steps, safety_officer, create_user, create_time, update_time, update_user, is_deleted from gas_device_record
     </sql>
 
     <select id="selectGasDeviceRecordList" parameterType="GasDeviceRecord" resultMap="GasDeviceRecordResult">
         <include refid="selectGasDeviceRecordVo"/>
-        <where>
-            <if test="gasId != null  and gasId != ''"> and gas_id = #{gasId}</if>
-            <if test="gasName != null  and gasName != ''"> and gas_name = #{gasName}</if>
-            <if test="inspectData != null  and inspectData != ''"> and inspect_data = #{inspectData}</if>
-            <if test="inspectPerson != null  and inspectPerson != ''"> and inspect_person = #{inspectPerson}</if>
-            <if test="inspectDevice != null  and inspectDevice != ''"> and inspect_device = #{inspectDevice}</if>
-            <if test="inspectProtector != null  and inspectProtector != ''"> and inspect_protector = #{inspectProtector}</if>
-            <if test="inspectCircumstances != null  and inspectCircumstances != ''"> and inspect_circumstances = #{inspectCircumstances}</if>
-            <if test="inspectWarning != null  and inspectWarning != ''"> and inspect_warning = #{inspectWarning}</if>
-            <if test="inspectComplaintReport != null  and inspectComplaintReport != ''"> and inspect_complaint_report = #{inspectComplaintReport}</if>
-            <if test="inspectPublicSentiment != null  and inspectPublicSentiment != ''"> and inspect_public_sentiment = #{inspectPublicSentiment}</if>
-            <if test="inspectPersonResult != null  and inspectPersonResult != ''"> and inspect_person_result = #{inspectPersonResult}</if>
-            <if test="inspectDeviceResult != null  and inspectDeviceResult != ''"> and inspect_device_result = #{inspectDeviceResult}</if>
-            <if test="inspectProtectorResult != null  and inspectProtectorResult != ''"> and inspect_protector_result = #{inspectProtectorResult}</if>
-            <if test="inspectCircumstancesResult != null  and inspectCircumstancesResult != ''"> and inspect_circumstances_result = #{inspectCircumstancesResult}</if>
-            <if test="inspectWarningResult != null  and inspectWarningResult != ''"> and inspect_warning_result = #{inspectWarningResult}</if>
-            <if test="inspectComplaintReportResult != null  and inspectComplaintReportResult != ''"> and inspect_complaint_report_result = #{inspectComplaintReportResult}</if>
-            <if test="inspectPublicSentimentResult != null  and inspectPublicSentimentResult != ''"> and inspect_public_sentiment_result = #{inspectPublicSentimentResult}</if>
-            <if test="inspectPersonRemark != null  and inspectPersonRemark != ''"> and inspect_person_remark = #{inspectPersonRemark}</if>
-            <if test="inspectDeviceRemark != null  and inspectDeviceRemark != ''"> and inspect_device_remark = #{inspectDeviceRemark}</if>
-            <if test="inspectProtectorRemark != null  and inspectProtectorRemark != ''"> and inspect_protector_remark = #{inspectProtectorRemark}</if>
-            <if test="inspectCircumstancesRemark != null  and inspectCircumstancesRemark != ''"> and inspect_circumstances_remark = #{inspectCircumstancesRemark}</if>
-            <if test="inspectWarningRemark != null  and inspectWarningRemark != ''"> and inspect_warning_remark = #{inspectWarningRemark}</if>
-            <if test="inspectComplaintReportRemark != null  and inspectComplaintReportRemark != ''"> and inspect_complaint_report_remark = #{inspectComplaintReportRemark}</if>
-            <if test="inspectPublicSentimentRemark != null  and inspectPublicSentimentRemark != ''"> and inspect_public_sentiment_remark = #{inspectPublicSentimentRemark}</if>
-            <if test="takeSteps != null  and takeSteps != ''"> and take_steps = #{takeSteps}</if>
-            <if test="safetyOfficer != null  and safetyOfficer != ''"> and safety_officer = #{safetyOfficer}</if>
-            <if test="createUser != null  and createUser != ''"> and create_user = #{createUser}</if>
-            <if test="updateUser != null  and updateUser != ''"> and update_user = #{updateUser}</if>
-            <if test="isDeleted != null "> and is_deleted = #{isDeleted}</if>
-        </where>
+        where is_deleted = 0
+            <if test="re.gasId != null  and re.gasId != ''"> and gas_id = #{re.gasId}</if>
+            <if test="re.gasName != null  and re.gasName != ''"> and gas_name = #{re.gasName}</if>
+            <if test="re.content != null  and re.content != ''"> and content = #{re.content}</if>
+            <if test="re.inspectName != null  and re.inspectName != ''"> and inspect_name = #{re.inspectName}</if>
+            <if test="re.inspectData != null  and re.inspectData != ''"> and inspect_data = #{re.inspectData}</if>
+            <if test="re.takeSteps != null  and re.takeSteps != ''"> and take_steps = #{re.takeSteps}</if>
+            <if test="re.safetyOfficer != null  and re.safetyOfficer != ''"> and safety_officer = #{re.safetyOfficer}</if>
+            <if test="re.createUser != null  and re.createUser != ''"> and create_user = #{re.createUser}</if>
+            <if test="re.updateUser != null  and re.updateUser != ''"> and update_user = #{re.updateUser}</if>
+            <if test="re.isDeleted != null "> and is_deleted = #{re.isDeleted}</if>
     </select>
 
     <select id="selectGasDeviceRecordById" parameterType="Long" resultMap="GasDeviceRecordResult">
         <include refid="selectGasDeviceRecordVo"/>
         where id = #{id}
     </select>
+
     <select id="selectGasDeviceRecordAllList" resultType="org.springblade.modules.core.entity.GasDeviceRecord">
         <include refid="selectGasDeviceRecordVo"/>
         where is_deleted = 0 order by create_time desc
+    </select>
+
+    <select id="selectGasDeviceRecordByInspectId"
+            resultType="org.springblade.modules.core.entity.GasDeviceRecord">
+        <include refid="selectGasDeviceRecordVo"/>
+        where is_deleted = 0
+        <if test="inspectId != null and inspectId != ''">
+                and inspect_id = #{inspectId}
+        </if>
+        order by create_time desc
     </select>
 
     <insert id="insertGasDeviceRecord" parameterType="GasDeviceRecord" useGeneratedKeys="true" keyProperty="id">
@@ -90,28 +64,9 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="gasId != null">gas_id,</if>
             <if test="gasName != null">gas_name,</if>
+            <if test="content != null">content,</if>
+            <if test="inspectName != null">inspect_name,</if>
             <if test="inspectData != null">inspect_data,</if>
-            <if test="inspectPerson != null">inspect_person,</if>
-            <if test="inspectDevice != null">inspect_device,</if>
-            <if test="inspectProtector != null">inspect_protector,</if>
-            <if test="inspectCircumstances != null">inspect_circumstances,</if>
-            <if test="inspectWarning != null">inspect_warning,</if>
-            <if test="inspectComplaintReport != null">inspect_complaint_report,</if>
-            <if test="inspectPublicSentiment != null">inspect_public_sentiment,</if>
-            <if test="inspectPersonResult != null">inspect_person_result,</if>
-            <if test="inspectDeviceResult != null">inspect_device_result,</if>
-            <if test="inspectProtectorResult != null">inspect_protector_result,</if>
-            <if test="inspectCircumstancesResult != null">inspect_circumstances_result,</if>
-            <if test="inspectWarningResult != null">inspect_warning_result,</if>
-            <if test="inspectComplaintReportResult != null">inspect_complaint_report_result,</if>
-            <if test="inspectPublicSentimentResult != null">inspect_public_sentiment_result,</if>
-            <if test="inspectPersonRemark != null">inspect_person_remark,</if>
-            <if test="inspectDeviceRemark != null">inspect_device_remark,</if>
-            <if test="inspectProtectorRemark != null">inspect_protector_remark,</if>
-            <if test="inspectCircumstancesRemark != null">inspect_circumstances_remark,</if>
-            <if test="inspectWarningRemark != null">inspect_warning_remark,</if>
-            <if test="inspectComplaintReportRemark != null">inspect_complaint_report_remark,</if>
-            <if test="inspectPublicSentimentRemark != null">inspect_public_sentiment_remark,</if>
             <if test="takeSteps != null">take_steps,</if>
             <if test="safetyOfficer != null">safety_officer,</if>
             <if test="createUser != null">create_user,</if>
@@ -123,28 +78,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="gasId != null">#{gasId},</if>
             <if test="gasName != null">#{gasName},</if>
+            <if test="content != null">#{content},</if>
+            <if test="inspectName != null">#{inspectName},</if>
             <if test="inspectData != null">#{inspectData},</if>
-            <if test="inspectPerson != null">#{inspectPerson},</if>
-            <if test="inspectDevice != null">#{inspectDevice},</if>
-            <if test="inspectProtector != null">#{inspectProtector},</if>
-            <if test="inspectCircumstances != null">#{inspectCircumstances},</if>
-            <if test="inspectWarning != null">#{inspectWarning},</if>
-            <if test="inspectComplaintReport != null">#{inspectComplaintReport},</if>
-            <if test="inspectPublicSentiment != null">#{inspectPublicSentiment},</if>
-            <if test="inspectPersonResult != null">#{inspectPersonResult},</if>
-            <if test="inspectDeviceResult != null">#{inspectDeviceResult},</if>
-            <if test="inspectProtectorResult != null">#{inspectProtectorResult},</if>
-            <if test="inspectCircumstancesResult != null">#{inspectCircumstancesResult},</if>
-            <if test="inspectWarningResult != null">#{inspectWarningResult},</if>
-            <if test="inspectComplaintReportResult != null">#{inspectComplaintReportResult},</if>
-            <if test="inspectPublicSentimentResult != null">#{inspectPublicSentimentResult},</if>
-            <if test="inspectPersonRemark != null">#{inspectPersonRemark},</if>
-            <if test="inspectDeviceRemark != null">#{inspectDeviceRemark},</if>
-            <if test="inspectProtectorRemark != null">#{inspectProtectorRemark},</if>
-            <if test="inspectCircumstancesRemark != null">#{inspectCircumstancesRemark},</if>
-            <if test="inspectWarningRemark != null">#{inspectWarningRemark},</if>
-            <if test="inspectComplaintReportRemark != null">#{inspectComplaintReportRemark},</if>
-            <if test="inspectPublicSentimentRemark != null">#{inspectPublicSentimentRemark},</if>
             <if test="takeSteps != null">#{takeSteps},</if>
             <if test="safetyOfficer != null">#{safetyOfficer},</if>
             <if test="createUser != null">#{createUser},</if>
@@ -158,50 +94,24 @@
     <update id="updateGasDeviceRecord" parameterType="GasDeviceRecord">
         update gas_device_record
         <trim prefix="SET" suffixOverrides=",">
-            <if test="gasId != null">gas_id = #{gasId},</if>
-            <if test="gasName != null">gas_name = #{gasName},</if>
-            <if test="inspectData != null">inspect_data = #{inspectData},</if>
-            <if test="inspectPerson != null">inspect_person = #{inspectPerson},</if>
-            <if test="inspectDevice != null">inspect_device = #{inspectDevice},</if>
-            <if test="inspectProtector != null">inspect_protector = #{inspectProtector},</if>
-            <if test="inspectCircumstances != null">inspect_circumstances = #{inspectCircumstances},</if>
-            <if test="inspectWarning != null">inspect_warning = #{inspectWarning},</if>
-            <if test="inspectComplaintReport != null">inspect_complaint_report = #{inspectComplaintReport},</if>
-            <if test="inspectPublicSentiment != null">inspect_public_sentiment = #{inspectPublicSentiment},</if>
-            <if test="inspectPersonResult != null">inspect_person_result = #{inspectPersonResult},</if>
-            <if test="inspectDeviceResult != null">inspect_device_result = #{inspectDeviceResult},</if>
-            <if test="inspectProtectorResult != null">inspect_protector_result = #{inspectProtectorResult},</if>
-            <if test="inspectCircumstancesResult != null">inspect_circumstances_result = #{inspectCircumstancesResult},</if>
-            <if test="inspectWarningResult != null">inspect_warning_result = #{inspectWarningResult},</if>
-            <if test="inspectComplaintReportResult != null">inspect_complaint_report_result = #{inspectComplaintReportResult},</if>
-            <if test="inspectPublicSentimentResult != null">inspect_public_sentiment_result = #{inspectPublicSentimentResult},</if>
-            <if test="inspectPersonRemark != null">inspect_person_remark = #{inspectPersonRemark},</if>
-            <if test="inspectDeviceRemark != null">inspect_device_remark = #{inspectDeviceRemark},</if>
-            <if test="inspectProtectorRemark != null">inspect_protector_remark = #{inspectProtectorRemark},</if>
-            <if test="inspectCircumstancesRemark != null">inspect_circumstances_remark = #{inspectCircumstancesRemark},</if>
-            <if test="inspectWarningRemark != null">inspect_warning_remark = #{inspectWarningRemark},</if>
-            <if test="inspectComplaintReportRemark != null">inspect_complaint_report_remark = #{inspectComplaintReportRemark},</if>
-            <if test="inspectPublicSentimentRemark != null">inspect_public_sentiment_remark = #{inspectPublicSentimentRemark},</if>
-            <if test="takeSteps != null">take_steps = #{takeSteps},</if>
-            <if test="safetyOfficer != null">safety_officer = #{safetyOfficer},</if>
-            <if test="createUser != null">create_user = #{createUser},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
-            <if test="updateTime != null">update_time = #{updateTime},</if>
-            <if test="updateUser != null">update_user = #{updateUser},</if>
-            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+            <if test="gas.gasId != null">gas_id = #{gas.gasId},</if>
+            <if test="gas.gasName != null">gas_name = #{gas.gasName},</if>
+            <if test="gas.content != null">content = #{gas.content},</if>
+            <if test="gas.inspectName != null">inspect_name = #{gas.inspectName},</if>
+            <if test="gas.inspectData != null">inspect_data = #{gas.inspectData},</if>
+            <if test="gas.takeSteps != null">take_steps = #{gas.takeSteps},</if>
+            <if test="gas.safetyOfficer != null">safety_officer = #{gas.safetyOfficer},</if>
+            <if test="gas.createUser != null">create_user = #{gas.createUser},</if>
+            <if test="gas.createTime != null">create_time = #{gas.createTime},</if>
+            <if test="gas.updateTime != null">update_time = #{gas.updateTime},</if>
+            <if test="gas.updateUser != null">update_user = #{gas.updateUser},</if>
+            <if test="gas.isDeleted != null">is_deleted = #{gas.isDeleted},</if>
         </trim>
-        where id = #{id}
+        where id = #{gas.id}
     </update>
 
-    <delete id="deleteGasDeviceRecordById" parameterType="Long">
-        delete from gas_device_record where id = #{id}
-    </delete>
-
-    <delete id="deleteGasDeviceRecordByIds" parameterType="String">
-        delete from gas_device_record where id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
-        </foreach>
+    <delete id="deleteGasDeviceRecordById" parameterType="String">
+        update gas_device_record set is_deleted = 1  where id = #{id}
     </delete>
 
 </mapper>

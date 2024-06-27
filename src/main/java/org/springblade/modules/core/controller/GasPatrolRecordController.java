@@ -6,9 +6,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springblade.modules.core.entity.GasDeviceRecord;
+import org.springblade.modules.core.dto.GasPatrolRecordDto;
 import org.springblade.modules.core.entity.GasPatrolRecord;
-import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
 import org.springblade.modules.core.service.GasPatrolRecordService;
 import org.springblade.modules.core.util.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +26,21 @@ import java.util.List;
  * @date 2024-05-20
  */
 @RestController
-@RequestMapping("/gas-patrol")
+@RequestMapping("/dev/gas-patrol")
 @Api(value = "加气站巡查记录", tags = "加气站巡查记录接口")
 public class GasPatrolRecordController {
 
     @Autowired
     private GasPatrolRecordService gasPatrolRecordService;
+
+	/**
+	 * 查询加气站巡查记录详情
+	 */
+	@GetMapping("/detail")
+	public R selectById(@RequestParam("id") Long id) {
+		GasPatrolRecordDto gasPatrolRecordDto = gasPatrolRecordService.selectGasPatrolRecordById(id);
+		return R.data(gasPatrolRecordDto);
+	}
 
     /**
      * 查询加气站巡查记录列表
@@ -51,7 +59,7 @@ public class GasPatrolRecordController {
      * 新增保存加气站巡查记录
      */
     @PostMapping("/save")
-    public R save(@RequestBody @Valid GasPatrolRecord gasPatrolRecord)
+    public R save(@RequestBody @Valid GasPatrolRecordDto gasPatrolRecord)
     {
         return R.data(gasPatrolRecordService.insertGasPatrolRecord(gasPatrolRecord));
     }
@@ -61,17 +69,16 @@ public class GasPatrolRecordController {
      * 修改保存加气站巡查记录
      */
     @PostMapping("/update")
-    public R update(@RequestBody @Valid GasPatrolRecord gasPatrolRecord)
+    public R update(@RequestBody @Valid GasPatrolRecordDto gasPatrolRecords)
     {
-        return R.data(gasPatrolRecordService.updateGasPatrolRecord(gasPatrolRecord));
+        return R.data(gasPatrolRecordService.updateGasPatrolRecord(gasPatrolRecords));
     }
 
     /**
      * 删除加气站巡查记录
      */
-    @PostMapping( "/remove")
-    public R remove(String ids)
-    {
+	@GetMapping( "/delete")
+    public R delete(@RequestParam("ids") String ids) {
         return R.data(gasPatrolRecordService.deleteGasPatrolRecordByIds(ids));
     }
 

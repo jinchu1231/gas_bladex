@@ -16,6 +16,9 @@
  */
 package org.springblade.modules.core.service.impl;
 
+import org.springblade.modules.core.dto.dapin.DayPriceDto;
+import org.springblade.modules.core.dto.dapin.OrderTrendDto;
+import org.springblade.modules.core.dto.dapin.PriceTrendDto;
 import org.springblade.modules.core.entity.ListedPriceEntity;
 import org.springblade.modules.core.vo.ListedPriceVO;
 import org.springblade.modules.core.excel.ListedPriceExcel;
@@ -49,6 +52,31 @@ public class ListedPriceServiceImpl extends BaseServiceImpl<ListedPriceMapper, L
 		//	listedPrice.setTypeName(DictCache.getValue(DictEnum.YES_NO, ListedPrice.getType()));
 		//});
 		return listedPriceList;
+	}
+
+	@Override
+	public PriceTrendDto priceTrend(String id) {
+		PriceTrendDto dto = new PriceTrendDto();
+		int minValue = Integer.MAX_VALUE;
+		int maxValue = Integer.MIN_VALUE;
+		List<DayPriceDto> dayPriceDtos = baseMapper.priceTrend(id);
+		dto.setPriceList(dayPriceDtos);
+		for (DayPriceDto dayPriceDto : dayPriceDtos) {
+			if (dayPriceDto.getPrice() < minValue){
+				minValue = dayPriceDto.getPrice();
+			}
+			if (dayPriceDto.getPrice() > maxValue) {
+				maxValue = dayPriceDto.getPrice();
+			}
+		}
+		dto.setMax(maxValue);
+		dto.setMin(minValue);
+		return dto;
+	}
+
+	@Override
+	public List<OrderTrendDto> orderTrend(String id) {
+		return baseMapper.orderTrend(id);
 	}
 
 }

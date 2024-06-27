@@ -24,5 +24,9 @@
     <select id="getBaseInfoList" resultMap="baseInfoResultMap">
         select * from fluid_field_base_info where is_deleted = 0
     </select>
+    <select id="selectFluidFieldBaseInfoList"
+            resultType="org.springblade.modules.core.entity.FluidFieldBaseInfo">
+        select * from fluid_field_base_info where is_deleted = 0
+    </select>
 
 </mapper>

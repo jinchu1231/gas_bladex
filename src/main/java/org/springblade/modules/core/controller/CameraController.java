@@ -24,7 +24,7 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @AllArgsConstructor
-@RequestMapping("/gas/camera")
+@RequestMapping("/dev/gas/camera")
 @Api(value = "萤石api", tags = "萤石视频接口")
 public class CameraController{
 

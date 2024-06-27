@@ -15,11 +15,13 @@
  */
 package org.springblade.modules.core.entity;
 
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springblade.core.mp.base.BaseEntity;
+import org.springblade.core.tenant.mp.TenantEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -28,7 +30,7 @@ import java.util.Date;
 
 @Data
 @ApiModel(value = "BaseInfo对象", description = "加气站基本信息表")
-public class GasBaseInfo {
+public class GasBaseInfo extends TenantEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -126,12 +128,12 @@ public class GasBaseInfo {
      * 是否出省口加气站
      */
     @ApiModelProperty(value = "是否出省口加气站")
-    private Byte outProvincial;
+    private String outProvincial;
     /**
      * 是否入省口加气站
      */
     @ApiModelProperty(value = "是否入省口加气站")
-    private Byte inProvincial;
+    private String inProvincial;
     /**
      * 相邻省份
      */
@@ -188,20 +190,10 @@ public class GasBaseInfo {
 	private  Byte manageCompany;
 
     /**
-     * 创建人
-     */
-    @ApiModelProperty(value = "创建人")
-    private String createUser;
-    /**
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
-    /**
-     * 修改人
-     */
-    @ApiModelProperty(value = "修改人")
-    private  String updateUser;
     /**
      * 修改时间
      */
@@ -211,13 +203,17 @@ public class GasBaseInfo {
      * 是否刪除
      */
     @ApiModelProperty(value = "是否刪除")
-    private  Integer isDeleted;
+	@TableLogic
+    private Integer isDeleted;
     /**
      * 状态(0-待建;1-建设中;2-已建成待运行;3-已运行;4-废弃)
      */
     @ApiModelProperty(value = "状态(0-待建;1-建设中;2-已建成待运行;3-已运行;4-废弃)")
     private  Integer status;
-
-
+	/**
+	 * 创建部门
+	 */
+	@ApiModelProperty(value = "创建部门")
+    private String dept;
 
 }

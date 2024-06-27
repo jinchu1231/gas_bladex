@@ -32,6 +32,13 @@ public class GasTourReconcileDto {
 	@ExcelProperty("交班时间")
     private String tourTime;
 
+	/** 交班时间-开始 */
+	@ExcelIgnore
+	private String starTourTime;
+	/** 交班时间-结束 */
+	@ExcelIgnore
+	private String endTourTime;
+
     /** 总加液量(公斤) */
 	@ExcelProperty("总加液量(公斤)")
     private String addLiquidMeasureCount;
@@ -129,7 +136,9 @@ public class GasTourReconcileDto {
         this.id = gasTourReconcile.getId();
         this.gasId = gasTourReconcile.getGasId();
         this.tourPerson = gasTourReconcile.getTourPerson();
-        this.tourTime = gasTourReconcile.getTourTime();
+        this.tourTime = gasTourReconcile.getStarTourTime() + "至" + gasTourReconcile.getEndTourTime();
+        this.starTourTime = gasTourReconcile.getStarTourTime();
+        this.endTourTime = gasTourReconcile.getEndTourTime();
         this.addLiquidMeasureCount = gasTourReconcile.getAddLiquidMeasureCount();
         this.amountCount = gasTourReconcile.getAmountCount();
         this.amountReceivable = gasTourReconcile.getAmountReceivable();

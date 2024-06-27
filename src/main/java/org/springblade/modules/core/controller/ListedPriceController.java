@@ -16,6 +16,8 @@
  */
 package org.springblade.modules.core.controller;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -41,6 +43,8 @@ import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.tool.constant.BladeConstant;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
@@ -53,7 +57,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("blade-listedPrice/listedPrice")
+@RequestMapping("/dev/blade-listedPrice/listedPrice")
 @Api(value = "液厂挂牌价格", tags = "液厂挂牌价格接口")
 public class ListedPriceController extends BladeController {
 
@@ -146,6 +150,27 @@ public class ListedPriceController extends BladeController {
 		queryWrapper.lambda().eq(ListedPriceEntity::getIsDeleted, BladeConstant.DB_NOT_DELETED);
 		List<ListedPriceExcel> list = listedPriceService.exportListedPrice(queryWrapper);
 		ExcelUtil.export(response, "液厂挂牌价格数据" + DateUtil.time(), "液厂挂牌价格数据表", list, ListedPriceExcel.class);
+	}
+
+
+	/**
+	 * 液厂价格趋势统计图
+	 */
+	@PostMapping("/price-trend")
+	@ApiOperationSupport(order = 8)
+	@ApiOperation(value = "大屏-液厂价格趋势统计图", notes = "传入液厂id")
+	public R priceTrend(@ApiParam(value = "液厂id", required = true) @RequestParam String id) {
+		return R.data(listedPriceService.priceTrend(id));
+	}
+
+	/**
+	 * 液厂订单情况统计图
+	 */
+	@PostMapping("/order-trend")
+	@ApiOperationSupport(order = 9)
+	@ApiOperation(value = "大屏-液厂订单情况统计图", notes = "传入液厂id")
+	public R orderTrend(@ApiParam(value = "液厂id", required = true) @RequestParam String id) {
+		return R.data(listedPriceService.orderTrend(id));
 	}
 
 }

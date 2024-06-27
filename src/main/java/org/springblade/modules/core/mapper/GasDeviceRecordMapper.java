@@ -3,6 +3,7 @@ package org.springblade.modules.core.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.ibatis.annotations.Param;
 import org.springblade.modules.core.entity.GasDeviceRecord;
 import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
 
@@ -29,7 +30,7 @@ public interface GasDeviceRecordMapper extends BaseMapper<GasDeviceRecord> {
      * @param gasDeviceRecord 特种设备安全检查记录
      * @return 特种设备安全检查记录集合
      */
-    public List<GasDeviceRecord> selectGasDeviceRecordList(IPage page, GasDeviceRecord gasDeviceRecord);
+    public List<GasDeviceRecord> selectGasDeviceRecordList(IPage page,@Param("re") GasDeviceRecord gasDeviceRecord);
 
     /**
      * 新增特种设备安全检查记录
@@ -45,7 +46,7 @@ public interface GasDeviceRecordMapper extends BaseMapper<GasDeviceRecord> {
      * @param gasDeviceRecord 特种设备安全检查记录
      * @return 结果
      */
-    public int updateGasDeviceRecord(GasDeviceRecord gasDeviceRecord);
+    public int updateGasDeviceRecord(@Param("gas") GasDeviceRecord gasDeviceRecord);
 
     /**
      * 删除特种设备安全检查记录
@@ -53,15 +54,7 @@ public interface GasDeviceRecordMapper extends BaseMapper<GasDeviceRecord> {
      * @param id 特种设备安全检查记录主键
      * @return 结果
      */
-    public int deleteGasDeviceRecordById(Long id);
-
-    /**
-     * 批量删除特种设备安全检查记录
-     *
-     * @param ids 需要删除的数据主键集合
-     * @return 结果
-     */
-    public int deleteGasDeviceRecordByIds(String[] ids);
+    public int deleteGasDeviceRecordById(String id);
 
     List<GasDeviceRecord> selectGasDeviceRecordAllList();
 }

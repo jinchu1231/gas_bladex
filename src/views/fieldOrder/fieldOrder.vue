@@ -24,7 +24,7 @@
                    size="small"
                    icon="el-icon-delete"
                    plain
-                   v-if="permission.listedPrice_delete"
+                   v-if="permission.fieldOrder_delete"
                    @click="handleDelete">删 除
         </el-button>
         <el-button type="warning"
@@ -39,8 +39,8 @@
 </template>
 
 <script>
-  import {getList, getDetail, add, update, remove} from "@/api/listedPrice/listedPrice";
-  import option from "@/option/listedPrice/listedPrice";
+  import {getList, getDetail, add, update, remove} from "@/api/fieldOrder/fieldOrder";
+  import option from "@/option/fieldOrder/fieldOrder";
   import {mapGetters} from "vuex";
   import {exportBlob} from "@/api/common";
   import {getToken} from '@/util/auth';
@@ -70,10 +70,10 @@
       ...mapGetters(["permission"]),
       permissionList() {
         return {
-          addBtn: this.vaildData(this.permission.listedPrice_add, false),
-          viewBtn: this.vaildData(this.permission.listedPrice_view, false),
-          delBtn: this.vaildData(this.permission.listedPrice_delete, false),
-          editBtn: this.vaildData(this.permission.listedPrice_edit, false)
+          addBtn: this.vaildData(this.permission.fieldOrder_add, false),
+          viewBtn: this.vaildData(this.permission.fieldOrder_view, false),
+          delBtn: this.vaildData(this.permission.fieldOrder_delete, false),
+          editBtn: this.vaildData(this.permission.fieldOrder_edit, false)
         };
       },
       ids() {
@@ -151,18 +151,20 @@
           });
       },
       handleExport() {
-        let downloadUrl = `/api/blade-listedPrice/listedPrice/export-listedPrice?${this.website.tokenHeader}=${getToken()}`;
+        let downloadUrl = `/api/blade-fieldOrder/fieldOrder/export-fieldOrder?${this.website.tokenHeader}=${getToken()}`;
         const {
-            id,
+            orderId,
             gasId,
             gasName,
-            day,
+            orderData,
+            carNumber,
         } = this.query;
         let values = {
-            id_equal: id,
+            orderId_equal: orderId,
             gasId_equal: gasId,
             gasName_equal: gasName,
-            day_equal: day,
+            orderData_equal: orderData,
+            carNumber_equal: carNumber,
         };
         this.$confirm("是否导出数据?", "提示", {
           confirmButtonText: "确定",
@@ -171,7 +173,7 @@
         }).then(() => {
           NProgress.start();
           exportBlob(downloadUrl, values).then(res => {
-            downloadXls(res.data, `加气站挂牌价格${dateNow()}.xlsx`);
+            downloadXls(res.data, `液厂采购订单${dateNow()}.xlsx`);
             NProgress.done();
           })
         });
@@ -214,17 +216,19 @@
         this.loading = true;
 
         const {
-          id,
+          orderId,
           gasId,
           gasName,
-          day,
+          orderData,
+          carNumber,
         } = this.query;
 
         let values = {
-          id_equal: id,
+          orderId_equal: orderId,
           gasId_equal: gasId,
           gasName_equal: gasName,
-          day_equal: day,
+          orderData_equal: orderData,
+          carNumber_equal: carNumber,
         };
 
         getList(page.currentPage, page.pageSize, values).then(res => {

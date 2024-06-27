@@ -21,6 +21,7 @@ import org.springblade.core.secure.registry.SecureRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -37,7 +38,7 @@ public class BladeConfiguration implements WebMvcConfigurer {
 	@Bean
 	public SecureRegistry secureRegistry() {
 		SecureRegistry secureRegistry = new SecureRegistry();
-		secureRegistry.setEnabled(true);
+//		secureRegistry.setEnabled(true);
 		secureRegistry.excludePathPatterns("/blade-auth/**");
 		secureRegistry.excludePathPatterns("/blade-system/menu/routes");
 		secureRegistry.excludePathPatterns("/blade-system/menu/auth-routes");
@@ -66,5 +67,12 @@ public class BladeConfiguration implements WebMvcConfigurer {
 			.maxAge(3600)
 			.allowCredentials(true);
 	}
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/file/**").addResourceLocations("file:/home/gas_station/upload/");
+		//registry.addResourceHandler("/file/**").addResourceLocations("file:D://upload/");
+	}
+
 
 }

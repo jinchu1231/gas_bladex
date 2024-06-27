@@ -2,14 +2,24 @@ package org.springblade.modules.core.service.impl;
 
 
 import cn.hutool.core.convert.Convert;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springblade.core.tool.utils.RandomType;
+import org.springblade.core.tool.utils.StringUtil;
+import org.springblade.modules.core.dto.GasPatrolRecordDto;
+import org.springblade.modules.core.dto.patrol.RecordDto;
+import org.springblade.modules.core.entity.Device;
 import org.springblade.modules.core.entity.GasPatrolRecord;
 import org.springblade.modules.core.mapper.GasPatrolRecordMapper;
 import org.springblade.modules.core.service.GasPatrolRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,9 +41,24 @@ public class GasPatrolRecordServiceImpl extends ServiceImpl<GasPatrolRecordMappe
      * @return 加气站巡查记录
      */
     @Override
-    public GasPatrolRecord selectGasPatrolRecordById(Long id)
+    public GasPatrolRecordDto selectGasPatrolRecordById(Long id)
     {
-        return gasPatrolRecordMapper.selectGasPatrolRecordById(id);
+		GasPatrolRecordDto dto = new GasPatrolRecordDto();
+		GasPatrolRecord gasPatrolRecords = gasPatrolRecordMapper.selectGasPatrolRecordById(id);
+		ObjectMapper mapper = new ObjectMapper();
+		List<RecordDto> recordDtoList = null;
+		try {
+			recordDtoList = mapper.readValue(gasPatrolRecords.getContent(), new TypeReference<List<RecordDto>>(){});
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		dto.setGasId(gasPatrolRecords.getGasId());
+		dto.setGasName(gasPatrolRecords.getGasName());
+		dto.setFillDate(gasPatrolRecords.getFillDate());
+		dto.setRecordDtoList(recordDtoList);
+		dto.setPrincipal(gasPatrolRecords.getPrincipal());
+		dto.setReviewPerson(gasPatrolRecords.getReviewPerson());
+		return dto;
     }
 
     /**
@@ -52,27 +77,41 @@ public class GasPatrolRecordServiceImpl extends ServiceImpl<GasPatrolRecordMappe
     /**
      * 新增加气站巡查记录
      *
-     * @param gasPatrolRecord 加气站巡查记录
+     * @param gasPatrolRecords 加气站巡查记录
      * @return 结果
      */
     @Override
-    public int insertGasPatrolRecord(GasPatrolRecord gasPatrolRecord)
+    public int insertGasPatrolRecord(GasPatrolRecordDto gasPatrolRecords)
     {
-        gasPatrolRecord.setCreateTime(new Date());
-        return gasPatrolRecordMapper.insertGasPatrolRecord(gasPatrolRecord);
+		GasPatrolRecord gasPatrolRecord = new GasPatrolRecord();
+		gasPatrolRecord.setGasId(gasPatrolRecords.getGasId());
+		gasPatrolRecord.setGasName(gasPatrolRecords.getGasName());
+		gasPatrolRecord.setFillDate(gasPatrolRecords.getFillDate());
+		gasPatrolRecord.setPrincipal(gasPatrolRecords.getPrincipal());
+		gasPatrolRecord.setReviewPerson(gasPatrolRecords.getReviewPerson());
+		gasPatrolRecord.setCreateTime(new Date());
+		gasPatrolRecord.setContent(JSON.toJSONString(gasPatrolRecords.getRecordDtoList()));
+		return gasPatrolRecordMapper.insertGasPatrolRecord(gasPatrolRecord);
     }
 
     /**
      * 修改加气站巡查记录
      *
-     * @param gasPatrolRecord 加气站巡查记录
+     * @param gasPatrolRecords 加气站巡查记录
      * @return 结果
      */
     @Override
-    public int updateGasPatrolRecord(GasPatrolRecord gasPatrolRecord)
+    public int updateGasPatrolRecord(GasPatrolRecordDto gasPatrolRecords)
     {
-        gasPatrolRecord.setUpdateTime(new Date());
-        return gasPatrolRecordMapper.updateGasPatrolRecord(gasPatrolRecord);
+		GasPatrolRecord gasPatrolRecord = new GasPatrolRecord();
+		gasPatrolRecord.setGasId(gasPatrolRecords.getGasId());
+		gasPatrolRecord.setGasName(gasPatrolRecords.getGasName());
+		gasPatrolRecord.setFillDate(gasPatrolRecords.getFillDate());
+		gasPatrolRecord.setPrincipal(gasPatrolRecords.getPrincipal());
+		gasPatrolRecord.setReviewPerson(gasPatrolRecords.getReviewPerson());
+		gasPatrolRecord.setUpdateTime(new Date());
+		gasPatrolRecord.setContent(JSON.toJSONString(gasPatrolRecords.getRecordDtoList()));
+		return gasPatrolRecordMapper.updateGasPatrolRecord(gasPatrolRecord);
     }
 
     /**
@@ -84,19 +123,7 @@ public class GasPatrolRecordServiceImpl extends ServiceImpl<GasPatrolRecordMappe
     @Override
     public int deleteGasPatrolRecordByIds(String ids)
     {
-        return gasPatrolRecordMapper.deleteGasPatrolRecordByIds(Convert.toStrArray(ids));
-    }
-
-    /**
-     * 删除加气站巡查记录信息
-     *
-     * @param id 加气站巡查记录主键
-     * @return 结果
-     */
-    @Override
-    public int deleteGasPatrolRecordById(Long id)
-    {
-        return gasPatrolRecordMapper.deleteGasPatrolRecordById(id);
+        return gasPatrolRecordMapper.deleteGasPatrolRecordByIds(ids);
     }
 
 	@Override

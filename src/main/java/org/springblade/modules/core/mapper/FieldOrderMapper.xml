@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.core.mapper.FieldOrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="fieldOrderResultMap" type="org.springblade.modules.core.entity.FieldOrderEntity">
+        <result column="id" property="id"/>
+        <result column="order_id" property="orderId"/>
+        <result column="gas_id" property="gasId"/>
+        <result column="gas_name" property="gasName"/>
+        <result column="order_data" property="orderData"/>
+        <result column="num" property="num"/>
+        <result column="car_number" property="carNumber"/>
+        <result column="unit_of_carriage" property="unitOfCarriage"/>
+        <result column="forwarding_unit" property="forwardingUnit"/>
+        <result column="consignee_unit" property="consigneeUnit"/>
+        <result column="number_of_arrivals" property="numberOfArrivals"/>
+        <result column="solid_discharge" property="solidDischarge"/>
+        <result column="price" property="price"/>
+        <result column="total_prices" property="totalPrices"/>
+        <result column="order_status" property="orderStatus"/>
+        <result column="buyer" property="buyer"/>
+        <result column="accepter" property="accepter"/>
+        <result column="buy_field_principal" property="buyFieldPrincipal"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+    <select id="selectFieldOrderPage" resultMap="fieldOrderResultMap">
+        select * from fluid_field_order where is_deleted = 0
+    </select>
+
+
+    <select id="exportFieldOrder" resultType="org.springblade.modules.core.excel.FieldOrderExcel">
+        SELECT * FROM fluid_field_order ${ew.customSqlSegment}
+    </select>
+
+    <select id="selectOrderCount" resultType="org.springblade.modules.core.vo.OrderVO">
+        select count(1) as orderCount, count(1) as FieldOrderCount from fluid_field_order
+    </select>
+
+</mapper>

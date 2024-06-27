@@ -47,5 +47,12 @@
         select * from gas_base_info where is_deleted = 0
     </select>
 
+    <select id="selectIdByName" resultType="java.lang.String">
+        select gas_number from gas_base_info where gas_name = #{name}
+    </select>
+
+    <select id="selectGasBaseInfoList" resultType="org.springblade.modules.core.entity.GasBaseInfo">
+        select * from gas_base_info where is_deleted = 0
+    </select>
 
 </mapper>

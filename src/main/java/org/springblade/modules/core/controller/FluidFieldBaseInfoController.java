@@ -1,28 +1,44 @@
 package org.springblade.modules.core.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.esotericsoftware.kryo.kryo5.minlog.Log;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springblade.core.boot.ctrl.BladeController;
+import org.springblade.core.mp.support.Condition;
+import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
+import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.RandomType;
 import org.springblade.modules.core.entity.FluidFieldBaseInfo;
+import org.springblade.modules.core.entity.GasBaseInfo;
 import org.springblade.modules.core.entity.GasListedPriceEntity;
 import org.springblade.modules.core.service.FluidFieldBaseInfoService;
 import org.springblade.modules.core.service.GasBaseInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/fluid_field-service/baseinfo")
+	@RequestMapping("/dev/fluid_field-service/baseinfo")
 @Api(value = "加气站基本信息表", tags = "加气站基本信息表接口")
-public class FluidFieldBaseInfoController {
+public class FluidFieldBaseInfoController extends BladeController {
 
     @Autowired
     private FluidFieldBaseInfoService fluidFieldBaseInfoService;
+
+	/**
+	 * 加液厂详情
+	 */
+	@GetMapping("/detail")
+	@ApiOperationSupport(order = 1)
+	@ApiOperation(value = "详情", notes = "传入fieldOrder")
+	public R<FluidFieldBaseInfo> detail(String id) {
+		return R.data(fluidFieldBaseInfoService.getById(id));
+	}
 
     /**
      * 获取液厂基础信息
@@ -34,12 +50,24 @@ public class FluidFieldBaseInfoController {
     }
 
 	/**
+	 * 查询加气站巡查记录列表
+	 */
+	@PostMapping("/pageList")
+	public R<IPage<FluidFieldBaseInfo>> list(@RequestBody FluidFieldBaseInfo fluidFieldBaseInfo, @Valid @RequestBody Query query) {
+		IPage<FluidFieldBaseInfo> list =
+			fluidFieldBaseInfoService.selectFluidFieldBaseInfoList(Condition.getPage(query),fluidFieldBaseInfo);
+		return R.data(list);
+	}
+
+	/**
 	 * 液厂基础信息 新增
 	 */
 	@PostMapping("/save")
 	@ApiOperationSupport(order = 4)
 	@ApiOperation(value = "新增", notes = "传入listedPrice")
 	public R save(@Valid @RequestBody FluidFieldBaseInfo baseInfo) {
+		String random = Func.random(15, RandomType.INT);
+		baseInfo.setFluNumber(random);
 		return R.status(fluidFieldBaseInfoService.save(baseInfo));
 	}
 
@@ -48,8 +76,17 @@ public class FluidFieldBaseInfoController {
 	 */
 	@PostMapping("/update")
 	@ApiOperationSupport(order = 4)
-	@ApiOperation(value = "新增", notes = "传入listedPrice")
+	@ApiOperation(value = "修改", notes = "传入listedPrice")
 	public R update(@Valid @RequestBody FluidFieldBaseInfo baseInfo) {
 		return R.status(fluidFieldBaseInfoService.updateById(baseInfo));
+	}
+
+	/**
+	 * 删除
+	 */
+	@PostMapping("/delete")
+	@ApiOperation(value = "删除", notes = "传入GasBaseInfo")
+	public R delete(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
+		return R.status(fluidFieldBaseInfoService.deleteLogic(Func.toLongList(ids)));
 	}
 }

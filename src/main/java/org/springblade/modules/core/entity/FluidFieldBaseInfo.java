@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springblade.core.tenant.mp.TenantEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -27,7 +28,7 @@ import java.util.Date;
 
 @Data
 @ApiModel(value = "BaseInfo对象", description = "液厂基本信息表")
-public class FluidFieldBaseInfo {
+public class FluidFieldBaseInfo extends TenantEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -72,20 +73,10 @@ public class FluidFieldBaseInfo {
 	@ApiModelProperty(value = "备注")
 	private String remark;
 	/**
-	 * 创建人
-	 */
-	@ApiModelProperty(value = "创建人")
-	private String createUser;
-	/**
 	 * 创建时间
 	 */
 	@ApiModelProperty(value = "创建时间")
 	private Date createTime;
-	/**
-	 * 修改人
-	 */
-	@ApiModelProperty(value = "修改人")
-	private  String updateUser;
 	/**
 	 * 修改时间
 	 */

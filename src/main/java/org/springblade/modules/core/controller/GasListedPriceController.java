@@ -53,7 +53,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("gas-listedPrice")
+@RequestMapping("/dev/gas-listedPrice")
 @Api(value = "加气站挂牌价格", tags = "加气站挂牌价格接口")
 public class GasListedPriceController extends BladeController {
 

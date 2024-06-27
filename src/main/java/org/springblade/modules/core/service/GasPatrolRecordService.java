@@ -5,6 +5,7 @@ package org.springblade.modules.core.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springblade.modules.core.dto.GasPatrolRecordDto;
 import org.springblade.modules.core.entity.GasPatrolRecord;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public interface GasPatrolRecordService extends IService<GasPatrolRecord>
      * @param id 加气站巡查记录主键
      * @return 加气站巡查记录
      */
-    public GasPatrolRecord selectGasPatrolRecordById(Long id);
+    public GasPatrolRecordDto selectGasPatrolRecordById(Long id);
 
     /**
      * 查询加气站巡查记录列表
@@ -39,15 +40,15 @@ public interface GasPatrolRecordService extends IService<GasPatrolRecord>
      * @param gasPatrolRecord 加气站巡查记录
      * @return 结果
      */
-    public int insertGasPatrolRecord(GasPatrolRecord gasPatrolRecord);
+    public int insertGasPatrolRecord(GasPatrolRecordDto gasPatrolRecord);
 
     /**
      * 修改加气站巡查记录
      *
-     * @param gasPatrolRecord 加气站巡查记录
+     * @param gasPatrolRecords 加气站巡查记录
      * @return 结果
      */
-    public int updateGasPatrolRecord(GasPatrolRecord gasPatrolRecord);
+    public int updateGasPatrolRecord(GasPatrolRecordDto gasPatrolRecords);
 
     /**
      * 批量删除加气站巡查记录
@@ -56,14 +57,6 @@ public interface GasPatrolRecordService extends IService<GasPatrolRecord>
      * @return 结果
      */
     public int deleteGasPatrolRecordByIds(String ids);
-
-    /**
-     * 删除加气站巡查记录信息
-     *
-     * @param id 加气站巡查记录主键
-     * @return 结果
-     */
-    public int deleteGasPatrolRecordById(Long id);
 
 	List<GasPatrolRecord> selectGasPatrolRecordAllList();
 }

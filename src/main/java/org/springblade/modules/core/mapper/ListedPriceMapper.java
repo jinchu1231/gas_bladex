@@ -16,6 +16,9 @@
  */
 package org.springblade.modules.core.mapper;
 
+import org.springblade.modules.core.dto.dapin.DayPriceDto;
+import org.springblade.modules.core.dto.dapin.OrderTrendDto;
+import org.springblade.modules.core.dto.dapin.PriceTrendDto;
 import org.springblade.modules.core.entity.ListedPriceEntity;
 import org.springblade.modules.core.vo.ListedPriceVO;
 import org.springblade.modules.core.excel.ListedPriceExcel;
@@ -51,4 +54,7 @@ public interface ListedPriceMapper extends BaseMapper<ListedPriceEntity> {
 	 */
 	List<ListedPriceExcel> exportListedPrice(@Param("ew") Wrapper<ListedPriceEntity> queryWrapper);
 
+	List<DayPriceDto> priceTrend(String id);
+
+	List<OrderTrendDto> orderTrend(String id);
 }

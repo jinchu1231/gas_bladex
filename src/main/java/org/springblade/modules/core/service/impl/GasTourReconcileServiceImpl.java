@@ -1,14 +1,12 @@
 package org.springblade.modules.core.service.impl;
 
-
-import cn.hutool.core.convert.Convert;
-import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
+import org.springblade.modules.core.dto.tour.GasTourReconcileSaveDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
 import org.springblade.modules.core.entity.tour.*;
 import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
@@ -39,9 +37,47 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
      * @return 交班对账
      */
     @Override
-    public GasTourReconcile selectGasTourReconcileById(Long id)
+    public GasTourReconcileSaveDto selectGasTourReconcileById(Long id)
     {
-        return gasTourReconcileMapper.selectGasTourReconcileById(id);
+
+		GasTourReconcile gasTourReconcile = gasTourReconcileMapper.selectGasTourReconcileById(id);
+		ObjectMapper mapper = new ObjectMapper();
+		List<CollectionChannelSummary> collectionChannelSummaries = null;
+		List<GunNumberSummary> gunNumberSummaryList = null;
+		List<GroupSummary> groupSummaryList = null;
+		List<FleetSummary> fleetSummaryList = null;
+		List<UnitPriceSummary> unitPriceSummaryList = null;
+		try {
+			collectionChannelSummaries = mapper.readValue(gasTourReconcile.getCollectionChannelSummary(), new TypeReference<List<CollectionChannelSummary>>() {});
+			gunNumberSummaryList = mapper.readValue(gasTourReconcile.getGunNumberSummary(), new TypeReference<List<GunNumberSummary>>() {});
+			groupSummaryList = mapper.readValue(gasTourReconcile.getGroupSummary(), new TypeReference<List<GroupSummary>>() {});
+			fleetSummaryList = mapper.readValue(gasTourReconcile.getFleetSummary(), new TypeReference<List<FleetSummary>>() {});
+			unitPriceSummaryList = mapper.readValue(gasTourReconcile.getUnitPriceSummary(), new TypeReference<List<UnitPriceSummary>>() {});
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+		TourDealSummary tourDealSummary = new TourDealSummary();
+		tourDealSummary.setAddLiquidMeasureCount(gasTourReconcile.getAddLiquidMeasureCount());
+		tourDealSummary.setAmountCount(gasTourReconcile.getAmountCount());
+		tourDealSummary.setAmountReceivable(gasTourReconcile.getAmountReceivable());
+		tourDealSummary.setFundsReceived(gasTourReconcile.getFundsReceived());
+		tourDealSummary.setDealCount(gasTourReconcile.getDealCount());
+
+		TourPaySummary tourPaySummary = new TourPaySummary();
+		tourPaySummary.setTotalRechargeAmount(gasTourReconcile.getTotalRechargeAmount());
+		tourPaySummary.setAmountReceivableT(gasTourReconcile.getAmountReceivableT());
+		tourPaySummary.setFundsReceivedT(gasTourReconcile.getFundsReceivedT());
+		tourPaySummary.setDealCountT(gasTourReconcile.getDealCountT());
+		tourPaySummary.setAmountDeducted(gasTourReconcile.getAmountDeducted());
+
+		TourManageSummary tourManageSummary = new TourManageSummary();
+		tourManageSummary.setInventory(gasTourReconcile.getInventory());
+		tourManageSummary.setLeaderSignature(gasTourReconcile.getLeaderSignature());
+		tourManageSummary.setAgentSignature(gasTourReconcile.getAgentSignature());
+
+		return new GasTourReconcileSaveDto(gasTourReconcile, tourDealSummary, tourPaySummary, collectionChannelSummaries,
+			gunNumberSummaryList, groupSummaryList, fleetSummaryList, unitPriceSummaryList, tourManageSummary);
     }
 
     /**
@@ -51,26 +87,13 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
      * @return 交班对账
      */
     @Override
-    public List<GasTourReconcileDto> selectGasTourReconcileList(IPage<GasTourReconcile> page, GasTourReconcile gasTourReconcile)
+    public IPage<GasTourReconcile> selectGasTourReconcileList(IPage<GasTourReconcile> page, GasTourReconcile gasTourReconcile)
     {
         IPage<GasTourReconcile> gasTourReconciles = page.setRecords(gasTourReconcileMapper.selectGasTourReconcileList(page,gasTourReconcile));
-        List<GasTourReconcileDto> dto = new ArrayList<>();
-            gasTourReconciles.getRecords().forEach(gas -> {
-                try {
-                    ObjectMapper mapper = new ObjectMapper();
-                    List<CollectionChannelSummary> collectionChannelSummaries = mapper.readValue(gas.getCollectionChannelSummary(), new TypeReference<List<CollectionChannelSummary>>() {});
-                    List<GunNumberSummary> gunNumberSummaryList = mapper.readValue(gas.getGunNumberSummary(), new TypeReference<List<GunNumberSummary>>() {});
-                    List<GroupSummary> groupSummaryList = mapper.readValue(gas.getGroupSummary(), new TypeReference<List<GroupSummary>>() {});
-                    List<FleetSummary> fleetSummaryList = mapper.readValue(gas.getFleetSummary(), new TypeReference<List<FleetSummary>>() {});
-                    List<UnitPriceSummary> unitPriceSummaryList = mapper.readValue(gas.getUnitPriceSummary(), new TypeReference<List<UnitPriceSummary>>() {});
-                    dto.add(new GasTourReconcileDto(gas, collectionChannelSummaries,
-                            gunNumberSummaryList, groupSummaryList, fleetSummaryList, unitPriceSummaryList));
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-            });
-
-        return dto;
+		for (GasTourReconcile record : gasTourReconciles.getRecords()) {
+			record.setTourTime(record.getStarTourTime() + "至" + record.getEndTourTime());
+		}
+        return gasTourReconciles;
     }
 
     /**
@@ -80,8 +103,7 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
      * @return 结果
      */
     @Override
-    public int insertGasTourReconcile(GasTourReconcileDto dto)
-    {
+    public int insertGasTourReconcile(GasTourReconcileSaveDto dto) {
         GasTourReconcile gasTourReconcile = new GasTourReconcile(dto);
         gasTourReconcile.setCreateTime(new Date());
         return gasTourReconcileMapper.insertGasTourReconcile(gasTourReconcile);
@@ -94,23 +116,11 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
      * @return 结果
      */
     @Override
-    public int updateGasTourReconcile(GasTourReconcileDto dto)
+    public int updateGasTourReconcile(GasTourReconcileSaveDto dto)
     {
         GasTourReconcile gasTourReconcile = new GasTourReconcile(dto);
         gasTourReconcile.setUpdateTime(new Date());
         return gasTourReconcileMapper.updateGasTourReconcile(gasTourReconcile);
-    }
-
-    /**
-     * 批量删除交班对账
-     *
-     * @param ids 需要删除的交班对账主键
-     * @return 结果
-     */
-    @Override
-    public int deleteGasTourReconcileByIds(String ids)
-    {
-        return gasTourReconcileMapper.deleteGasTourReconcileByIds(Convert.toStrArray(ids));
     }
 
     /**
@@ -120,7 +130,7 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
      * @return 结果
      */
     @Override
-    public int deleteGasTourReconcileById(Long id)
+    public int deleteGasTourReconcileById(String id)
     {
         return gasTourReconcileMapper.deleteGasTourReconcileById(id);
     }

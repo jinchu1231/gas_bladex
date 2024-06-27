@@ -1,11 +1,13 @@
 package org.springblade.modules.core.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
+import org.springblade.modules.core.dto.tour.GasTourReconcileSaveDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
 import org.springblade.modules.core.entity.tour.*;
 import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
@@ -28,21 +30,28 @@ import java.util.List;
  * @date 2024-05-20
  */
 @RestController
-@RequestMapping("/gas-reconcile")
+@RequestMapping("/dev/gas-reconcile")
 @Api(value = "交班对账", tags = "交班对账接口")
 public class GasTourReconcileController {
 
     @Autowired
     private GasTourReconcileService gasTourReconcileService;
 
+	/**
+	 * 查询交班对账详情
+	 */
+	@GetMapping("/detail")
+	public R selectById(@RequestParam("id") String id) {
+		GasTourReconcileSaveDto gasTourReconcileDto = gasTourReconcileService.selectGasTourReconcileById(Long.valueOf(id));
+		return R.data(gasTourReconcileDto);
+	}
+
     /**
      * 查询交班对账列表
      */
     @PostMapping("/list")
-    public R list(@RequestBody @Valid GasTourReconcile gasTourReconcile,
-				  @Valid @RequestBody Query query)
-    {
-		List<GasTourReconcileDto> list =
+    public R list(@RequestBody GasTourReconcile gasTourReconcile, @RequestBody Query query) {
+		IPage<GasTourReconcile> list =
 			gasTourReconcileService.selectGasTourReconcileList(Condition.getPage(query),gasTourReconcile);
         return R.data(list);
     }
@@ -51,7 +60,7 @@ public class GasTourReconcileController {
      * 新增保存交班对账
      */
     @PostMapping("/save")
-    public R save(@RequestBody @Valid GasTourReconcileDto dto)
+    public R save(@RequestBody @Valid GasTourReconcileSaveDto dto)
     {
         return R.data(gasTourReconcileService.insertGasTourReconcile(dto));
     }
@@ -61,7 +70,7 @@ public class GasTourReconcileController {
      * 修改保存交班对账
      */
     @PostMapping("/update")
-    public R update(@RequestBody @Valid GasTourReconcileDto dto)
+    public R update(@RequestBody @Valid GasTourReconcileSaveDto dto)
     {
         return R.data(gasTourReconcileService.updateGasTourReconcile(dto));
     }
@@ -69,10 +78,9 @@ public class GasTourReconcileController {
     /**
      * 删除交班对账
      */
-    @PostMapping( "/remove")
-    public R remove(String ids)
-    {
-        return R.data(gasTourReconcileService.deleteGasTourReconcileByIds(ids));
+	@GetMapping( "/delete")
+    public R delete(@RequestParam("ids") String ids) {
+        return R.data(gasTourReconcileService.deleteGasTourReconcileById(ids));
     }
 
 	/**

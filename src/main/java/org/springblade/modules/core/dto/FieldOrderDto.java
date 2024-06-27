@@ -16,19 +16,19 @@
  */
 package org.springblade.modules.core.dto;
 
-import org.springblade.modules.core.entity.ListedPriceEntity;
+import org.springblade.modules.core.entity.FieldOrderEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 液厂挂牌价格 数据传输对象实体类
+ * 液厂采购订单 数据传输对象实体类
  *
  * @author BladeX
- * @since 2024-06-14
+ * @since 2024-06-19
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ListedPriceDTO extends ListedPriceEntity {
+public class FieldOrderDto extends FieldOrderEntity {
 	private static final long serialVersionUID = 1L;
 
 }

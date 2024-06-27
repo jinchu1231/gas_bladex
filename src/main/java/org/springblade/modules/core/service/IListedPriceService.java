@@ -17,6 +17,8 @@
 package org.springblade.modules.core.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import org.springblade.modules.core.dto.dapin.OrderTrendDto;
+import org.springblade.modules.core.dto.dapin.PriceTrendDto;
 import org.springblade.modules.core.entity.ListedPriceEntity;
 import org.springblade.modules.core.vo.ListedPriceVO;
 import org.springblade.modules.core.excel.ListedPriceExcel;
@@ -49,4 +51,7 @@ public interface IListedPriceService extends BaseService<ListedPriceEntity> {
 	 */
 	List<ListedPriceExcel> exportListedPrice(Wrapper<ListedPriceEntity> queryWrapper);
 
+    PriceTrendDto priceTrend(String id);
+
+	List<OrderTrendDto> orderTrend(String id);
 }

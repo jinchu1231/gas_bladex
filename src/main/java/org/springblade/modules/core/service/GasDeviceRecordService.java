@@ -3,8 +3,11 @@ package org.springblade.modules.core.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springblade.modules.core.dto.GasDeviceRecordDto;
 import org.springblade.modules.core.entity.GasDeviceRecord;
+import org.springblade.modules.core.excel.DeviceRecordExcel;
 import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,7 +24,7 @@ public interface GasDeviceRecordService extends IService<GasDeviceRecord> {
      * @param id 特种设备安全检查记录主键
      * @return 特种设备安全检查记录
      */
-    public GasDeviceRecord selectGasDeviceRecordById(Long id);
+    public GasDeviceRecordDto selectGasDeviceRecordById(Long id);
 
     /**
      * 查询特种设备安全检查记录列表
@@ -48,20 +51,18 @@ public interface GasDeviceRecordService extends IService<GasDeviceRecord> {
     public int updateGasDeviceRecord(GasDeviceRecord gasDeviceRecord);
 
     /**
-     * 批量删除特种设备安全检查记录
-     *
-     * @param ids 需要删除的特种设备安全检查记录主键集合
-     * @return 结果
-     */
-    public int deleteGasDeviceRecordByIds(String ids);
-
-    /**
      * 删除特种设备安全检查记录信息
      *
      * @param id 特种设备安全检查记录主键
      * @return 结果
      */
-    public int deleteGasDeviceRecordById(Long id);
+    public int deleteGasDeviceRecordById(String id);
 
-	List<GasDeviceRecord> selectGasDeviceRecordAllList();
+	List<GasDeviceRecordDto> selectGasDeviceRecordAllList();
+
+	int insertGasDevice(GasDeviceRecordDto gasDeviceRecordDto);
+
+	int updateGasDevice(GasDeviceRecordDto gasDeviceRecordDto);
+
+	void writeNotice(MultipartFile file);
 }

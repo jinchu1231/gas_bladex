@@ -28,7 +28,7 @@ import org.springblade.modules.core.entity.GasListedPriceEntity;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class GasListedPriceDTO extends GasListedPriceEntity {
+public class GasListedPriceDto extends GasListedPriceEntity {
 	private static final long serialVersionUID = 1L;
 
 }
