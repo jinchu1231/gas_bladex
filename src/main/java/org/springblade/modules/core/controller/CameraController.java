@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.core.dto.CameraDto;
@@ -24,7 +25,7 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @AllArgsConstructor
-@RequestMapping("/dev/gas/camera")
+@RequestMapping(AppConstant.DEV_CODE + "/gas/camera")
 @Api(value = "萤石api", tags = "萤石视频接口")
 public class CameraController{
 

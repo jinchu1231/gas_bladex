@@ -14,44 +14,47 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.modules.core.service;
+package org.springblade.modules.core.mapper;
 
+import org.springblade.modules.core.dto.GasNewsDTO;
+import org.springblade.modules.core.entity.GasNewsEntity;
+import org.springblade.modules.core.vo.GasNewsVO;
+import org.springblade.modules.core.excel.GasNewsExcel;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import org.springblade.modules.core.dto.dapin.OrderTrendDto;
-import org.springblade.modules.core.dto.dapin.PriceTrendDto;
-import org.springblade.modules.core.entity.ListedPriceEntity;
-import org.springblade.modules.core.vo.ListedPriceVO;
-import org.springblade.modules.core.excel.ListedPriceExcel;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.springblade.core.mp.base.BaseService;
+import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * 液厂挂牌价格 服务类
+ * 新闻动态 Mapper 接口
  *
  * @author BladeX
- * @since 2024-06-14
+ * @since 2024-07-01
  */
-public interface IListedPriceService extends BaseService<ListedPriceEntity> {
+public interface GasNewsMapper extends BaseMapper<GasNewsEntity> {
+
 	/**
 	 * 自定义分页
 	 *
 	 * @param page
-	 * @param listedPrice
+	 * @param gasnews
 	 * @return
 	 */
-	IPage<ListedPriceVO> selectListedPricePage(IPage<ListedPriceVO> page, ListedPriceVO listedPrice);
+	List<GasNewsVO> selectGasNewsPage(IPage page,@Param("vo") GasNewsVO gasnews);
 
 
 	/**
-	 * 导出数据
+	 * 获取导出数据
 	 *
 	 * @param queryWrapper
 	 * @return
 	 */
-	List<ListedPriceExcel> exportListedPrice(Wrapper<ListedPriceEntity> queryWrapper);
+	List<GasNewsExcel> exportGasNews(@Param("ew") Wrapper<GasNewsEntity> queryWrapper);
 
-    PriceTrendDto priceTrend(String id);
+	int insertNews(GasNewsEntity gasnews);
 
-	Double recentQuotation(String fluid);
+	int updateNews(@Param("gas") GasNewsEntity gasNewsEntity);
+
+	int deleteNewsById(String ids);
 }

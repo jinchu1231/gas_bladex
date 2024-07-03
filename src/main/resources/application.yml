@@ -110,6 +110,9 @@ swagger:
     name: 翼宿
     email: bladejava@qq.com
     url: https://gitee.com/smallc
+  base-packages:
+    - org.springblade
+    - org.springframework.security.oauth2.provider.endpoint
 
 #flowable配置
 flowable:
@@ -136,15 +139,13 @@ oss:
   #minio、s3、qiniu、alioss、huaweiobs、tencentcos
   name: minio
   #租户模式
-  tenant-mode: true
+  tenant-mode: false
   #oss服务地址
-  endpoint: http://127.0.0.1:9000
-  #oss转换服务地址，用于内网上传后将返回地址改为转换的外网地址
-  transform-endpoint: http://localhost:9000
+  endpoint: http://172.16.11.185:9000
   #访问key
-  access-key: bladexadmin
+  access-key: admin
   #密钥key
-  secret-key: bladexadmin
+  secret-key: 12345678
   #存储桶
   bucket-name: bladex
 

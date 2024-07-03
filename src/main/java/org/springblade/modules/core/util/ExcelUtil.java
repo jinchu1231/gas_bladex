@@ -1,10 +1,16 @@
 package org.springblade.modules.core.util;
 
+import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.read.builder.ExcelReaderBuilder;
 import com.alibaba.excel.read.listener.ReadListener;
+import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.util.DateUtils;
+import com.alibaba.excel.write.builder.ExcelWriterBuilder;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import lombok.SneakyThrows;
@@ -14,12 +20,16 @@ import org.springblade.core.excel.listener.DataListener;
 import org.springblade.core.excel.listener.ImportListener;
 import org.springblade.core.excel.support.ExcelException;
 import org.springblade.core.excel.support.ExcelImporter;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 /**
@@ -161,13 +171,67 @@ public class ExcelUtil {
 	}
 
 	/**
+	 * 导出隧道设备列表
+	 */
+	@SneakyThrows
+	public static void download(HttpServletResponse response, String projectId) {
+
+		//获取模板
+//		ClassPathResource classPathResource = new ClassPathResource("/static/特种设备安全检查.xlsx");
+		InputStream inputStream = ResourceUtil.getResourceObj("static/特种设备安全检查.xlsx").getStream();
+		//输入流
+//		InputStream inputStream = null;
+		//输出流
+		ServletOutputStream outputStream = null;
+		//Excel对象
+		ExcelWriter excelWriter = null;
+		try {
+			//输入流
+//			inputStream = classPathResource.getInputStream();
+			// 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
+			response.setContentType("application/vnd.ms-excel");
+			response.setCharacterEncoding("utf-8");
+			// 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+			String fileName = URLEncoder.encode("特种设备安全检查", "UTF-8");
+			response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+			outputStream = response.getOutputStream();
+			//设置输出流和模板信息
+			excelWriter = EasyExcel.write(outputStream).withTemplate(inputStream).excelType(ExcelTypeEnum.XLSX).build();
+//			excelWriter.finish();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			// 千万别忘记finish 会帮忙关闭流
+			if (excelWriter != null) {
+				excelWriter.finish();
+			}
+			//关闭流
+			if (outputStream != null) {
+				try {
+					outputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	/**
 	 * 文件下载
 	 *
 	 * @param response HttpServletResponse
 	 * @param filePath 文件路径
 	 * @throws IOException IOException
 	 */
-	public static void download(HttpServletResponse response, String filePath) {
+	/*public static void download(HttpServletResponse response, String filePath) {
 		// 参数检查：
 		if (StrUtil.isEmpty(filePath)) {
 			return;
@@ -177,18 +241,39 @@ public class ExcelUtil {
 		// 获取文件路径
 		File file;
 		try {
-			file = new File(filePath);
-			inputStream = ExcelUtil.class.getClassLoader().getResourceAsStream(DEF_BASE_PATH + filePath);
+			//获取模板
+			ClassPathResource classPathResource = new ClassPathResource("/static/交控运营事件报表.xlsx");
+			String path = ResourceUtils.getURL("classpath:").getPath() + "static/" + filePath;
+			*//** 获取文件的名称 . *//*
+			String fileName = path.substring(path.lastIndexOf("/") +1);
+			file = new File(fileName);
+			if (!file.exists()){
+				System.out.println("路径有误，文件不存在！");
+			}
+			response.setContentType("application/vnd.ms-excel");
+			response.setCharacterEncoding("utf-8");
+			response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName,"UTF-8"));
+			response.setContentType("content-type:octet-stream");
+			BufferedInputStream inputStream1 = new BufferedInputStream(new FileInputStream(file));
+			OutputStream outputStream = response.getOutputStream();
+			byte[] buffer = new byte[1024];
+			int len;
+			while ((len = inputStream.read(buffer)) != -1){ *//** 将流中内容写出去 .*//*
+			outputStream.write(buffer ,0 , len);
+			}
+			inputStream.close();
+			outputStream.close();
+			*//*inputStream = ExcelUtil.class.getClassLoader().getResourceAsStream(DEF_BASE_PATH + filePath);
 			response.reset(); // 必须reset，否则会出现文件不完整
-			response.setCharacterEncoding("UTF-8");
-			response.setContentType("multipart/octet-stream");
+//			response.setCharacterEncoding("UTF-16LE");
+			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			String fileName = URLEncoder.encode(file.getName(), "UTF-8");
-			response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
+			response.addHeader("Content-Disposition", "attachment; filename=" + fileName);*//*
 			// 循环取出流中的数据
-			byte[] b = new byte[4096];
+			*//*byte[] b = new byte[4096];
 			for (int len = inputStream.read(b); len > 0; len = inputStream.read(b)) {
 				response.getOutputStream().write(b, 0, len);
-			}
+			}*//*
 		} catch (IOException e) {
 			e.getMessage();
 		} finally {
@@ -201,5 +286,5 @@ public class ExcelUtil {
 				}
 			}
 		}
-	}
+	}*/
 }

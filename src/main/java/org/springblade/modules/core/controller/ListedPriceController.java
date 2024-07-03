@@ -25,6 +25,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import lombok.AllArgsConstructor;
 import javax.validation.Valid;
 
+import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.secure.BladeUser;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -57,7 +58,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/dev/blade-listedPrice/listedPrice")
+@RequestMapping(AppConstant.DEV_CODE + "/blade-listedPrice/listedPrice")
 @Api(value = "液厂挂牌价格", tags = "液厂挂牌价格接口")
 public class ListedPriceController extends BladeController {
 
@@ -164,13 +165,13 @@ public class ListedPriceController extends BladeController {
 	}
 
 	/**
-	 * 液厂订单情况统计图
+	 * 获取液厂最新价格
 	 */
-	@PostMapping("/order-trend")
+	@PostMapping("/recent-quotation")
 	@ApiOperationSupport(order = 9)
-	@ApiOperation(value = "大屏-液厂订单情况统计图", notes = "传入液厂id")
-	public R orderTrend(@ApiParam(value = "液厂id", required = true) @RequestParam String id) {
-		return R.data(listedPriceService.orderTrend(id));
+	@ApiOperation(value = "获取液厂最新价格", notes = "传入液厂id")
+	public R recentQuotation(@ApiParam(value = "液厂id", required = true) @RequestParam String fluid) {
+		return R.data(listedPriceService.recentQuotation(fluid));
 	}
 
 }

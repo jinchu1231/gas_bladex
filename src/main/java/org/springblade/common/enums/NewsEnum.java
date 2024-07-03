@@ -5,23 +5,23 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum OrderEnum {
+public enum NewsEnum {
 	/**
-	 * 未知
+	 * 公司动态
 	 */
-	CREATE_UNAUDITED("已创建未审核","0"),
+	COMPANY_DYNAMIC("公司动态","1"),
 	/**
-	 * 已创建未支付
+	 * 行业资讯
 	 */
-	CREATED_NOT_PAID("已审核","1"),
+	INDUSTRY_INFORMATION("行业资讯","2"),
 	/**
-	 * 已支付
+	 * 行业新闻
 	 */
-	ORDER_PAID("已支付","2"),
+	TRADE_NEWS("行业新闻","3"),
 	/**
-	 * 已完成
+	 * 其他
 	 */
-	ORDER_OVER("已完成","3"),
+	OTHER("其他","4"),
 	;
 
 	final String name;
@@ -34,8 +34,8 @@ public enum OrderEnum {
 	 * @param value v
 	 * @return 枚举对象
 	 */
-	public static OrderEnum getStatus(String value) {
-		for (OrderEnum enumItem : OrderEnum.values()) {
+	public static NewsEnum getStatus(String value) {
+		for (NewsEnum enumItem : NewsEnum.values()) {
 			if (enumItem.getValue().equals(value)) {
 				return enumItem;
 			}

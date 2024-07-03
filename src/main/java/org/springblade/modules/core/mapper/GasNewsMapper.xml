@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.springblade.modules.core.mapper.GasNewsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="gasnewsResultMap" type="org.springblade.modules.core.entity.GasNewsEntity">
+        <result column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="headline" property="headline"/>
+        <result column="content" property="content"/>
+        <result column="file_url" property="fileUrl"/>
+        <result column="their_id" property="theirId"/>
+        <result column="pub_time" property="pubTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="create_dept" property="createDept"/>
+    </resultMap>
+
+
+    <insert id="insertNews"  parameterType="GasNewsEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into gas_news
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">type,</if>
+            <if test="headline != null">headline,</if>
+            <if test="content != null">content,</if>
+            <if test="fileUrl != null">file_url,</if>
+            <if test="theirId != null">their_id,</if>
+            <if test="pubTime != null">pub_time,</if>
+            <if test="createUser != null">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateUser != null">update_user,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+            <if test="tenantId != null">tenant_id,</if>
+            <if test="createDept != null">create_dept,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">#{type},</if>
+            <if test="headline != null">#{headline},</if>
+            <if test="content != null">#{content},</if>
+            <if test="fileUrl != null">#{fileUrl},</if>
+            <if test="theirId != null">#{theirId},</if>
+            <if test="pubTime != null">#{pubTime},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+            <if test="tenantId != null">#{tenantId},</if>
+            <if test="createDept != null">#{createDept},</if>
+            <if test="status != null">#{status},</if>
+        </trim>
+    </insert>
+
+
+    <update id="updateNews"  parameterType="GasNewsEntity">
+        update gas_news
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gas.type != null">type = #{gas.type},</if>
+            <if test="gas.headline != null">headline = #{gas.headline},</if>
+            <if test="gas.content != null">content = #{gas.content},</if>
+            <if test="gas.fileUrl != null">file_url = #{gas.fileUrl},</if>
+            <if test="gas.theirId != null">their_id = #{gas.theirId},</if>
+            <if test="gas.pubTime != null">pub_time = #{gas.pubTime},</if>
+            <if test="gas.createUser != null">create_user = #{gas.createUser},</if>
+            <if test="gas.createTime != null">create_time = #{gas.createTime},</if>
+            <if test="gas.updateTime != null">update_time = #{gas.updateTime},</if>
+            <if test="gas.updateUser != null">update_user = #{gas.updateUser},</if>
+            <if test="gas.isDeleted != null">is_deleted = #{gas.isDeleted},</if>
+            <if test="gas.tenantId != null">tenant_id = #{gas.tenantId},</if>
+            <if test="gas.createDept != null">create_dept = #{gas.createDept},</if>
+            <if test="gas.status != null">status = #{gas.status},</if>
+        </trim>
+        where id = #{gas.id}
+    </update>
+
+
+    <delete id="deleteNewsById">
+        update gas_news set is_deleted = 1  where id = #{id}
+    </delete>
+
+
+    <select id="selectGasNewsPage" resultType="org.springblade.modules.core.vo.GasNewsVO">
+        select * from gas_news where is_deleted = 0
+        <if test="vo.type != null">
+            and type = #{vo.type}
+        </if>
+        <if test="vo.headline != null and vo.headline != ''">
+            and headline = #{vo.headline}
+        </if>
+        order by create_time desc
+    </select>
+
+
+    <select id="exportGasNews" resultType="org.springblade.modules.core.excel.GasNewsExcel">
+        SELECT * FROM gas_news ${ew.customSqlSegment}
+    </select>
+</mapper>

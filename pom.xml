@@ -285,6 +285,30 @@
                         </buildArgs>
                     </configuration>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration>
+                        <fork>true</fork>
+                        <meminitial>512m</meminitial>
+                        <!-- 如果不够读者可以加大 -->
+                        <maxmem>4096m</maxmem>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <version>2.6</version>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                        <nonFilteredFileExtensions>
+                            <nonFilteredFileExtension>xlsx</nonFilteredFileExtension>
+                        </nonFilteredFileExtensions>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>

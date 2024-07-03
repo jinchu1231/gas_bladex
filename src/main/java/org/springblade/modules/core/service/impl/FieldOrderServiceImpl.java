@@ -16,8 +16,13 @@
  */
 package org.springblade.modules.core.service.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
+import org.springblade.common.cache.DictCache;
+import org.springblade.common.enums.DictEnum;
 import org.springblade.common.enums.OrderEnum;
+import org.springblade.modules.core.dto.dapin.OrderTrendDto;
 import org.springblade.modules.core.entity.FieldOrderEntity;
 import org.springblade.modules.core.vo.FieldOrderVO;
 import org.springblade.modules.core.excel.FieldOrderExcel;
@@ -28,6 +33,8 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springblade.core.mp.base.BaseServiceImpl;
+
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -42,6 +49,20 @@ public class FieldOrderServiceImpl extends BaseServiceImpl<FieldOrderMapper, Fie
 	@Override
 	public IPage<FieldOrderVO> selectFieldOrderPage(IPage<FieldOrderVO> page, FieldOrderVO fieldOrder) {
 		IPage<FieldOrderVO> fieldOrderVOIPage = page.setRecords(baseMapper.selectFieldOrderPage(page, fieldOrder));
+		fieldOrderVOIPage.getRecords().forEach(fieldOrders -> {
+			fieldOrders.setOrderStatusName(OrderEnum.getStatus(fieldOrders.getOrderStatus()).getName());
+			if(!StringUtils.isEmpty(fieldOrders.getPdfUrl())){
+				ObjectMapper mapper = new ObjectMapper();
+				List<String> list = null;
+				try {
+					list = mapper.readValue(fieldOrders.getPdfUrl(), new TypeReference<List<String>>() {
+					});
+				}catch (IOException e) {
+					e.printStackTrace();
+				}
+				fieldOrders.setPdfUrlList(list);
+			}
+		});
 		return fieldOrderVOIPage;
 	}
 
@@ -58,6 +79,16 @@ public class FieldOrderServiceImpl extends BaseServiceImpl<FieldOrderMapper, Fie
 	@Override
 	public OrderVO selectOrderCount() {
 		return baseMapper.selectOrderCount();
+	}
+
+	@Override
+	public List<OrderTrendDto> orderTrend(String id) {
+		return baseMapper.orderTrend(id);
+	}
+
+	@Override
+	public FieldOrderVO getOrderById(String id) {
+		return baseMapper.getOrderById(id);
 	}
 
 }

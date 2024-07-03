@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springblade.core.boot.ctrl.BladeController;
+import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -23,8 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-	@RequestMapping("/dev/fluid_field-service/baseinfo")
-@Api(value = "加气站基本信息表", tags = "加气站基本信息表接口")
+@RequestMapping(AppConstant.DEV_CODE + "/fluid_field-service/baseinfo")
+@Api(value = "液厂基本信息表", tags = "液厂基本信息表接口")
 public class FluidFieldBaseInfoController extends BladeController {
 
     @Autowired

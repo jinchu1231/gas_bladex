@@ -16,6 +16,9 @@
  */
 package org.springblade.modules.core.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -23,12 +26,16 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import lombok.AllArgsConstructor;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springblade.common.enums.OrderEnum;
+import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.secure.BladeUser;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.RandomType;
+import org.springblade.modules.core.dto.FieldOrderDto;
 import org.springblade.modules.core.vo.OrderVO;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -44,9 +51,11 @@ import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.tool.constant.BladeConstant;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.List;
+import java.util.Objects;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -57,7 +66,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/dev/blade-fieldOrder/fieldOrder")
+@RequestMapping(AppConstant.DEV_CODE + "/blade-fieldOrder/fieldOrder")
 @Api(value = "液厂采购订单", tags = "液厂采购订单接口")
 public class FieldOrderController extends BladeController {
 
@@ -68,10 +77,22 @@ public class FieldOrderController extends BladeController {
 	 */
 	@GetMapping("/detail")
 	@ApiOperationSupport(order = 1)
-	@ApiOperation(value = "详情", notes = "传入fieldOrder")
-	public R<FieldOrderVO> detail(String id) {
-		FieldOrderEntity detail = fieldOrderService.getById(id);
-		return R.data(FieldOrderWrapper.build().entityVO(detail));
+	@ApiOperation(value = "详情", notes = "传入id")
+	public R detail(String id) {
+		FieldOrderVO detail = fieldOrderService.getOrderById(id);
+		detail.setOrderStatusName(OrderEnum.getStatus(detail.getOrderStatus()).getName());
+		if(!StringUtils.isEmpty(detail.getPdfUrl())){
+			ObjectMapper mapper = new ObjectMapper();
+			List<String> list = null;
+			try {
+				list = mapper.readValue(detail.getPdfUrl(), new TypeReference<List<String>>() {
+				});
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+			detail.setPdfUrlList(list);
+		}
+		return R.data(detail);
 	}
 /*
 	*/
@@ -89,10 +110,10 @@ public class FieldOrderController extends BladeController {
 	/**
 	 * 液厂采购订单 自定义分页
 	 */
-	@GetMapping("/list")
+	@PostMapping("/list")
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "分页", notes = "传入fieldOrder")
-	public R<IPage<FieldOrderVO>> page(FieldOrderVO fieldOrder,@RequestBody Query query) {
+	public R<IPage<FieldOrderVO>> page(@RequestBody FieldOrderVO fieldOrder,@RequestBody Query query) {
 		IPage<FieldOrderVO> pages = fieldOrderService.selectFieldOrderPage(Condition.getPage(query), fieldOrder);
 		return R.data(pages);
 	}
@@ -114,13 +135,30 @@ public class FieldOrderController extends BladeController {
 	@PostMapping("/save")
 	@ApiOperationSupport(order = 4)
 	@ApiOperation(value = "新增", notes = "传入fieldOrder")
-	public R save(@Valid @RequestBody FieldOrderEntity fieldOrder) {
+	public R save(@Valid @RequestBody FieldOrderDto fieldOrder) {
 		String random = Func.random(15, RandomType.INT);
 		fieldOrder.setOrderId(random);
-		BigDecimal num = new BigDecimal(fieldOrder.getNum());
+		/*if (Objects.isNull(fieldOrder.getPrice())){
+			return R.fail("请输入每吨单价");
+		}*/
+		if (fieldOrder.getNum() <= 0){
+			return R.fail("请输入正确数量");
+		}
+		if (StringUtils.isEmpty(fieldOrder.getOrderStatus())){
+			return R.fail("请输入订单状态");
+		}
+	/*	BigDecimal num = BigDecimal.valueOf(fieldOrder.getNum());
 		BigDecimal price = fieldOrder.getPrice();
-		fieldOrder.setTotalPrices(num.multiply(price));
-		return R.status(fieldOrderService.save(fieldOrder));
+		fieldOrder.setTotalPrices(num.multiply(price));*/
+		fieldOrder.setPrice(BigDecimal.valueOf(0));
+		fieldOrder.setTotalPrices(BigDecimal.valueOf(0));
+		//todo 等订单做完对比后，再把多个附件上传这里修改一下
+		fieldOrder.setFileUrl("http://220.194.189.169:9000/bladex/upload/20240702/81d8e5ebbda41143ef9641fbda732cc4.docx");
+		if(!Objects.isNull(fieldOrder.getPdfUrlList()) && fieldOrder.getPdfUrlList().size() > 0){
+			fieldOrder.setFileUrl(JSON.toJSONString(fieldOrder.getPdfUrlList()));
+		}
+		FieldOrderEntity entity = new FieldOrderEntity(fieldOrder);
+		return R.status(fieldOrderService.save(entity));
 	}
 
 	/**
@@ -129,8 +167,25 @@ public class FieldOrderController extends BladeController {
 	@PostMapping("/update")
 	@ApiOperationSupport(order = 5)
 	@ApiOperation(value = "修改", notes = "传入fieldOrder")
-	public R update(@Valid @RequestBody FieldOrderEntity fieldOrder) {
-		return R.status(fieldOrderService.updateById(fieldOrder));
+	public R update(@Valid @RequestBody FieldOrderDto fieldOrder) {
+		/*if (Objects.isNull(fieldOrder.getPrice())){
+			return R.fail("请输入每吨单价");
+		}*/
+		if (fieldOrder.getNum() <= 0){
+			return R.fail("请输入正确数量");
+		}
+		if (StringUtils.isEmpty(fieldOrder.getOrderStatus())){
+			return R.fail("请输入订单状态");
+		}
+		fieldOrder.setPrice(BigDecimal.valueOf(0));
+		fieldOrder.setTotalPrices(BigDecimal.valueOf(0));
+		//todo 等订单做完对比后，再把多个附件上传这里修改一下
+		fieldOrder.setFileUrl("http://220.194.189.169:9000/bladex/upload/20240702/81d8e5ebbda41143ef9641fbda732cc4.docx");
+		if(!Objects.isNull(fieldOrder.getPdfUrlList()) && fieldOrder.getPdfUrlList().size() > 0){
+			fieldOrder.setFileUrl(JSON.toJSONString(fieldOrder.getPdfUrlList()));
+		}
+		FieldOrderEntity entity = new FieldOrderEntity(fieldOrder);
+		return R.status(fieldOrderService.updateById(entity));
 	}
 
 	/**
@@ -149,7 +204,7 @@ public class FieldOrderController extends BladeController {
 	@GetMapping("/delete")
 	@ApiOperationSupport(order = 7)
 	@ApiOperation(value = "逻辑删除", notes = "传入ids")
-	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
+	public R delete(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
 		return R.status(fieldOrderService.deleteLogic(Func.toLongList(ids)));
 	}
 
@@ -168,6 +223,16 @@ public class FieldOrderController extends BladeController {
 		queryWrapper.lambda().eq(FieldOrderEntity::getIsDeleted, BladeConstant.DB_NOT_DELETED);
 		List<FieldOrderExcel> list = fieldOrderService.exportFieldOrder(queryWrapper);
 		ExcelUtil.export(response, "液厂采购订单数据" + DateUtil.time(), "液厂采购订单数据表", list, FieldOrderExcel.class);
+	}
+
+	/**
+	 * 液厂订单情况统计图
+	 */
+	@PostMapping("/order-trend")
+	@ApiOperationSupport(order = 10)
+	@ApiOperation(value = "大屏-液厂订单情况统计图", notes = "传入液厂id")
+	public R orderTrend(@ApiParam(value = "液厂id", required = true) @RequestParam String id) {
+		return R.data(fieldOrderService.orderTrend(id));
 	}
 
 }

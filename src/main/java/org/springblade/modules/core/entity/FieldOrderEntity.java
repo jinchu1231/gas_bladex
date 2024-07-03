@@ -16,6 +16,8 @@
  */
 package org.springblade.modules.core.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import io.swagger.annotations.ApiModel;
@@ -23,9 +25,12 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import lombok.EqualsAndHashCode;
 import org.apache.poi.hpsf.Decimal;
 import org.springblade.core.tenant.mp.TenantEntity;
+import org.springblade.modules.core.dto.FieldOrderDto;
 
 /**
  * 液厂采购订单 实体类
@@ -39,6 +44,8 @@ import org.springblade.core.tenant.mp.TenantEntity;
 @EqualsAndHashCode(callSuper = true)
 public class FieldOrderEntity extends TenantEntity {
 
+	@TableId(value = "id", type = IdType.AUTO)
+	private Long id;
 	/**
 	 * 订单id
 	 */
@@ -63,7 +70,7 @@ public class FieldOrderEntity extends TenantEntity {
 	 * 数量
 	 */
 	@ApiModelProperty(value = "数量")
-	private Integer num;
+	private double num;
 	/**
 	 * 车号
 	 */
@@ -105,9 +112,9 @@ public class FieldOrderEntity extends TenantEntity {
 	@ApiModelProperty(value = "总价")
 	private BigDecimal totalPrices;
 	/**
-	 * 订单状态(0-已创建未支付;1-已支付;2-超时未支付)
+	 * 订单状态(0-已创建未审核;1-已审核;2-已支付;3-已完成)
 	 */
-	@ApiModelProperty(value = "订单状态(0-已创建未支付;1-已支付;2-超时未支付)")
+	@ApiModelProperty(value = "订单状态(0-已创建未审核;1-已审核;2-已支付;3-已完成)")
 	private String orderStatus;
 	/**
 	 * 采购人
@@ -125,4 +132,40 @@ public class FieldOrderEntity extends TenantEntity {
 	@ApiModelProperty(value = "购液负责人")
 	private String buyFieldPrincipal;
 
+	/**
+	 * 文件url
+	 */
+	@ApiModelProperty(value = "文件url")
+	private String fileUrl;
+
+	/**
+	 * 订单内部pdf文件
+	 */
+	@ApiModelProperty(value = "订单内部pdf文件")
+	private String pdfUrl;
+
+	public FieldOrderEntity(){}
+
+	public FieldOrderEntity(FieldOrderDto dto){
+		this.id = dto.getId();
+		this.orderId = dto.getOrderId();
+		this.gasId = dto.getGasId();
+		this.gasName = dto.getGasName();
+		this.orderData = dto.getOrderData();
+		this.num = dto.getNum();
+		this.carNumber = dto.getCarNumber();
+		this.unitOfCarriage = dto.getUnitOfCarriage();
+		this.forwardingUnit = dto.getForwardingUnit();
+		this.consigneeUnit = dto.getConsigneeUnit();
+		this.numberOfArrivals = dto.getNumberOfArrivals();
+		this.solidDischarge = dto.getSolidDischarge();
+		this.price = dto.getPrice();
+		this.totalPrices = dto.getTotalPrices();
+		this.orderStatus = dto.getOrderStatus();
+		this.buyer = dto.getBuyer();
+		this.accepter = dto.getAccepter();
+		this.buyFieldPrincipal = dto.getBuyFieldPrincipal();
+		this.fileUrl = dto.getFileUrl();
+		this.pdfUrl = dto.getPdfUrl();
+	}
 }

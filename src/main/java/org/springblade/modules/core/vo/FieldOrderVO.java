@@ -22,6 +22,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 液厂采购订单 视图实体类
@@ -33,6 +34,8 @@ import java.math.BigDecimal;
 //@EqualsAndHashCode(callSuper = true)
 public class FieldOrderVO {
 	private static final long serialVersionUID = 1L;
+
+	private Long id;
 
 	/**
 	 * 订单id
@@ -58,7 +61,7 @@ public class FieldOrderVO {
 	 * 数量
 	 */
 	@ApiModelProperty(value = "数量")
-	private Integer num;
+	private double num;
 	/**
 	 * 车号
 	 */
@@ -104,6 +107,7 @@ public class FieldOrderVO {
 	 */
 	@ApiModelProperty(value = "订单状态(0-已创建未支付;1-已支付;2-超时未支付)")
 	private String orderStatus;
+	private String orderStatusName;
 	/**
 	 * 采购人
 	 */
@@ -120,4 +124,8 @@ public class FieldOrderVO {
 	@ApiModelProperty(value = "购液负责人")
 	private String buyFieldPrincipal;
 
+	private String tenantId;
+	private String fileUrl;
+	private String pdfUrl;
+	private List<String> pdfUrlList;
 }

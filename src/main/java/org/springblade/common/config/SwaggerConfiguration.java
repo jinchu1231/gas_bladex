@@ -73,6 +73,11 @@ public class SwaggerConfiguration {
 		return docket("工作流模块", Collections.singletonList(AppConstant.BASE_PACKAGES + ".flow"));
 	}
 
+	@Bean
+	public Docket gasDocket() {
+		return docket("加气站模块", Collections.singletonList(AppConstant.BASE_PACKAGES + ".modules.core"));
+	}
+
 	private Docket docket(String groupName, List<String> basePackages) {
 		return new Docket(DocumentationType.SWAGGER_2)
 			.groupName(groupName)

@@ -185,9 +185,7 @@ public class GasDeviceRecordServiceImpl extends ServiceImpl<GasDeviceRecordMappe
 	@Override
 	public int insertGasDevice(GasDeviceRecordDto gasDeviceRecordDto) {
 		if (!StringUtils.isEmpty(gasDeviceRecordDto.getInspectData())){
-			ZonedDateTime zonedDateTime = ZonedDateTime.parse(gasDeviceRecordDto.getInspectData());
-			String dateOnly = zonedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-			gasDeviceRecordDto.setInspectData(dateOnly);
+			gasDeviceRecordDto.setInspectData(gasDeviceRecordDto.getInspectData());
 		}
 		GasDeviceRecord gasDeviceRecord = new GasDeviceRecord();
 		gasDeviceRecord.setContent(JSON.toJSONString(gasDeviceRecordDto.getList()));
@@ -204,9 +202,7 @@ public class GasDeviceRecordServiceImpl extends ServiceImpl<GasDeviceRecordMappe
 	@Override
 	public int updateGasDevice(GasDeviceRecordDto gasDeviceRecordDto) {
 		if (!StringUtils.isEmpty(gasDeviceRecordDto.getInspectData())){
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			LocalDate date = LocalDate.parse(gasDeviceRecordDto.getInspectData(), formatter);
-			gasDeviceRecordDto.setInspectData(String.valueOf(date));
+			gasDeviceRecordDto.setInspectData(gasDeviceRecordDto.getInspectData());
 		}
 		GasDeviceRecord gasDeviceRecord = new GasDeviceRecord();
 		gasDeviceRecord.setContent(JSON.toJSONString(gasDeviceRecordDto.getList()));

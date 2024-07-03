@@ -4,9 +4,9 @@ import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.SneakyThrows;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -25,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.List;
 
 /**
@@ -35,7 +34,7 @@ import java.util.List;
  * @date 2024-05-20
  */
 @RestController
-@RequestMapping("/dev/gas-device")
+@RequestMapping(AppConstant.DEV_CODE + "/gas-device")
 @Api(value = "特种设备安全检查记录", tags = "特种设备安全检查记录接口")
 public class GasDeviceRecordController {
 
@@ -93,10 +92,11 @@ public class GasDeviceRecordController {
 	 *
 	 * @param response response
 	 */
-	@GetMapping(value = "/downloadTemplate", produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "下载模板", httpMethod = "GET")
+	@GetMapping(value = "/downloadTemplate")
+//	@ApiOperation(value = "下载模板", httpMethod = "GET")
+//	@ApiOperation(value = "导出用户阶段详情", notes = "export", produces = "application/octet-stream")
 	public void downloadTemplate(HttpServletResponse response) {
-		ExcelUtil.download(response, "temp" + File.separator + "特种设备安全检查.xlsx");
+		ExcelUtil.download(response, "特种设备安全检查.xlsx");
 	}
 
 	/**

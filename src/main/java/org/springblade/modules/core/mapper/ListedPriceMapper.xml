@@ -48,14 +48,9 @@
             flp.day
     </select>
 
-    <select id="orderTrend" resultType="org.springblade.modules.core.dto.dapin.OrderTrendDto">
-        select count(1) as orderNum,
-               ROUND(AVG(price),2) as price,
-               SUM(num) as num
-        from fluid_field_order
-        where gas_id = #{id}
-          and order_data &gt;= CURDATE() - INTERVAL 90 DAY
-        GROUP BY order_data
+    <select id="recentQuotation" resultType="java.lang.Double">
+        select listed_price from fluid_listed_price where fluid = #{fluid} order by create_time desc limit 1
     </select>
+
 
 </mapper>

@@ -5,6 +5,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springblade.core.boot.ctrl.BladeController;
+import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/dev/gas-service/baseinfo")
+@RequestMapping(AppConstant.DEV_CODE + "/gas-service/baseinfo")
 @Api(value = "加气站基本信息表", tags = "加气站基本信息表接口")
 public class GasBaseInfoController extends BladeController {
 

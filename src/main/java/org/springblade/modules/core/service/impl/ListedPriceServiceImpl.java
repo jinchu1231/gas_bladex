@@ -75,8 +75,9 @@ public class ListedPriceServiceImpl extends BaseServiceImpl<ListedPriceMapper, L
 	}
 
 	@Override
-	public List<OrderTrendDto> orderTrend(String id) {
-		return baseMapper.orderTrend(id);
+	public Double recentQuotation(String fluid) {
+		return baseMapper.recentQuotation(fluid);
 	}
+
 
 }

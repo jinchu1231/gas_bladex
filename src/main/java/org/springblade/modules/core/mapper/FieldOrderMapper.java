@@ -16,6 +16,7 @@
  */
 package org.springblade.modules.core.mapper;
 
+import org.springblade.modules.core.dto.dapin.OrderTrendDto;
 import org.springblade.modules.core.entity.FieldOrderEntity;
 import org.springblade.modules.core.vo.FieldOrderVO;
 import org.springblade.modules.core.excel.FieldOrderExcel;
@@ -42,7 +43,7 @@ public interface FieldOrderMapper extends BaseMapper<FieldOrderEntity> {
 	 * @param fieldOrder
 	 * @return
 	 */
-	List<FieldOrderVO> selectFieldOrderPage(IPage page, FieldOrderVO fieldOrder);
+	List<FieldOrderVO> selectFieldOrderPage(IPage page,@Param("vo") FieldOrderVO fieldOrder);
 
 
 	/**
@@ -54,4 +55,8 @@ public interface FieldOrderMapper extends BaseMapper<FieldOrderEntity> {
 	List<FieldOrderExcel> exportFieldOrder(@Param("ew") Wrapper<FieldOrderEntity> queryWrapper);
 
 	OrderVO selectOrderCount();
+
+	List<OrderTrendDto> orderTrend(String id);
+
+	FieldOrderVO getOrderById(String id);
 }

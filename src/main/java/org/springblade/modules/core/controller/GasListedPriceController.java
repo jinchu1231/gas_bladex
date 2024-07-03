@@ -23,6 +23,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import lombok.AllArgsConstructor;
 import javax.validation.Valid;
 
+import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.secure.BladeUser;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
@@ -53,7 +54,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @AllArgsConstructor
-@RequestMapping("/dev/gas-listedPrice")
+@RequestMapping(AppConstant.DEV_CODE + "/gas-listedPrice")
 @Api(value = "加气站挂牌价格", tags = "加气站挂牌价格接口")
 public class GasListedPriceController extends BladeController {
 

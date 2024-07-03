@@ -56,5 +56,6 @@ public interface ListedPriceMapper extends BaseMapper<ListedPriceEntity> {
 
 	List<DayPriceDto> priceTrend(String id);
 
-	List<OrderTrendDto> orderTrend(String id);
+
+	Double recentQuotation(String fluid);
 }

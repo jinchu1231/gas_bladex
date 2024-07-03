@@ -17,6 +17,7 @@
 package org.springblade.modules.core.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import org.springblade.modules.core.dto.dapin.OrderTrendDto;
 import org.springblade.modules.core.entity.FieldOrderEntity;
 import org.springblade.modules.core.vo.FieldOrderVO;
 import org.springblade.modules.core.excel.FieldOrderExcel;
@@ -52,4 +53,8 @@ public interface IFieldOrderService extends BaseService<FieldOrderEntity> {
 	List<FieldOrderExcel> exportFieldOrder(Wrapper<FieldOrderEntity> queryWrapper);
 
 	OrderVO selectOrderCount();
+
+	List<OrderTrendDto> orderTrend(String id);
+
+	FieldOrderVO getOrderById(String id);
 }

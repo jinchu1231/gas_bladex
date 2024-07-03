@@ -22,6 +22,7 @@
         <result column="buyer" property="buyer"/>
         <result column="accepter" property="accepter"/>
         <result column="buy_field_principal" property="buyFieldPrincipal"/>
+        <result column="file_url" property="fileUrl"/>
         <result column="create_user" property="createUser"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
@@ -30,8 +31,23 @@
     </resultMap>
 
 
-    <select id="selectFieldOrderPage" resultMap="fieldOrderResultMap">
+    <select id="selectFieldOrderPage" resultType="org.springblade.modules.core.vo.FieldOrderVO">
         select * from fluid_field_order where is_deleted = 0
+        <if test="vo.gasId != null and vo.gasId != ''">
+            and gas_id = #{vo.gasId}
+        </if>
+        <if test="vo.gasName != null and vo.gasName != ''">
+            and gas_name = #{vo.gasName}
+        </if>
+        <if test="vo.orderStatus != null and vo.orderStatus != ''">
+            and order_status = #{vo.orderStatus}
+        </if>
+        <if test="vo.orderData != null and vo.orderData != ''">
+            and order_data = #{vo.orderData}
+        </if>
+        <if test="vo.forwardingUnit != null and vo.forwardingUnit != ''">
+            and forwarding_unit = #{vo.forwardingUnit}
+        </if>
     </select>
 
 
@@ -41,6 +57,19 @@
 
     <select id="selectOrderCount" resultType="org.springblade.modules.core.vo.OrderVO">
         select count(1) as orderCount, count(1) as FieldOrderCount from fluid_field_order
+        where is_deleted = 0
     </select>
 
+    <select id="orderTrend" resultType="org.springblade.modules.core.dto.dapin.OrderTrendDto">
+        select count(1) as orderNum,
+               ROUND(AVG(price),2) as price,
+               SUM(num) as num
+        from fluid_field_order
+        where gas_id = #{id}
+          and order_data &gt;= CURDATE() - INTERVAL 90 DAY
+        GROUP BY order_data
+    </select>
+    <select id="getOrderById" resultType="org.springblade.modules.core.vo.FieldOrderVO">
+        select * from fluid_field_order where id = #{id}
+    </select>
 </mapper>

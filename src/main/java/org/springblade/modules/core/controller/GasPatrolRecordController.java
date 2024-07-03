@@ -3,6 +3,7 @@ package org.springblade.modules.core.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -26,7 +27,7 @@ import java.util.List;
  * @date 2024-05-20
  */
 @RestController
-@RequestMapping("/dev/gas-patrol")
+@RequestMapping(AppConstant.DEV_CODE + "/gas-patrol")
 @Api(value = "加气站巡查记录", tags = "加气站巡查记录接口")
 public class GasPatrolRecordController {
 
@@ -99,7 +100,7 @@ public class GasPatrolRecordController {
 	@GetMapping(value = "/downloadTemplate", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "下载模板", httpMethod = "GET")
 	public void downloadTemplate(HttpServletResponse response) {
-		ExcelUtil.download(response, "temp" + File.separator + "巡查记录.xlsx");
+		ExcelUtil.download(response, "巡查记录.xlsx");
 	}
 
 	@PostMapping("write-notice")

@@ -17,30 +17,31 @@
 package org.springblade.modules.core.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import org.springblade.modules.core.dto.dapin.OrderTrendDto;
-import org.springblade.modules.core.dto.dapin.PriceTrendDto;
-import org.springblade.modules.core.entity.ListedPriceEntity;
-import org.springblade.modules.core.vo.ListedPriceVO;
-import org.springblade.modules.core.excel.ListedPriceExcel;
+import com.baomidou.mybatisplus.extension.service.IService;
+import org.springblade.modules.core.dto.GasNewsDTO;
+import org.springblade.modules.core.entity.GasNewsEntity;
+import org.springblade.modules.core.entity.GasTourReconcile;
+import org.springblade.modules.core.vo.GasNewsVO;
+import org.springblade.modules.core.excel.GasNewsExcel;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springblade.core.mp.base.BaseService;
 import java.util.List;
 
 /**
- * 液厂挂牌价格 服务类
+ * 新闻动态 服务类
  *
  * @author BladeX
- * @since 2024-06-14
+ * @since 2024-07-01
  */
-public interface IListedPriceService extends BaseService<ListedPriceEntity> {
+public interface IGasNewsService extends IService<GasNewsEntity> {
 	/**
 	 * 自定义分页
 	 *
 	 * @param page
-	 * @param listedPrice
+	 * @param gasnews
 	 * @return
 	 */
-	IPage<ListedPriceVO> selectListedPricePage(IPage<ListedPriceVO> page, ListedPriceVO listedPrice);
+	IPage<GasNewsVO> selectGasNewsPage(IPage<GasNewsVO> page, GasNewsVO gasnews);
 
 
 	/**
@@ -49,9 +50,11 @@ public interface IListedPriceService extends BaseService<ListedPriceEntity> {
 	 * @param queryWrapper
 	 * @return
 	 */
-	List<ListedPriceExcel> exportListedPrice(Wrapper<ListedPriceEntity> queryWrapper);
+	List<GasNewsExcel> exportGasNews(Wrapper<GasNewsEntity> queryWrapper);
 
-    PriceTrendDto priceTrend(String id);
+	int insertNews(GasNewsDTO gasnews);
 
-	Double recentQuotation(String fluid);
+	int deleteById(String ids);
+
+	int updateNews(GasNewsDTO gasnews);
 }
