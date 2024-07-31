@@ -1,25 +1,20 @@
 package org.springblade.modules.core.service.impl;
 
 
-import cn.hutool.core.convert.Convert;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springblade.core.tool.utils.RandomType;
-import org.springblade.core.tool.utils.StringUtil;
 import org.springblade.modules.core.dto.GasPatrolRecordDto;
 import org.springblade.modules.core.dto.patrol.RecordDto;
-import org.springblade.modules.core.entity.Device;
 import org.springblade.modules.core.entity.GasPatrolRecord;
 import org.springblade.modules.core.mapper.GasPatrolRecordMapper;
 import org.springblade.modules.core.service.GasPatrolRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -58,6 +53,8 @@ public class GasPatrolRecordServiceImpl extends ServiceImpl<GasPatrolRecordMappe
 		dto.setRecordDtoList(recordDtoList);
 		dto.setPrincipal(gasPatrolRecords.getPrincipal());
 		dto.setReviewPerson(gasPatrolRecords.getReviewPerson());
+		dto.setAbarbeitung(gasPatrolRecords.getAbarbeitung());
+		dto.setFileUrl(gasPatrolRecords.getFileUrl());
 		return dto;
     }
 
@@ -89,8 +86,10 @@ public class GasPatrolRecordServiceImpl extends ServiceImpl<GasPatrolRecordMappe
 		gasPatrolRecord.setFillDate(gasPatrolRecords.getFillDate());
 		gasPatrolRecord.setPrincipal(gasPatrolRecords.getPrincipal());
 		gasPatrolRecord.setReviewPerson(gasPatrolRecords.getReviewPerson());
+		gasPatrolRecord.setAbarbeitung(gasPatrolRecords.getAbarbeitung());
 		gasPatrolRecord.setCreateTime(new Date());
 		gasPatrolRecord.setContent(JSON.toJSONString(gasPatrolRecords.getRecordDtoList()));
+		gasPatrolRecord.setFileUrl(gasPatrolRecords.getFileUrl());
 		return gasPatrolRecordMapper.insertGasPatrolRecord(gasPatrolRecord);
     }
 
@@ -104,13 +103,16 @@ public class GasPatrolRecordServiceImpl extends ServiceImpl<GasPatrolRecordMappe
     public int updateGasPatrolRecord(GasPatrolRecordDto gasPatrolRecords)
     {
 		GasPatrolRecord gasPatrolRecord = new GasPatrolRecord();
+		gasPatrolRecord.setId(gasPatrolRecords.getId());
 		gasPatrolRecord.setGasId(gasPatrolRecords.getGasId());
 		gasPatrolRecord.setGasName(gasPatrolRecords.getGasName());
 		gasPatrolRecord.setFillDate(gasPatrolRecords.getFillDate());
 		gasPatrolRecord.setPrincipal(gasPatrolRecords.getPrincipal());
 		gasPatrolRecord.setReviewPerson(gasPatrolRecords.getReviewPerson());
+		gasPatrolRecord.setAbarbeitung(gasPatrolRecords.getAbarbeitung());
 		gasPatrolRecord.setUpdateTime(new Date());
 		gasPatrolRecord.setContent(JSON.toJSONString(gasPatrolRecords.getRecordDtoList()));
+		gasPatrolRecord.setFileUrl(gasPatrolRecords.getFileUrl());
 		return gasPatrolRecordMapper.updateGasPatrolRecord(gasPatrolRecord);
     }
 
@@ -129,5 +131,10 @@ public class GasPatrolRecordServiceImpl extends ServiceImpl<GasPatrolRecordMappe
 	@Override
 	public List<GasPatrolRecord> selectGasPatrolRecordAllList() {
 		return gasPatrolRecordMapper.selectGasPatrolRecordAllList();
+	}
+
+	@Override
+	public int updateFileUrlById(GasPatrolRecordDto gasPatrolRecords) {
+		return gasPatrolRecordMapper.updateFileUrlById(gasPatrolRecords.getId().toString(), gasPatrolRecords.getFileUrl());
 	}
 }

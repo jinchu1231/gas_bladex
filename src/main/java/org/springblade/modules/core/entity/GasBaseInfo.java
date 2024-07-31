@@ -30,7 +30,7 @@ import java.util.Date;
 
 @Data
 @ApiModel(value = "BaseInfo对象", description = "加气站基本信息表")
-public class GasBaseInfo extends TenantEntity {
+public class GasBaseInfo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,6 +39,16 @@ public class GasBaseInfo extends TenantEntity {
      */
     @ApiModelProperty(value = "主键")
     private Long id;
+	/**
+	 * 加气站编码
+	 */
+	@ApiModelProperty(value = "加气站编码")
+	private String gasNumber;
+	/**
+	 * 父级ID
+	 */
+	@ApiModelProperty(value = "父级ID")
+	private String parentId;
     /**
      * 加气站名称
      */
@@ -49,11 +59,6 @@ public class GasBaseInfo extends TenantEntity {
 	 */
 	@ApiModelProperty(value = "加气站位置")
 	private String gasLocation;
-    /**
-     * 加气站编码
-     */
-    @ApiModelProperty(value = "加气站编码")
-    private String gasNumber;
     /**
      * 所处地市
      */
@@ -209,7 +214,8 @@ public class GasBaseInfo extends TenantEntity {
      * 状态(0-待建;1-建设中;2-已建成待运行;3-已运行;4-废弃)
      */
     @ApiModelProperty(value = "状态(0-待建;1-建设中;2-已建成待运行;3-已运行;4-废弃)")
-    private  Integer status;
+    private Integer status;
+    private String statusName;
 	/**
 	 * 创建部门
 	 */

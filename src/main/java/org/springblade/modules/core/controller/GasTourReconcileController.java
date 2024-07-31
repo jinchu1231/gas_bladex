@@ -3,15 +3,13 @@ package org.springblade.modules.core.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
+import lombok.SneakyThrows;
 import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springblade.modules.core.dto.GasTourReconcileDto;
 import org.springblade.modules.core.dto.tour.GasTourReconcileSaveDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
-import org.springblade.modules.core.entity.tour.*;
 import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
 import org.springblade.modules.core.service.GasBaseInfoService;
 import org.springblade.modules.core.service.GasTourReconcileService;
@@ -22,10 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 交班对账Controller
@@ -109,11 +104,23 @@ public class GasTourReconcileController {
 		ExcelUtil.export(response, "交班对账", "交班对账数据表", dtos, GasTourReconcileExcelDto.class);
 	}
 
+	/**
+	 * 导入
+	 * @param file file
+	 * @return boolean
+	 */
+	@SneakyThrows
 	@PostMapping("write-notice")
 	public R writeNotice(MultipartFile file) {
+		GasTourReconcileExcelDto dto = gasTourReconcileService.writeNotice(file);
+		return R.data(gasTourReconcileService.save(new GasTourReconcile(dto)));
+	}
+
+	/*@PostMapping("write-notice1")
+	public R writeNotice1(MultipartFile file) {
 		List<GasTourReconcileExcelDto> list = ExcelUtil.read(file, GasTourReconcileExcelDto.class);
 
-		List<GasTourReconcile> gasDeviceRecordList = new ArrayList<>();
+		List<GasTourReconcile> gasTourReconcileList = new ArrayList<>();
 		if(Objects.isNull(list) || list.size() <= 0){
 			return R.fail("请导入有效数据");
 		}
@@ -221,8 +228,9 @@ public class GasTourReconcileController {
 
 			dto.setGasId(gasBaseInfoService.selectIdByName(dto.getGasName()));
 			GasTourReconcile gasTourReconcile = new GasTourReconcile(dto);
-			gasDeviceRecordList.add(gasTourReconcile);
+			gasTourReconcileList.add(gasTourReconcile);
 		});
-		return R.data(gasTourReconcileService.saveBatch(gasDeviceRecordList));
-	}
+		return R.data(gasTourReconcileService.saveBatch(gasTourReconcileList));
+	}*/
+
 }

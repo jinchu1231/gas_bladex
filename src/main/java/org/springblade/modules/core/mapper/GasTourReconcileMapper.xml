@@ -8,7 +8,7 @@
         <result property="id"    column="id"    />
         <result property="gasId"    column="gas_id"    />
         <result property="tourPerson"    column="tour_person"    />
-        <result property="starTourTime"    column="start_tour_time"    />
+        <result property="startTourTime"    column="start_tour_time"    />
         <result property="endTourTime"    column="end_tour_time"    />
         <result property="addLiquidMeasureCount"    column="add_liquid_measure_count"    />
         <result property="amountCount"    column="amount_count"    />
@@ -40,7 +40,7 @@
             <if test="gas.gasId != null  and gas.gasId != ''"> and gas_id = #{gas.gasId}</if>
             <if test="gas.gasName != null  and gas.gasName != ''"> and gas_name = #{gas.gasName}</if>
             <if test="gas.tourPerson != null  and gas.tourPerson != ''"> and tour_person = #{gas.tourPerson}</if>
-            <if test="gas.starTourTime != null  and gas.starTourTime != ''"> and start_tour_time = #{gas.starTourTime}</if>
+            <if test="gas.startTourTime != null  and gas.startTourTime != ''"> and start_tour_time = #{gas.startTourTime}</if>
             <if test="gas.endTourTime != null  and gas.endTourTime != ''"> and end_tour_time = #{gas.endTourTime}</if>
             <if test="gas.addLiquidMeasureCount != null  and gas.addLiquidMeasureCount != ''"> and add_liquid_measure_count = #{gas.addLiquidMeasureCount}</if>
             <if test="gas.amountCount != null  and gas.amountCount != ''"> and amount_count = #{gas.amountCount}</if>
@@ -57,8 +57,7 @@
             <if test="gas.agentSignature != null  and gas.agentSignature != ''"> and agent_signature = #{gas.agentSignature}</if>
             <if test="gas.createUser != null  and gas.createUser != ''"> and create_user = #{gas.createUser}</if>
             <if test="gas.updateUser != null  and gas.updateUser != ''"> and update_user = #{gas.updateUser}</if>
-
-
+        order by create_time desc
     </select>
 
     <select id="selectGasTourReconcileById" parameterType="Long" resultMap="GasTourReconcileResult">
@@ -77,7 +76,7 @@
             <if test="gasId != null">gas_id,</if>
             <if test="gasName != null">gas_name,</if>
             <if test="tourPerson != null">tour_person,</if>
-            <if test="starTourTime != null">start_tour_time,</if>
+            <if test="startTourTime != null">start_tour_time,</if>
             <if test="endTourTime != null">end_tour_time,</if>
             <if test="addLiquidMeasureCount != null">add_liquid_measure_count,</if>
             <if test="amountCount != null">amount_count,</if>
@@ -107,7 +106,7 @@
             <if test="gasId != null">#{gasId},</if>
             <if test="gasName != null">#{gasName},</if>
             <if test="tourPerson != null">#{tourPerson},</if>
-            <if test="starTourTime != null">#{starTourTime},</if>
+            <if test="startTourTime != null">#{startTourTime},</if>
             <if test="endTourTime != null">#{endTourTime},</if>
             <if test="addLiquidMeasureCount != null">#{addLiquidMeasureCount},</if>
             <if test="amountCount != null">#{amountCount},</if>
@@ -141,7 +140,7 @@
             <if test="gas.gasId != null">gas_id = #{gas.gasId},</if>
             <if test="gas.gasName != null">gas_name = #{gas.gasName},</if>
             <if test="gas.tourPerson != null">tour_person = #{gas.tourPerson},</if>
-            <if test="gas.starTourTime != null">start_tour_time = #{gas.starTourTime},</if>
+            <if test="gas.startTourTime != null">start_tour_time = #{gas.startTourTime},</if>
             <if test="gas.endTourTime != null">end_tour_time = #{gas.endTourTime},</if>
             <if test="gas.addLiquidMeasureCount != null">add_liquid_measure_count = #{gas.addLiquidMeasureCount},</if>
             <if test="gas.amountCount != null">amount_count = #{gas.amountCount},</if>

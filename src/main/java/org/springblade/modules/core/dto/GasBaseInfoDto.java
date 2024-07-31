@@ -154,5 +154,7 @@ public class GasBaseInfoDto {
     /**
      * 状态(0-待建;1-建设中;2-已建成待运行;3-已运行;4-废弃)
      */
-    private  Integer status;
+    private Integer status;
+
+    private String statusName;
 }

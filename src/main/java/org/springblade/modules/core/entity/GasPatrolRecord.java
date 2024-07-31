@@ -53,6 +53,10 @@ public class GasPatrolRecord {
 	@ExcelProperty("复查人")
     private String reviewPerson;
 
+	/** 遗留隐患跟踪及整改责任 */
+	@ExcelProperty("遗留隐患跟踪及整改责任")
+    private String abarbeitung;
+
     /** 创建者 */
 	@ExcelIgnore
     private String createUser;
@@ -72,4 +76,10 @@ public class GasPatrolRecord {
     /** 是否刪除 */
 	@ExcelIgnore
     private Long isDeleted;
+
+	/**
+	 * 文件url
+	 */
+	@ExcelIgnore
+	private String fileUrl;
 }

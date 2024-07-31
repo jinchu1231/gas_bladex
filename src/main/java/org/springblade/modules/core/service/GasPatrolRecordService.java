@@ -59,4 +59,6 @@ public interface GasPatrolRecordService extends IService<GasPatrolRecord>
     public int deleteGasPatrolRecordByIds(String ids);
 
 	List<GasPatrolRecord> selectGasPatrolRecordAllList();
+
+	int updateFileUrlById(GasPatrolRecordDto gasPatrolRecords);
 }

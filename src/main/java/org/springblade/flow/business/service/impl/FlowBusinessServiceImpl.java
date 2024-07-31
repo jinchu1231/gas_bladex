@@ -263,6 +263,7 @@ public class FlowBusinessServiceImpl implements FlowBusinessService {
 			variables = Kv.create();
 		}
 		variables.put(ProcessConstant.PASS_KEY, flow.isPass());
+		variables.put("activityName", flow.isPass() ? "同意" : "驳回");
 		// 完成任务
 		taskService.complete(taskId, variables);
 		return true;

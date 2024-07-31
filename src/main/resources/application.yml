@@ -46,6 +46,12 @@ spring:
         exclusions: '*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*'
         session-stat-enable: true
         session-stat-max-count: 10
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 0
+      maxFileSize: 100MB
+      maxRequestSize: 100MB
 
 # mybatis
 mybatis-plus:

@@ -39,7 +39,7 @@ public interface GasPatrolRecordMapper extends BaseMapper<GasPatrolRecord>
      * @param gasPatrolRecord 加气站巡查记录
      * @return 结果
      */
-    public int insertGasPatrolRecord(GasPatrolRecord gasPatrolRecord);
+    public int insertGasPatrolRecord(@Param("gas") GasPatrolRecord gasPatrolRecord);
 
     /**
      * 修改加气站巡查记录
@@ -59,4 +59,6 @@ public interface GasPatrolRecordMapper extends BaseMapper<GasPatrolRecord>
     public int deleteGasPatrolRecordByIds(String ids);
 
     List<GasPatrolRecord> selectGasPatrolRecordAllList();
+
+	int updateFileUrlById(@Param("id") String id, @Param("url") String fileUrl);
 }

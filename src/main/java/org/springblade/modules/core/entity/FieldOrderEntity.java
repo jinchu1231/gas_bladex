@@ -29,6 +29,7 @@ import java.util.List;
 
 import lombok.EqualsAndHashCode;
 import org.apache.poi.hpsf.Decimal;
+import org.springblade.core.mp.base.BaseEntity;
 import org.springblade.core.tenant.mp.TenantEntity;
 import org.springblade.modules.core.dto.FieldOrderDto;
 
@@ -42,7 +43,7 @@ import org.springblade.modules.core.dto.FieldOrderDto;
 @TableName("fluid_field_order")
 @ApiModel(value = "FieldOrder对象", description = "液厂采购订单")
 @EqualsAndHashCode(callSuper = true)
-public class FieldOrderEntity extends TenantEntity {
+public class FieldOrderEntity extends BaseEntity {
 
 	@TableId(value = "id", type = IdType.AUTO)
 	private Long id;

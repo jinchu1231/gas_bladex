@@ -43,8 +43,18 @@
     </resultMap>
 
 
-    <select id="getBaseInfoList" resultMap="baseInfoResultMap">
+    <select id="getBaseInfoList" resultType="org.springblade.modules.core.dto.GasBaseInfoDto">
         select * from gas_base_info where is_deleted = 0
+        <choose>
+            <when test="type == 0">
+                and parent_id = 0
+            </when>
+            <when test="type == 1">
+                and parent_id != 0
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
     </select>
 
     <select id="selectIdByName" resultType="java.lang.String">
@@ -53,6 +63,10 @@
 
     <select id="selectGasBaseInfoList" resultType="org.springblade.modules.core.entity.GasBaseInfo">
         select * from gas_base_info where is_deleted = 0
+    </select>
+
+    <select id="selectNameByNumber" resultType="java.lang.String">
+        select gas_name from gas_base_info where gas_number = #{gasNumber}
     </select>
 
 </mapper>

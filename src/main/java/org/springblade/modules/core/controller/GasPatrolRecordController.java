@@ -75,6 +75,15 @@ public class GasPatrolRecordController {
         return R.data(gasPatrolRecordService.updateGasPatrolRecord(gasPatrolRecords));
     }
 
+	/**
+	 * 上传文件
+	 */
+	@PostMapping("/updateFileUrlById")
+	public R updateFileUrlById(@RequestBody GasPatrolRecordDto gasPatrolRecords)
+	{
+		return R.data(gasPatrolRecordService.updateFileUrlById(gasPatrolRecords));
+	}
+
     /**
      * 删除加气站巡查记录
      */

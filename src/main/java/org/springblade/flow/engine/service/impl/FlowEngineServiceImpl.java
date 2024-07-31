@@ -246,6 +246,33 @@ public class FlowEngineServiceImpl extends ServiceImpl<FlowMapper, FlowModel> im
 	}
 
 	@Override
+	public List<BladeFlow> historyList(String processInstanceId) {
+		List<BladeFlow> flowList = new ArrayList<>();
+		List<HistoricActivityInstance> historicActivityInstanceList = historyService.createHistoricActivityInstanceQuery().processInstanceId(processInstanceId).orderByHistoricActivityInstanceStartTime().asc().orderByHistoricActivityInstanceEndTime().asc().list();
+		for (int i = 0; i < historicActivityInstanceList.size(); i++) {
+			BladeFlow flow = new BladeFlow();
+			HistoricActivityInstance historicActivityInstance = historicActivityInstanceList.get(i);
+			// 显示开始节点和结束节点，并且执行人不为空的任务
+			if (StringUtils.equals("sequenceFlow", historicActivityInstance.getActivityType())) {
+				if ("驳回".equals(historicActivityInstance.getActivityName())){
+					flow.setHistoryActivityId(historicActivityInstance.getActivityId());
+					flow.setAssigneeName(historicActivityInstance.getActivityName());
+					flow.setEndTime(historicActivityInstance.getEndTime());
+					flow.setStatus("驳回");
+					flowList.add(flow);
+				}else if ("同意".equals(historicActivityInstance.getActivityName())){
+					flow.setHistoryActivityId(historicActivityInstance.getActivityId());
+					flow.setAssigneeName(historicActivityInstance.getActivityName());
+					flow.setEndTime(historicActivityInstance.getEndTime());
+					flow.setStatus("同意");
+					flowList.add(flow);
+				}
+			}
+		}
+		return flowList;
+	}
+
+	@Override
 	public String changeState(String state, String processId) {
 		try {
 			if (state.equals(FlowEngineConstant.ACTIVE)) {

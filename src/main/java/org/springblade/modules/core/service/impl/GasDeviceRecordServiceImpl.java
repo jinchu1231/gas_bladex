@@ -1,38 +1,28 @@
 package org.springblade.modules.core.service.impl;
 
-import cn.hutool.core.convert.Convert;
-import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spire.xls.Workbook;
 import org.apache.commons.lang3.StringUtils;
-import org.springblade.core.tool.utils.StringUtil;
+import org.springblade.common.utils.FindAndReplaceData;
 import org.springblade.modules.core.dto.GasDeviceRecordDto;
-import org.springblade.modules.core.entity.Device;
 import org.springblade.modules.core.entity.GasDeviceRecord;
-import org.springblade.modules.core.excel.DeviceRecordExcel;
 import org.springblade.modules.core.mapper.GasDeviceRecordMapper;
 import org.springblade.modules.core.service.GasBaseInfoService;
 import org.springblade.modules.core.service.GasDeviceRecordService;
-import org.springblade.modules.core.util.ExcelUtil;
 import org.springblade.modules.core.vo.DeviceRecordVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * 特种设备安全检查记录Service业务层处理
@@ -69,6 +59,7 @@ public class GasDeviceRecordServiceImpl extends ServiceImpl<GasDeviceRecordMappe
 			dto.setSafetyOfficer(gasDeviceRecord.getSafetyOfficer());
 			dto.setTakeSteps(gasDeviceRecord.getTakeSteps());
 			dto.setInspectData(gasDeviceRecord.getInspectData());
+			dto.setFileUrl(gasDeviceRecord.getFileUrl());
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
@@ -218,56 +209,73 @@ public class GasDeviceRecordServiceImpl extends ServiceImpl<GasDeviceRecordMappe
 	}
 
 	@Override
-	public void writeNotice(MultipartFile file) {
-		List<DeviceRecordExcel> list = ExcelUtil.read(file, DeviceRecordExcel.class);
-		List<DeviceRecordVo> records = new ArrayList<>();
-		String name = "";
-		String inspectName = "";
-		String inspectData = "";
-		String takeSteps = "";
-		String safetyOfficer = "";
-		//每7条为一组数据
-		for (int i = 1; i < list.size(); i++) {
-			DeviceRecordExcel record = list.get(i);
-			DeviceRecordVo deviceRecordVo = new DeviceRecordVo();
-			deviceRecordVo.setInspectItem(record.getInspectItem());
-			deviceRecordVo.setRemark(record.getRemark());
-			deviceRecordVo.setResult(record.getResult());
-			deviceRecordVo.setInspectContent(record.getInspectContent());
-			deviceRecordVo.setInspectResult(record.getInspectResult());
-			records.add(deviceRecordVo);
-			if (!StringUtils.isEmpty(record.getGasName())){
-				name = record.getGasName();
-			}
-			if (!StringUtils.isEmpty(record.getInspectName())){
-				inspectName = record.getInspectName();
-			}
-			if (!StringUtils.isEmpty(record.getInspectData())){
-				inspectData = record.getInspectData();
-			}
-			if (!StringUtils.isEmpty(record.getTakeSteps())){
-				takeSteps = record.getTakeSteps();
-			}
-			if (!StringUtils.isEmpty(record.getSafetyOfficer())){
-				safetyOfficer = record.getSafetyOfficer();
-			}
+	public GasDeviceRecord writeNotice(MultipartFile file) {
+		Workbook workbook = new Workbook();
+		try {
+			// 创建一个临时文件
+			File tempFile = File.createTempFile("temp", ".xlsx");
+			tempFile.deleteOnExit(); // 确保程序结束后删除临时文件
 
-			//每7条数据保存一次
-			if (i % 7 == 0) {
-				GasDeviceRecord gasDeviceRecord = new GasDeviceRecord();
-				String gasId = gasBaseInfoService.selectIdByName(name);
-				gasDeviceRecord.setGasId(gasId);
-				gasDeviceRecord.setGasName(name);
-				gasDeviceRecord.setContent(JSON.toJSONString(records));
-				gasDeviceRecord.setInspectName(inspectName);
-				if ("".equals(inspectData)){
-					gasDeviceRecord.setInspectData(LocalDate.now().toString());
+			// 将 MultipartFile 的内容写入临时文件
+			try (InputStream inputStream = file.getInputStream();
+				 OutputStream outputStream = new FileOutputStream(tempFile)) {
+				byte[] buffer = new byte[1024];
+				int bytesRead;
+				while ((bytesRead = inputStream.read(buffer)) != -1) {
+					outputStream.write(buffer, 0, bytesRead);
 				}
-				gasDeviceRecord.setTakeSteps(takeSteps);
-				gasDeviceRecord.setSafetyOfficer(safetyOfficer);
-				insertGasDeviceRecord(gasDeviceRecord);
-				records.clear();
+			}
+			// 使用 Spire.XLS 加载临时文件
+			workbook.loadFromFile(tempFile.getAbsolutePath());
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		GasDeviceRecord dto = new GasDeviceRecord();
+		List<DeviceRecordVo> contentList = new ArrayList<>();
+		ArrayList<String[]> strings = FindAndReplaceData.readRows(workbook, 0);
+		for (int i = 0; i < strings.size(); i++) {
+			String[] string = strings.get(i);
+			System.out.println("第一层数据打印：" + JSON.toJSONString(string));
+			for (int j = 0; j < string.length; j++) {
+				if ("站点".equals(string[j])) {
+					dto.setGasName(string[j + 1]);
+					dto.setGasId(gasBaseInfoService.selectIdByName(dto.getGasName()));
+				}
+				if ("检查日期".equals(string[j])){
+					dto.setInspectData(string[j + 1]);
+				}
+
+				if (string[j].equals("序号")){
+					for (int k = i + 1; k < strings.size(); k++) {
+						if (strings.get(k)[0].equals("采取的防范措施")){
+							break;
+						}
+						DeviceRecordVo deviceRecordVo = new DeviceRecordVo();
+						deviceRecordVo.setInspectItem(strings.get(k)[1]);
+						deviceRecordVo.setInspectContent(strings.get(k)[2]);
+						deviceRecordVo.setInspectResult(strings.get(k)[3]);
+						deviceRecordVo.setResult(strings.get(k)[4]);
+						deviceRecordVo.setRemark(strings.get(k)[5]);
+						contentList.add(deviceRecordVo);
+					}
+					dto.setContent(JSON.toJSONString(contentList));
+				}
+
+				if ("采取的防范措施".equals(string[j])){
+					dto.setTakeSteps(string[j + 1]);
+				}
+				if ("安全员".equals(string[j])){
+					dto.setSafetyOfficer(string[j + 1]);
+				}
+				System.out.println("第二次数据打印：" + string[j]);
 			}
 		}
+		return dto;
+	}
+
+	@Override
+	public int updateFileUrlById(GasDeviceRecordDto gasDeviceRecordDto) {
+		return gasDeviceRecordMapper.updateFileUrlById(gasDeviceRecordDto.getId(), gasDeviceRecordDto.getFileUrl());
 	}
 }

@@ -72,4 +72,8 @@ public class GasDeviceRecord {
     /** 是否刪除 */
 	@ExcelIgnore
     private Long isDeleted;
+
+	/** 文件url */
+	@ExcelIgnore
+    private String fileUrl;
 }

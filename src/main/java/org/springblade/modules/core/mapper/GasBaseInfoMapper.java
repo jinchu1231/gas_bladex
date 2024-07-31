@@ -10,9 +10,11 @@ import java.util.List;
 
 public interface GasBaseInfoMapper extends BaseMapper<GasBaseInfo> {
 
-   List<GasBaseInfoDto> getBaseInfoList();
+   List<GasBaseInfoDto> getBaseInfoList(String type);
 
     String selectIdByName(String gasName);
+
+    String selectNameByNumber(String gasNumber);
 
 	List<GasBaseInfo> selectGasBaseInfoList(IPage page, GasBaseInfo gasBaseInfo);
 }

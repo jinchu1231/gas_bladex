@@ -18,6 +18,7 @@ package org.springblade.flow.engine.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.flowable.engine.history.HistoricActivityInstance;
 import org.springblade.flow.core.entity.BladeFlow;
 import org.springblade.flow.engine.entity.FlowExecution;
 import org.springblade.flow.engine.entity.FlowModel;
@@ -162,4 +163,12 @@ public interface FlowEngineService extends IService<FlowModel> {
 	 * @return
 	 */
 	byte[] getModelEditorXML(FlowModel model);
+
+	/**
+	 * 导出-获取流转历史列表
+	 *
+	 * @param processInstanceId 流程实例id
+	 * @return
+	 */
+	List<BladeFlow> historyList(String processInstanceId);
 }

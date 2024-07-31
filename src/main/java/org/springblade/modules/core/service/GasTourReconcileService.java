@@ -7,6 +7,7 @@ import org.springblade.modules.core.dto.GasTourReconcileDto;
 import org.springblade.modules.core.dto.tour.GasTourReconcileSaveDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
 import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -60,4 +61,7 @@ public interface GasTourReconcileService extends IService<GasTourReconcile>
 
 
 	List<GasTourReconcileExcelDto> selectAllGasTourReconcileList();
+
+
+	GasTourReconcileExcelDto writeNotice(MultipartFile file);
 }

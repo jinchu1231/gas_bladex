@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.mp.support.Condition;
@@ -41,8 +42,8 @@ public class GasBaseInfoController extends BladeController {
      */
     @ApiOperation("获取加气站基础信息")
     @PostMapping("/getBaseInfoList")
-    public R getBaseInfoList(){
-        return R.data(gasBaseInfoService.getBaseInfoList());
+    public R getBaseInfoList(@RequestParam("type") String type){
+        return R.data(gasBaseInfoService.getBaseInfoList(type));
     }
 
 	/**
@@ -65,6 +66,9 @@ public class GasBaseInfoController extends BladeController {
 	public R save(@Valid @RequestBody GasBaseInfo baseInfo) {
 		String random = Func.random(15, RandomType.INT);
 		baseInfo.setGasNumber(random);
+		if(!StringUtils.isEmpty(baseInfo.getParentId())){
+			baseInfo.setParentId("0");
+		}
 		return R.status(gasBaseInfoService.save(baseInfo));
 	}
 

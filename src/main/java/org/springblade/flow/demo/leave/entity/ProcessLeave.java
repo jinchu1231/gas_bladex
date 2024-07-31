@@ -24,7 +24,7 @@ import org.springblade.flow.core.entity.FlowEntity;
 import java.util.Date;
 
 /**
- * 请假流程实体类
+ * 订单审核流程实体类
  *
  * @author Chill
  */
@@ -44,17 +44,33 @@ public class ProcessLeave extends FlowEntity {
 	 */
 	private String processInstanceId;
 	/**
-	 * 请假开始时间
+	 * 订单审核开始时间
 	 */
 	private Date startTime;
 	/**
-	 * 请假结束时间
+	 * 订单审核结束时间
 	 */
 	private Date endTime;
 	/**
-	 * 请假理由
+	 * 审核内容
 	 */
-	private String reason;
+	private String content;
+	/**
+	 * 审核价格
+	 */
+	private String price;
+	/**
+	 * 采购方案(常规性采购，应急性采购)
+	 */
+	private String procurementScheme;
+	/**
+	 * 供货厂家
+	 */
+	private String lieferant;
+	/**
+	 * 备注
+	 */
+	private String comment;
 	/**
 	 * 审批人
 	 */

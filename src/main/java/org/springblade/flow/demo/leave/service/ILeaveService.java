@@ -19,6 +19,8 @@ package org.springblade.flow.demo.leave.service;
 import org.springblade.core.mp.base.BaseService;
 import org.springblade.flow.demo.leave.entity.ProcessLeave;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 服务类
  *
@@ -29,9 +31,14 @@ public interface ILeaveService extends BaseService<ProcessLeave> {
 	/**
 	 * 开启流程
 	 *
-	 * @param leave 请假实体
+	 * @param leave 订单审核实体
 	 * @return boolean
 	 */
 	boolean startProcess(ProcessLeave leave);
 
+	/**
+	 * 导出
+	 * @return
+	 */
+	void export(Long businessId, String processInstanceId, HttpServletResponse response);
 }

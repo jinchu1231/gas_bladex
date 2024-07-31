@@ -57,4 +57,6 @@ public interface GasDeviceRecordMapper extends BaseMapper<GasDeviceRecord> {
     public int deleteGasDeviceRecordById(String id);
 
     List<GasDeviceRecord> selectGasDeviceRecordAllList();
+
+	int updateFileUrlById(@Param("id") String id, @Param("url") String fileUrl);
 }

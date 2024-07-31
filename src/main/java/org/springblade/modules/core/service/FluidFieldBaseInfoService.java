@@ -2,7 +2,6 @@ package org.springblade.modules.core.service;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.core.mp.base.BaseService;
 import org.springblade.modules.core.dto.FluidFieldBaseInfoDto;
 import org.springblade.modules.core.entity.FluidFieldBaseInfo;

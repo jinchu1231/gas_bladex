@@ -18,10 +18,11 @@
         <result property="updateTime"    column="update_time"    />
         <result property="updateUser"    column="update_user"    />
         <result property="isDeleted"    column="is_deleted"    />
+        <result property="fileUrl"    column="file_url"    />
     </resultMap>
 
     <sql id="selectGasDeviceRecordVo">
-        select id,gas_id,gas_name,content,inspect_name,inspect_data, take_steps, safety_officer, create_user, create_time, update_time, update_user, is_deleted from gas_device_record
+        select id,gas_id,gas_name,content,inspect_name,inspect_data, take_steps, safety_officer, create_user, create_time, update_time, update_user, is_deleted, file_url from gas_device_record
     </sql>
 
     <select id="selectGasDeviceRecordList" parameterType="GasDeviceRecord" resultMap="GasDeviceRecordResult">
@@ -108,6 +109,10 @@
             <if test="gas.isDeleted != null">is_deleted = #{gas.isDeleted},</if>
         </trim>
         where id = #{gas.id}
+    </update>
+
+    <update id="updateFileUrlById">
+        update gas_device_record set file_url = #{url}  where id = #{id}
     </update>
 
     <delete id="deleteGasDeviceRecordById" parameterType="String">

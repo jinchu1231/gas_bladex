@@ -33,6 +33,10 @@ public class GasTourReconcileExcelDto {
 	@ExcelProperty("交班时间")
 	@ColumnWidth(38)
 	private String tourTime;
+	/** 交班时间-开始 */
+	private String startTourTime;
+	/** 交班时间-结束 */
+	private String endTourTime;
 
 	/** 总加液量(公斤) */
 	@ExcelProperty("总加液量(公斤)")

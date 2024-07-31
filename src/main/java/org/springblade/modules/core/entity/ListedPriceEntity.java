@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import java.util.Date;
 import lombok.EqualsAndHashCode;
+import org.springblade.core.mp.base.BaseEntity;
 import org.springblade.core.tenant.mp.TenantEntity;
 
 /**
@@ -35,7 +36,7 @@ import org.springblade.core.tenant.mp.TenantEntity;
 @TableName("fluid_listed_price")
 @ApiModel(value = "ListedPrice对象", description = "液厂挂牌价格")
 @EqualsAndHashCode(callSuper = true)
-public class ListedPriceEntity extends TenantEntity {
+public class ListedPriceEntity extends BaseEntity {
 
 	/**
 	 * 液厂id

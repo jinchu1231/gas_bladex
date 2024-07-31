@@ -64,5 +64,8 @@ public interface GasDeviceRecordService extends IService<GasDeviceRecord> {
 
 	int updateGasDevice(GasDeviceRecordDto gasDeviceRecordDto);
 
-	void writeNotice(MultipartFile file);
+	GasDeviceRecord writeNotice(MultipartFile file);
+
+	int updateFileUrlById(GasDeviceRecordDto gasDeviceRecordDto);
+
 }

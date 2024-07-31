@@ -8,6 +8,9 @@ import lombok.Data;
 public class DeviceRecordExcel {
 
 	/** 加气站名称*/
+	@ExcelProperty("加气站id")
+	private String gasId;
+	/** 加气站名称*/
 	@ExcelProperty("加气站名称")
 	private String gasName;
 	/** 检查日期*/

@@ -45,5 +45,9 @@ public class GasDeviceRecordDto {
 	/** 安全员 */
 	@Excel(name = "安全员")
 	private String safetyOfficer;
+	/**
+	 * 文件url
+	 */
+	private String fileUrl;
 
 }

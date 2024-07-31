@@ -1,20 +1,26 @@
 package org.springblade.modules.core.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spire.xls.Workbook;
+import org.springblade.common.utils.FindAndReplaceData;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
 import org.springblade.modules.core.dto.tour.GasTourReconcileSaveDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
 import org.springblade.modules.core.entity.tour.*;
 import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
 import org.springblade.modules.core.mapper.GasTourReconcileMapper;
+import org.springblade.modules.core.service.GasBaseInfoService;
 import org.springblade.modules.core.service.GasTourReconcileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +35,8 @@ import java.util.List;
 public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMapper,GasTourReconcile> implements GasTourReconcileService {
     @Autowired
     private GasTourReconcileMapper gasTourReconcileMapper;
+	@Autowired
+	private GasBaseInfoService gasBaseInfoService;
 
     /**
      * 查询交班对账
@@ -91,7 +99,7 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
     {
         IPage<GasTourReconcile> gasTourReconciles = page.setRecords(gasTourReconcileMapper.selectGasTourReconcileList(page,gasTourReconcile));
 		for (GasTourReconcile record : gasTourReconciles.getRecords()) {
-			record.setTourTime(record.getStarTourTime() + "至" + record.getEndTourTime());
+			record.setTourTime(record.getStartTourTime() + "至" + record.getEndTourTime());
 		}
         return gasTourReconciles;
     }
@@ -215,5 +223,178 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
 			}
 		});
 		return dtos;
+	}
+
+
+	@Override
+	public GasTourReconcileExcelDto writeNotice(MultipartFile file) {
+		Workbook workbook = new Workbook();
+		try {
+			// 创建一个临时文件
+			File tempFile = File.createTempFile("temp", ".xlsx");
+			tempFile.deleteOnExit(); // 确保程序结束后删除临时文件
+
+			// 将 MultipartFile 的内容写入临时文件
+			try (InputStream inputStream = file.getInputStream();
+				 OutputStream outputStream = new FileOutputStream(tempFile)) {
+				byte[] buffer = new byte[1024];
+				int bytesRead;
+				while ((bytesRead = inputStream.read(buffer)) != -1) {
+					outputStream.write(buffer, 0, bytesRead);
+				}
+			}
+			// 使用 Spire.XLS 加载临时文件
+			workbook.loadFromFile(tempFile.getAbsolutePath());
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		GasTourReconcileExcelDto dto = new GasTourReconcileExcelDto();
+
+		ArrayList<String[]> strings = FindAndReplaceData.readRows(workbook, 0);
+		for (int i = 0; i < strings.size(); i++) {
+			String[] string = strings.get(i);
+//			System.out.println("第一层数据打印：" + JSON.toJSONString(string));
+			for (int j = 0; j < string.length; j++) {
+				if ("站点".equals(string[j])) {
+					dto.setGasName(string[j + 1]);
+					dto.setGasId(gasBaseInfoService.selectIdByName(dto.getGasName()));
+				}
+				if ("交班人".equals(string[j])){
+					dto.setTourPerson(string[j + 1]);
+				}
+				if ("时间".equals(string[j])){
+					String[] split = string[j + 1].split("至");
+					dto.setStartTourTime(split[0]);
+					dto.setEndTourTime(split[1]);
+				}
+				if ("总加液量(公斤)".equals(string[j])){
+					dto.setAddLiquidMeasureCount(string[j + 1]);
+				}
+				if ("总金额(元)".equals(string[j])){
+					dto.setAmountCount(string[j + 1]);
+				}
+				if ("应收金额(元)".equals(string[j])){
+					dto.setAmountReceivable(string[j + 1]);
+				}
+				if (i == 3 && "实收金额(元)".equals(string[j])){
+					dto.setFundsReceived(string[j + 1]);
+				}
+				if (i == 3 && "总交易数(笔)".equals(string[j])){
+					dto.setDealCount(string[j + 1]);
+				}
+
+				if ("总充值额(元)".equals(string[j])){
+					dto.setTotalRechargeAmount(string[j + 1]);
+				}
+				if ("应收额(元)".equals(string[j])){
+					dto.setAmountReceivableT(string[j + 1]);
+				}
+				if (i == 5 && "实收金额(元)".equals(string[j])){
+					dto.setFundsReceivedT(string[j + 1]);
+				}
+				if (i == 5 && "总交易数(笔)".equals(string[j])){
+					dto.setDealCountT(string[j + 1]);
+				}
+				if ("扣款金额(元)".equals(string[j])){
+					dto.setAmountDeducted(string[j + 1]);
+				}
+
+				if (string[j].contains("收款渠道汇总")){
+					List<CollectionChannelSummary> collectionChannelSummaryList = new ArrayList<>();
+
+					for (int k = i + 2; k < strings.size(); k++) {
+						if (strings.get(k)[0].contains("枪号汇总")){
+							break;
+						}
+						CollectionChannelSummary collectionChannelSummary = new CollectionChannelSummary();
+						collectionChannelSummary.setModeOfPayment(strings.get(k)[0]);
+						collectionChannelSummary.setPaymentAmount(strings.get(k)[1]);
+						collectionChannelSummaryList.add(collectionChannelSummary);
+					}
+					dto.setCollectionChannelSummaryList(collectionChannelSummaryList);
+				}
+
+				if (string[j].contains("枪号汇总")){
+					List<GunNumberSummary> gunNumberSummaryList = new ArrayList<>();
+					for (int k = i + 2; k < strings.size(); k++) {
+						if (strings.get(k)[0].contains("班组汇总")){
+							break;
+						}
+						GunNumberSummary gunNumberSummary = new GunNumberSummary();
+						gunNumberSummary.setGunMark(strings.get(k)[0]);
+						gunNumberSummary.setAmountOfLiquidAdded(strings.get(k)[1]);
+						gunNumberSummary.setAmountOfLiquidFilling(strings.get(k)[2]);
+						gunNumberSummary.setFrequency(strings.get(k)[3]);
+						gunNumberSummaryList.add(gunNumberSummary);
+					}
+					dto.setGunNumberSummaryList(gunNumberSummaryList);
+				}
+
+				if (string[j].contains("班组汇总")){
+					List<GroupSummary> groupSummaryList = new ArrayList<>();
+					for (int k = i + 2; k < strings.size(); k++) {
+						if (strings.get(k)[0].contains("车队汇总")){
+							break;
+						}
+						GroupSummary groupSummary = new GroupSummary();
+						groupSummary.setClassNumber(strings.get(k)[0]);
+						groupSummary.setFrequency(strings.get(k)[1]);
+						groupSummary.setAmountOfLiquidAdded(strings.get(k)[2]);
+						groupSummary.setAmountOfLiquidFilling(strings.get(k)[3]);
+						groupSummaryList.add(groupSummary);
+					}
+					dto.setGroupSummaryList(groupSummaryList);
+				}
+
+				if (string[j].contains("车队汇总")){
+					List<FleetSummary> fleetSummaryList = new ArrayList<>();
+					for (int k = i + 2; k < strings.size(); k++) {
+						if (strings.get(k)[0].contains("单价汇总")){
+							break;
+						}
+						FleetSummary fleetSummary = new FleetSummary();
+						fleetSummary.setNameOfFleet(strings.get(k)[0]);
+						fleetSummary.setAmountOfLiquidFilling(strings.get(k)[1]);
+						fleetSummary.setAmountOfLiquidAdded(strings.get(k)[2]);
+						fleetSummary.setRechargeAmount(strings.get(k)[3]);
+						fleetSummary.setRemainingSum(strings.get(k)[4]);
+						fleetSummary.setFleetRemainingSum(strings.get(k)[5]);
+						fleetSummaryList.add(fleetSummary);
+					}
+					dto.setFleetSummaryList(fleetSummaryList);
+				}
+
+				if (string[j].contains("单价汇总")){
+					List<UnitPriceSummary> unitPriceSummaryList = new ArrayList<>();
+					for (int k = i + 2; k < strings.size(); k++) {
+						if (strings.get(k)[0].contains("库存")){
+							break;
+						}
+						UnitPriceSummary unitPriceSummary = new UnitPriceSummary();
+						unitPriceSummary.setSymbolName(strings.get(k)[0]);
+						unitPriceSummary.setStickerPrice(strings.get(k)[1]);
+						unitPriceSummary.setWeight(strings.get(k)[2]);
+						unitPriceSummary.setAmountOfReceipt(strings.get(k)[3]);
+						unitPriceSummary.setAmountPaid(strings.get(k)[4]);
+						unitPriceSummary.setFrequency(strings.get(k)[5]);
+						unitPriceSummaryList.add(unitPriceSummary);
+					}
+					dto.setUnitPriceSummaryList(unitPriceSummaryList);
+				}
+
+				if ("库存".equals(string[j])){
+					dto.setInventory(string[j + 1]);
+				}
+				if ("班组长签字".equals(string[j])){
+					dto.setLeaderSignature(string[j + 1]);
+				}
+				if ("值班站长签字".equals(string[j])){
+					dto.setAgentSignature(string[j + 1]);
+				}
+//				System.out.println("第二次数据打印：" + string[j]);
+			}
+		}
+		return dto;
 	}
 }

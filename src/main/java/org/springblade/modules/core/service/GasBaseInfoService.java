@@ -20,9 +20,11 @@ public interface GasBaseInfoService extends BaseService<GasBaseInfo> {
     /**
      * 获取加气站基础信息
      */
-    List<GasBaseInfoDto> getBaseInfoList();
+    List<GasBaseInfoDto> getBaseInfoList(String type);
 
 	String selectIdByName(String gasName);
+
+	String selectNameByNumber(String gasNumber);
 
 	IPage<GasBaseInfo> selectGasBaseInfoList(IPage<GasBaseInfo> page, GasBaseInfo gasBaseInfo);
 }

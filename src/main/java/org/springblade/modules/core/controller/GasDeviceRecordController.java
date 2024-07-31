@@ -4,6 +4,7 @@ import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.SneakyThrows;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springblade.core.launch.constant.AppConstant;
@@ -12,6 +13,7 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.core.dto.GasDeviceRecordDto;
 import org.springblade.modules.core.entity.GasDeviceRecord;
+import org.springblade.modules.core.service.GasBaseInfoService;
 import org.springblade.modules.core.service.GasDeviceRecordService;
 import org.springblade.modules.core.util.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,8 @@ public class GasDeviceRecordController {
 
     @Autowired
     private GasDeviceRecordService gasDeviceRecordService;
+	@Autowired
+	private GasBaseInfoService gasBaseInfoService;
 
 	/**
 	 * 查询特种设备安全检查记录详情
@@ -79,6 +83,15 @@ public class GasDeviceRecordController {
         return R.data(gasDeviceRecordService.updateGasDevice(gasDeviceRecordDto));
     }
 
+	/**
+	 * 上传文件
+	 */
+	@PostMapping("/updateFileUrlById")
+	public R updateFileUrlById(@RequestBody GasDeviceRecordDto gasDeviceRecordDto)
+	{
+		return R.data(gasDeviceRecordService.updateFileUrlById(gasDeviceRecordDto));
+	}
+
     /**
      * 删除特种设备安全检查记录
      */
@@ -93,8 +106,7 @@ public class GasDeviceRecordController {
 	 * @param response response
 	 */
 	@GetMapping(value = "/downloadTemplate")
-//	@ApiOperation(value = "下载模板", httpMethod = "GET")
-//	@ApiOperation(value = "导出用户阶段详情", notes = "export", produces = "application/octet-stream")
+	@ApiOperation(value = "下载模板", httpMethod = "GET")
 	public void downloadTemplate(HttpServletResponse response) {
 		ExcelUtil.download(response, "特种设备安全检查.xlsx");
 	}
@@ -104,8 +116,8 @@ public class GasDeviceRecordController {
 	 */
 	@PostMapping("write-notice")
 	public R writeNotice(MultipartFile file) {
-		gasDeviceRecordService.writeNotice(file);
-		return R.success("成功");
+		GasDeviceRecord dto = gasDeviceRecordService.writeNotice(file);
+		return R.data(gasDeviceRecordService.insertGasDeviceRecord(dto));
 	}
 
 	/**

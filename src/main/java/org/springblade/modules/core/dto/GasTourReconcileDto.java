@@ -34,7 +34,7 @@ public class GasTourReconcileDto {
 
 	/** 交班时间-开始 */
 	@ExcelIgnore
-	private String starTourTime;
+	private String startTourTime;
 	/** 交班时间-结束 */
 	@ExcelIgnore
 	private String endTourTime;
@@ -136,8 +136,8 @@ public class GasTourReconcileDto {
         this.id = gasTourReconcile.getId();
         this.gasId = gasTourReconcile.getGasId();
         this.tourPerson = gasTourReconcile.getTourPerson();
-        this.tourTime = gasTourReconcile.getStarTourTime() + "至" + gasTourReconcile.getEndTourTime();
-        this.starTourTime = gasTourReconcile.getStarTourTime();
+        this.tourTime = gasTourReconcile.getStartTourTime() + "至" + gasTourReconcile.getEndTourTime();
+        this.startTourTime = gasTourReconcile.getStartTourTime();
         this.endTourTime = gasTourReconcile.getEndTourTime();
         this.addLiquidMeasureCount = gasTourReconcile.getAddLiquidMeasureCount();
         this.amountCount = gasTourReconcile.getAmountCount();
