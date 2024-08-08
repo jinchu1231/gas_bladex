@@ -51,6 +51,15 @@ public class FluidFieldBaseInfoController extends BladeController {
     }
 
 	/**
+	 * 获取液厂list
+	 */
+	@ApiOperation("获取液厂list")
+	@PostMapping("/getFluList")
+	public R getFluList(){
+		return R.data(fluidFieldBaseInfoService.getFluList());
+	}
+
+	/**
 	 * 查询加气站巡查记录列表
 	 */
 	@PostMapping("/pageList")

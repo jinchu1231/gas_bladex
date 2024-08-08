@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import liquibase.pro.packaged.P;
 import org.apache.ibatis.annotations.Param;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
+import org.springblade.modules.core.dto.dapin.DayPriceDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
 import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
 
@@ -65,4 +66,8 @@ public interface GasTourReconcileMapper extends BaseMapper<GasTourReconcile>
 	 * @return 交班对账集合
 	 */
 	public List<GasTourReconcile> selectAllGasTourReconcileList();
+
+    List<DayPriceDto> revenueTrend(String id);
+
+	List<DayPriceDto> inventoryTrend(String id);
 }

@@ -16,13 +16,12 @@
  */
 package org.springblade.modules.core.controller;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import lombok.AllArgsConstructor;
+
 import javax.validation.Valid;
 
 import org.springblade.core.launch.constant.AppConstant;
@@ -30,7 +29,6 @@ import org.springblade.core.secure.BladeUser;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
-import org.springblade.core.tool.utils.Func;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -45,7 +43,6 @@ import org.springblade.core.excel.util.ExcelUtil;
 import org.springblade.core.tool.constant.BladeConstant;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
@@ -74,24 +71,25 @@ public class ListedPriceController extends BladeController {
 		ListedPriceEntity detail = listedPriceService.getOne(Condition.getQueryWrapper(listedPrice));
 		return R.data(ListedPriceWrapper.build().entityVO(detail));
 	}
-	/**
-	 * 液厂挂牌价格 分页
-	 */
+
+	/*
+	 * 大屏-每日挂牌价格
+	*/
 	@GetMapping("/list")
 	@ApiOperationSupport(order = 2)
-	@ApiOperation(value = "分页", notes = "传入listedPrice")
-	public R<IPage<ListedPriceVO>> list(@ApiIgnore @RequestParam Map<String, Object> listedPrice, Query query) {
-		IPage<ListedPriceEntity> pages = listedPriceService.page(Condition.getPage(query), Condition.getQueryWrapper(listedPrice, ListedPriceEntity.class));
-		return R.data(ListedPriceWrapper.build().pageVO(pages));
+	@ApiOperation(value = "大屏-每日挂牌价格")
+	public R list() {
+		List<ListedPriceEntity> list = listedPriceService.getDayList();
+		return R.data(list);
 	}
 
 	/**
 	 * 液厂挂牌价格 自定义分页
 	 */
-	@GetMapping("/page")
+	@PostMapping("/page")
 	@ApiOperationSupport(order = 3)
 	@ApiOperation(value = "分页", notes = "传入listedPrice")
-	public R<IPage<ListedPriceVO>> page(ListedPriceVO listedPrice, Query query) {
+	public R<IPage<ListedPriceVO>> page(@RequestBody ListedPriceVO listedPrice, @RequestBody Query query) {
 		IPage<ListedPriceVO> pages = listedPriceService.selectListedPricePage(Condition.getPage(query), listedPrice);
 		return R.data(pages);
 	}
@@ -103,6 +101,7 @@ public class ListedPriceController extends BladeController {
 	@ApiOperationSupport(order = 4)
 	@ApiOperation(value = "新增", notes = "传入listedPrice")
 	public R save(@Valid @RequestBody ListedPriceEntity listedPrice) {
+		listedPrice.setId(null);
 		return R.status(listedPriceService.save(listedPrice));
 	}
 
@@ -129,11 +128,11 @@ public class ListedPriceController extends BladeController {
 	/**
 	 * 液厂挂牌价格 删除
 	 */
-	@PostMapping("/remove")
+	@PostMapping("/delete")
 	@ApiOperationSupport(order = 7)
 	@ApiOperation(value = "逻辑删除", notes = "传入ids")
-	public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
-		return R.status(listedPriceService.deleteLogic(Func.toLongList(ids)));
+	public R delete(@RequestParam("ids") String ids) {
+		return R.data(listedPriceService.delete(ids));
 	}
 
 
@@ -172,6 +171,16 @@ public class ListedPriceController extends BladeController {
 	@ApiOperation(value = "获取液厂最新价格", notes = "传入液厂id")
 	public R recentQuotation(@ApiParam(value = "液厂id", required = true) @RequestParam String fluid) {
 		return R.data(listedPriceService.recentQuotation(fluid));
+	}
+
+	/**
+	 * 后台-液厂价格趋势统计图
+	 */
+	@PostMapping("/price-server-trend")
+	@ApiOperationSupport(order = 8)
+	@ApiOperation(value = "后台-液厂价格趋势统计图", notes = "传入液厂id")
+	public R priceServerTrend(@ApiParam(value = "液厂id", required = true) @RequestParam String id) {
+		return R.data(listedPriceService.priceServerTrend(id));
 	}
 
 }

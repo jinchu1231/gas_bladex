@@ -26,4 +26,14 @@ public class FluidFieldBaseInfoServiceImpl extends BaseServiceImpl<FluidFieldBas
 	public IPage<FluidFieldBaseInfo> selectFluidFieldBaseInfoList(IPage<FluidFieldBaseInfo> page, FluidFieldBaseInfo fluidFieldBaseInfo) {
 		return page.setRecords(fluidFieldBaseInfoMapper.selectFluidFieldBaseInfoList(page, fluidFieldBaseInfo));
 	}
+
+	@Override
+	public String fluBaseInfo(String fluId) {
+		return fluidFieldBaseInfoMapper.fluBaseInfo(fluId);
+	}
+
+	@Override
+	public List<FluidFieldBaseInfo> getFluList() {
+		return fluidFieldBaseInfoMapper.getFluList();
+	}
 }

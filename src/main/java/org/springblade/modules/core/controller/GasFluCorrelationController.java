@@ -29,8 +29,8 @@ public class GasFluCorrelationController extends BladeController {
 	@GetMapping("/detail")
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "详情", notes = "传入fieldOrder")
-	public R<List<GasFluCorrelationVO>> detail() {
-		return R.data(gasFluCorrelationService.detail(AuthUtil.getUserId()));
+	public R<List<GasFluCorrelationVO>> detail(@RequestParam("id") String id) {
+		return R.data(gasFluCorrelationService.detail(id));
 	}
 
 

@@ -40,16 +40,14 @@ import org.springblade.flow.demo.leave.entity.ProcessLeave;
 import org.springblade.flow.demo.leave.mapper.LeaveMapper;
 import org.springblade.flow.demo.leave.service.ILeaveService;
 import org.springblade.flow.engine.service.FlowEngineService;
+import org.springblade.modules.core.service.FluidFieldBaseInfoService;
 import org.springblade.modules.core.service.GasBaseInfoService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -68,6 +66,9 @@ public class LeaveServiceImpl extends BaseServiceImpl<LeaveMapper, ProcessLeave>
 	private final GasBaseInfoService gasBaseInfoService;
 
 	private final FlowEngineService flowEngineService;
+
+	private final FluidFieldBaseInfoService fluidFieldBaseInfoService;
+
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -114,6 +115,9 @@ public class LeaveServiceImpl extends BaseServiceImpl<LeaveMapper, ProcessLeave>
 		//获取订单创建人
 		Long createUser = detail.getCreateUser();
 		String gasName = gasBaseInfoService.selectNameByNumber(createUser.toString());
+
+		//获取供货厂家名称
+		String fluName = fluidFieldBaseInfoService.fluBaseInfo(detail.getLieferant());
 
 		String manage = "刘帅";
 		String incharge = "白瑞";
@@ -224,7 +228,7 @@ public class LeaveServiceImpl extends BaseServiceImpl<LeaveMapper, ProcessLeave>
 			cell6.setFixedHeight(60);
 			table.addCell(cell6);
 
-			PdfPCell cell7 = new PdfPCell(new Paragraph("供货厂家" + detail.getLieferant(), contentFont));
+			PdfPCell cell7 = new PdfPCell(new Paragraph("供货厂家：" + fluName, contentFont));
 			cell7.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell7.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell7.setFixedHeight(60);
@@ -258,9 +262,9 @@ public class LeaveServiceImpl extends BaseServiceImpl<LeaveMapper, ProcessLeave>
 			cell12.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell12.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell12.setFixedHeight(70);
-			table.addCell(cell12);*/
+			table.addCell(cell12);*//*
 
-			/*PdfPCell cell13 = new PdfPCell(new Paragraph(generalmanager, contentFont));
+			*//*PdfPCell cell13 = new PdfPCell(new Paragraph(generalmanager, contentFont));
 			cell13.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell13.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell13.setFixedHeight(70);

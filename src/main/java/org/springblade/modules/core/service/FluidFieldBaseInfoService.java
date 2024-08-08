@@ -22,4 +22,8 @@ public interface FluidFieldBaseInfoService extends BaseService<FluidFieldBaseInf
     List<FluidFieldBaseInfoDto> getBaseInfoList();
 
     IPage<FluidFieldBaseInfo> selectFluidFieldBaseInfoList(IPage<FluidFieldBaseInfo> page, FluidFieldBaseInfo fluidFieldBaseInfo);
+
+	String fluBaseInfo(String fluId);
+
+	List<FluidFieldBaseInfo> getFluList();
 }

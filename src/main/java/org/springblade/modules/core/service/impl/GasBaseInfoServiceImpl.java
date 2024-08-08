@@ -63,4 +63,13 @@ public class GasBaseInfoServiceImpl extends BaseServiceImpl<GasBaseInfoMapper,Ga
 		});
 		return gasBaseInfoIPage;
 	}
+
+	@Override
+	public GasBaseInfo getDetailById(String id) {
+		GasBaseInfo detail = gasBaseInfoMapper.getDetailById(id);
+		if (!Objects.isNull(detail) && !StringUtils.isEmpty(String.valueOf(detail.getStatus()))){
+			detail.setStatusName(Objects.requireNonNull(GasStatusEnum.getStatus(detail.getStatus())).getName());
+		}
+		return detail;
+	}
 }

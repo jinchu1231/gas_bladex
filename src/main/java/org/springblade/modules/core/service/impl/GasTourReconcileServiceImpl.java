@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spire.xls.Workbook;
 import org.springblade.common.utils.FindAndReplaceData;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
+import org.springblade.modules.core.dto.dapin.DayPriceDto;
+import org.springblade.modules.core.dto.dapin.PriceServerTrendDto;
 import org.springblade.modules.core.dto.tour.GasTourReconcileSaveDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
 import org.springblade.modules.core.entity.tour.*;
@@ -24,6 +26,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 交班对账Service业务层处理
@@ -395,6 +398,36 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
 //				System.out.println("第二次数据打印：" + string[j]);
 			}
 		}
+		return dto;
+	}
+
+	@Override
+	public PriceServerTrendDto revenueTrend(String id) {
+		List<DayPriceDto> dayPriceDtos = baseMapper.revenueTrend(id);
+		List<String> price = new ArrayList<>();
+		List<String> day = new ArrayList<>();
+		PriceServerTrendDto dto = new PriceServerTrendDto();
+		dayPriceDtos.forEach(dtos -> {
+			price.add(String.valueOf(dtos.getPrice()));
+			day.add(dtos.getPriceDay());
+		});
+		dto.setPriceList(price);
+		dto.setDateList(day);
+		return dto;
+	}
+
+	@Override
+	public PriceServerTrendDto inventoryTrend(String id) {
+		List<DayPriceDto> dayPriceDtos = baseMapper.inventoryTrend(id);
+		List<String> inventory = new ArrayList<>();
+		List<String> day = new ArrayList<>();
+		PriceServerTrendDto dto = new PriceServerTrendDto();
+		dayPriceDtos.forEach(dtos -> {
+			inventory.add(dtos.getInventory());
+			day.add(dtos.getPriceDay());
+		});
+		dto.setPriceList(inventory);
+		dto.setDateList(day);
 		return dto;
 	}
 }

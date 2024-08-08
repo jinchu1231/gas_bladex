@@ -18,6 +18,7 @@ package org.springblade.modules.core.service.impl;
 
 import org.springblade.modules.core.dto.dapin.DayPriceDto;
 import org.springblade.modules.core.dto.dapin.OrderTrendDto;
+import org.springblade.modules.core.dto.dapin.PriceServerTrendDto;
 import org.springblade.modules.core.dto.dapin.PriceTrendDto;
 import org.springblade.modules.core.entity.ListedPriceEntity;
 import org.springblade.modules.core.vo.ListedPriceVO;
@@ -28,6 +29,8 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springblade.core.mp.base.BaseServiceImpl;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,8 +60,8 @@ public class ListedPriceServiceImpl extends BaseServiceImpl<ListedPriceMapper, L
 	@Override
 	public PriceTrendDto priceTrend(String id) {
 		PriceTrendDto dto = new PriceTrendDto();
-		int minValue = Integer.MAX_VALUE;
-		int maxValue = Integer.MIN_VALUE;
+		double minValue = Integer.MAX_VALUE;
+		double maxValue = Integer.MIN_VALUE;
 		List<DayPriceDto> dayPriceDtos = baseMapper.priceTrend(id);
 		dto.setPriceList(dayPriceDtos);
 		for (DayPriceDto dayPriceDto : dayPriceDtos) {
@@ -77,6 +80,31 @@ public class ListedPriceServiceImpl extends BaseServiceImpl<ListedPriceMapper, L
 	@Override
 	public Double recentQuotation(String fluid) {
 		return baseMapper.recentQuotation(fluid);
+	}
+
+	@Override
+	public int delete(String ids) {
+		return baseMapper.deleteBaseInfo(ids);
+	}
+
+	@Override
+	public List<ListedPriceEntity> getDayList() {
+		return baseMapper.getDayList();
+	}
+
+	@Override
+	public PriceServerTrendDto priceServerTrend(String id) {
+		List<DayPriceDto> dayPriceDtos = baseMapper.priceServerTrend(id);
+		List<String> price = new ArrayList<>();
+		List<String> day = new ArrayList<>();
+		PriceServerTrendDto dto = new PriceServerTrendDto();
+		dayPriceDtos.forEach(dtos -> {
+			price.add(String.valueOf(dtos.getPrice()));
+			day.add(dtos.getPriceDay());
+		});
+		dto.setPriceList(price);
+		dto.setDateList(day);
+		return dto;
 	}
 
 

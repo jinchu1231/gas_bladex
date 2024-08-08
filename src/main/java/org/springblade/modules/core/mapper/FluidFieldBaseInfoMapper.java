@@ -13,4 +13,8 @@ public interface FluidFieldBaseInfoMapper extends BaseMapper<FluidFieldBaseInfo>
    List<FluidFieldBaseInfoDto> getBaseInfoList();
 
 	List<FluidFieldBaseInfo> selectFluidFieldBaseInfoList(IPage page, FluidFieldBaseInfo fluidFieldBaseInfo);
+
+	String fluBaseInfo(String fluId);
+
+	List<FluidFieldBaseInfo> getFluList();
 }

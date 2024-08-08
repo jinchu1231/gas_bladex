@@ -32,9 +32,9 @@ public class GasBaseInfoController extends BladeController {
 	 */
 	@GetMapping("/detail")
 	@ApiOperationSupport(order = 1)
-	@ApiOperation(value = "详情", notes = "传入fieldOrder")
+	@ApiOperation(value = "详情", notes = "传入id")
 	public R<GasBaseInfo> detail(String id) {
-		return R.data(gasBaseInfoService.getById(id));
+		return R.data(gasBaseInfoService.getDetailById(id));
 	}
 
     /**

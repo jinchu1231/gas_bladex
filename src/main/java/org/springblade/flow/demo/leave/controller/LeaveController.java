@@ -17,19 +17,16 @@
 package org.springblade.flow.demo.leave.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.springblade.common.cache.UserCache;
 import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.tenant.annotation.NonDS;
 import org.springblade.core.tool.api.R;
 import org.springblade.flow.demo.leave.entity.ProcessLeave;
 import org.springblade.flow.demo.leave.service.ILeaveService;
+import org.springblade.modules.core.service.FluidFieldBaseInfoService;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.net.URLEncoder;
 
 /**
  * 控制器
@@ -45,6 +42,8 @@ public class LeaveController {
 
 	private final ILeaveService leaveService;
 
+	private final FluidFieldBaseInfoService fluidFieldBaseInfoService;
+
 	/**
 	 * 详情
 	 *
@@ -54,6 +53,7 @@ public class LeaveController {
 	public R<ProcessLeave> detail(Long businessId) {
 		ProcessLeave detail = leaveService.getById(businessId);
 		detail.getFlow().setAssigneeName(UserCache.getUser(detail.getCreateUser()).getName());
+		detail.setLieferant(fluidFieldBaseInfoService.fluBaseInfo(detail.getLieferant()));
 		return R.data(detail);
 	}
 
@@ -65,23 +65,6 @@ public class LeaveController {
 	@PostMapping("start-process")
 	public R startProcess(@RequestBody ProcessLeave leave) {
 		return R.status(leaveService.startProcess(leave));
-	}
-
-	/**
-	 * 导出
-	 */
-	@SneakyThrows
-	@GetMapping("export")
-	public void export(@RequestParam("businessId") Long businessId, @RequestParam("processInstanceId") String processInstanceId,
-					HttpServletResponse response, HttpServletRequest request) {
-		// 防止日志记录获取session异常
-		request.getSession();
-		// 设置编码格式
-		response.setContentType("application/pdf;charset=UTF-8");
-		response.setCharacterEncoding("utf-8");
-		String fileName = URLEncoder.encode("购液订单审批表", "UTF-8");
-		response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".pdf");
-		leaveService.export(businessId, processInstanceId, response);
 	}
 
 }

@@ -17,4 +17,6 @@ public interface GasBaseInfoMapper extends BaseMapper<GasBaseInfo> {
     String selectNameByNumber(String gasNumber);
 
 	List<GasBaseInfo> selectGasBaseInfoList(IPage page, GasBaseInfo gasBaseInfo);
+
+    GasBaseInfo getDetailById(String id);
 }

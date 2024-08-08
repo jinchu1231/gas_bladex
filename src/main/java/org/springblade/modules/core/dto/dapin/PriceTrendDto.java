@@ -10,9 +10,9 @@ import java.util.List;
 @Data
 public class PriceTrendDto {
 	/** 最小值 */
-	private int min;
+	private double min;
 	/** 最大值 */
-	private int max;
+	private double max;
 	/** 趋势列表 */
 	private List<DayPriceDto> priceList;
 }

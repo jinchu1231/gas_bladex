@@ -56,6 +56,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.springblade.core.cache.constant.CacheConstant.USER_CACHE;
 
@@ -313,6 +314,18 @@ public class UserController {
 		List<User> userList = userService.list(Wrappers.<User>lambdaQuery().in(User::getId, Func.toLongList(userIds)));
 		userList.forEach(user -> bladeRedis.del(CacheNames.tenantKey(user.getTenantId(), CacheNames.USER_FAIL_KEY, user.getAccount())));
 		return R.success("操作成功");
+	}
+
+	/**
+	 * 当前登录用户列表
+	 */
+	@GetMapping("/loginUserList")
+	@ApiOperationSupport(order = 11)
+	@ApiOperation(value = "用户列表", notes = "传入user")
+	public R<List<User>> loginUserList(User user, BladeUser bladeUser) {
+		QueryWrapper<User> queryWrapper = Condition.getQueryWrapper(user);
+		List<User> list = userService.list((!AuthUtil.isAdministrator()) ? queryWrapper.lambda().eq(User::getTenantId, bladeUser.getTenantId()) : queryWrapper);
+		return R.data(list.stream().filter(users -> AuthUtil.getUserId().equals(users.getId())).collect(Collectors.toList()));
 	}
 
 }

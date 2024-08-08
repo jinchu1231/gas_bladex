@@ -10,11 +10,14 @@ import org.springblade.core.oss.MinioTemplate;
 import org.springblade.core.oss.model.BladeFile;
 import org.springblade.core.tenant.annotation.NonDS;
 import org.springblade.core.tool.api.R;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springblade.flow.demo.leave.service.ILeaveService;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 
 /**
@@ -32,6 +35,9 @@ public class FileController extends BladeController {
 
 	private MinioTemplate minioTemplate;
 
+	private final ILeaveService leaveService;
+
+
 	@SneakyThrows
 	@PostMapping("put-object")
 	@ApiOperationSupport(order = 1)
@@ -40,6 +46,25 @@ public class FileController extends BladeController {
 		BladeFile bladeFile =   minioTemplate.putFile("bladex", file.getOriginalFilename(), file.getInputStream(),file.getContentType());
 		bladeFile.setName(bladeFile.getLink().replace("172.16.11.185","220.194.189.169"));
 		return R.data(bladeFile);
+	}
+
+
+	@SneakyThrows
+	@GetMapping("export")
+	public void export(@RequestParam("businessId") Long businessId, @RequestParam("processInstanceId") String processInstanceId,
+					   HttpServletResponse response, HttpServletRequest request) {
+		try {
+			// 防止日志记录获取session异常
+			request.getSession();
+			// 设置编码格式
+			response.setContentType("application/pdf;charset=UTF-8");
+			response.setCharacterEncoding("utf-8");
+			String fileName = URLEncoder.encode("购液订单审批表", "UTF-8");
+			response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".pdf");
+			leaveService.export(businessId, processInstanceId, response);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 
 

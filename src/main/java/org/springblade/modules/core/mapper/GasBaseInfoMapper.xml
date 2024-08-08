@@ -69,4 +69,8 @@
         select gas_name from gas_base_info where gas_number = #{gasNumber}
     </select>
 
+    <select id="getDetailById" resultType="org.springblade.modules.core.entity.GasBaseInfo">
+        select * from gas_base_info where gas_number = #{id}
+    </select>
+
 </mapper>

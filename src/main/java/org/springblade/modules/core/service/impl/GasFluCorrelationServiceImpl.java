@@ -2,6 +2,8 @@ package org.springblade.modules.core.service.impl;
 
 
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springblade.flow.demo.leave.entity.ProcessLeave;
+import org.springblade.flow.demo.leave.service.ILeaveService;
 import org.springblade.modules.core.entity.GasFluCorrelation;
 import org.springblade.modules.core.mapper.GasFluCorrelationMapper;
 import org.springblade.modules.core.service.GasFluCorrelationService;
@@ -17,8 +19,13 @@ public class GasFluCorrelationServiceImpl extends BaseServiceImpl<GasFluCorrelat
 	@Autowired
 	private GasFluCorrelationMapper gasFluCorrelationMapper;
 
+	@Autowired
+	private ILeaveService leaveService;
+
 	@Override
-	public List<GasFluCorrelationVO> detail(Long userId) {
-		return gasFluCorrelationMapper.detail(String.valueOf(userId));
+	public List<GasFluCorrelationVO> detail(String id) {
+		//根据申请人查询对应的液厂列表
+		ProcessLeave leave = leaveService.getById(id);
+		return gasFluCorrelationMapper.detail(String.valueOf(leave.getTaskUser()));
 	}
 }

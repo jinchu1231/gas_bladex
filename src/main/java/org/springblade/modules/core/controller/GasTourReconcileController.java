@@ -116,121 +116,22 @@ public class GasTourReconcileController {
 		return R.data(gasTourReconcileService.save(new GasTourReconcile(dto)));
 	}
 
-	/*@PostMapping("write-notice1")
-	public R writeNotice1(MultipartFile file) {
-		List<GasTourReconcileExcelDto> list = ExcelUtil.read(file, GasTourReconcileExcelDto.class);
+	/**
+	 * 大屏-加气站营收趋势图
+	 * @param id id
+	 */
+	@PostMapping("revenueTrend")
+	public R revenueTrend(String id) {
+		return R.data(gasTourReconcileService.revenueTrend(id));
+	}
 
-		List<GasTourReconcile> gasTourReconcileList = new ArrayList<>();
-		if(Objects.isNull(list) || list.size() <= 0){
-			return R.fail("请导入有效数据");
-		}
-		//需要将dto中的汇总数据转换成json格式后再进行保存
-		list.forEach(dto -> {
-			//收款渠道汇总 数据处理
-			if (!StringUtils.isEmpty(dto.getModeOfPayment()) || !StringUtils.isEmpty(dto.getPaymentAmount())){
-				String[] split = dto.getModeOfPayment().split("\n");
-				String[] split1 = dto.getPaymentAmount().split("\n");
-				List<CollectionChannelSummary> channelSummaryList = new ArrayList<>();
-				for (int i = 0; i < split.length; i++) {
-					CollectionChannelSummary collectionChannelSummary = new CollectionChannelSummary();
-					collectionChannelSummary.setModeOfPayment(split[i]);
-					collectionChannelSummary.setPaymentAmount(split1[i]);
-					channelSummaryList.add(collectionChannelSummary);
-				}
-				dto.setCollectionChannelSummaryList(channelSummaryList);
-			}
-
-			if (!StringUtils.isEmpty(dto.getGunMark()) || !StringUtils.isEmpty(dto.getAmountOfLiquidAdded()) ||
-				!StringUtils.isEmpty(dto.getAmountOfLiquidFilling()) || !StringUtils.isEmpty(dto.getFrequency())){
-				//枪号汇总 数据处理
-				String[] gun = dto.getGunMark().split("\n");
-				String[] amount = dto.getAmountOfLiquidAdded().split("\n");
-				String[] amountF = dto.getAmountOfLiquidFilling().split("\n");
-				String[] fre = dto.getFrequency().split("\n");
-				List<GunNumberSummary> gunNumberSummaryList = new ArrayList<>();
-				for (int i = 0; i < gun.length; i++) {
-					GunNumberSummary gunNumberSummary = new GunNumberSummary();
-					gunNumberSummary.setGunMark(gun[i]);
-					gunNumberSummary.setAmountOfLiquidAdded(amount[i]);
-					gunNumberSummary.setAmountOfLiquidFilling(amountF[i]);
-					gunNumberSummary.setFrequency(fre[i]);
-					gunNumberSummaryList.add(gunNumberSummary);
-				}
-				dto.setGunNumberSummaryList(gunNumberSummaryList);
-			}
-
-			if (!StringUtils.isEmpty(dto.getClassNumber()) || !StringUtils.isEmpty(dto.getFrequencyT()) ||
-				!StringUtils.isEmpty(dto.getAmountOfLiquidAddedT()) || !StringUtils.isEmpty(dto.getAmountOfLiquidFillingT())){
-				//班组汇总 数据处理
-				String[] classN = dto.getClassNumber().split("\n");
-				String[] freq = dto.getFrequencyT().split("\n");
-				String[] amountT = dto.getAmountOfLiquidAddedT().split("\n");
-				String[] amountFT = dto.getAmountOfLiquidFillingT().split("\n");
-				List<GroupSummary> groupSummaryList = new ArrayList<>();
-				for (int i = 0; i < classN.length; i++) {
-					GroupSummary groupSummary = new GroupSummary();
-					groupSummary.setClassNumber(classN[i]);
-					groupSummary.setFrequency(freq[i]);
-					groupSummary.setAmountOfLiquidAdded(amountT[i]);
-					groupSummary.setAmountOfLiquidFilling(amountFT[i]);
-					groupSummaryList.add(groupSummary);
-				}
-				dto.setGroupSummaryList(groupSummaryList);
-			}
-
-			if (!StringUtils.isEmpty(dto.getNameOfFleet()) || !StringUtils.isEmpty(dto.getAmountOfLiquidFillingTH()) ||
-				!StringUtils.isEmpty(dto.getAmountOfLiquidAddedTH()) || !StringUtils.isEmpty(dto.getRechargeAmount()) ||
-				!StringUtils.isEmpty(dto.getAmountOfLiquidAddedTH()) || !StringUtils.isEmpty(dto.getFleetRemainingSum())) {
-				//车队汇总 数据处理
-				String[] name = dto.getNameOfFleet().split("\n");
-				String[] amountFTh = dto.getAmountOfLiquidFillingTH().split("\n");
-				String[] amountTh = dto.getAmountOfLiquidAddedTH().split("\n");
-				String[] rec = dto.getRechargeAmount().split("\n");
-				String[] rem = dto.getRemainingSum().split("\n");
-				String[] fle = dto.getFleetRemainingSum().split("\n");
-				List<FleetSummary> fleetSummaryList = new ArrayList<>();
-				for (int i = 0; i < name.length; i++) {
-					FleetSummary fleetSummary = new FleetSummary();
-					fleetSummary.setNameOfFleet(name[i]);
-					fleetSummary.setAmountOfLiquidFilling(amountFTh[i]);
-					fleetSummary.setAmountOfLiquidAdded(amountTh[i]);
-					fleetSummary.setRechargeAmount(rec[i]);
-					fleetSummary.setRemainingSum(rem[i]);
-					fleetSummary.setFleetRemainingSum(fle[i]);
-					fleetSummaryList.add(fleetSummary);
-				}
-				dto.setFleetSummaryList(fleetSummaryList);
-			}
-
-			if (!StringUtils.isEmpty(dto.getSymbolName()) || !StringUtils.isEmpty(dto.getStickerPrice()) ||
-				!StringUtils.isEmpty(dto.getAmountOfLiquidAddedTH()) || !StringUtils.isEmpty(dto.getAmountOfReceipt()) ||
-				!StringUtils.isEmpty(dto.getAmountOfLiquidAddedTH()) || !StringUtils.isEmpty(dto.getFrequencyTH())) {
-				//单价汇总 数据处理
-				String[] sym = dto.getSymbolName().split("\n");
-				String[] sti = dto.getStickerPrice().split("\n");
-				String[] wei = dto.getWeight().split("\n");
-				String[] amountR = dto.getAmountOfReceipt().split("\n");
-				String[] amountP = dto.getAmountPaid().split("\n");
-				String[] freTH = dto.getFrequencyTH().split("\n");
-				List<UnitPriceSummary> unitPriceSummaryList = new ArrayList<>();
-				for (int i = 0; i < sym.length; i++) {
-					UnitPriceSummary unitPriceSummary = new UnitPriceSummary();
-					unitPriceSummary.setSymbolName(sym[i]);
-					unitPriceSummary.setStickerPrice(sti[i]);
-					unitPriceSummary.setWeight(wei[i]);
-					unitPriceSummary.setAmountOfReceipt(amountR[i]);
-					unitPriceSummary.setAmountPaid(amountP[i]);
-					unitPriceSummary.setFrequency(freTH[i]);
-					unitPriceSummaryList.add(unitPriceSummary);
-				}
-				dto.setUnitPriceSummaryList(unitPriceSummaryList);
-			}
-
-			dto.setGasId(gasBaseInfoService.selectIdByName(dto.getGasName()));
-			GasTourReconcile gasTourReconcile = new GasTourReconcile(dto);
-			gasTourReconcileList.add(gasTourReconcile);
-		});
-		return R.data(gasTourReconcileService.saveBatch(gasTourReconcileList));
-	}*/
+	/**
+	 * 大屏-加气站库存趋势图
+	 * @param id id
+	 */
+	@PostMapping("inventoryTrend")
+	public R inventoryTrend(String id) {
+		return R.data(gasTourReconcileService.inventoryTrend(id));
+	}
 
 }

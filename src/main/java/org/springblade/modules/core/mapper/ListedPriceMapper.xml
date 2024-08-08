@@ -19,6 +19,13 @@
 
     <select id="selectListedPricePage" resultMap="listedPriceResultMap">
         select * from fluid_listed_price where is_deleted = 0
+        and  (fluid, create_time) IN (
+        SELECT
+        fluid,
+        MAX(create_time) AS max_create_time
+        FROM
+        gas_bladex.fluid_listed_price
+        GROUP BY fluid)
         <if test="vo.fluid != null and vo.fluid != ''">
             and fluid = #{vo.fluid}
         </if>
@@ -52,5 +59,51 @@
         select listed_price from fluid_listed_price where fluid = #{fluid} order by create_time desc limit 1
     </select>
 
+    <select id="getDayList" resultType="org.springblade.modules.core.entity.ListedPriceEntity">
+        SELECT
+            fluid,
+            fluid_name,
+            day,
+            MAX(listed_price) as listedPrice
+        FROM
+            fluid_listed_price
+        WHERE
+            day = CURDATE()
+        GROUP BY
+            fluid
+    </select>
 
+    <select id="priceServerTrend" resultType="org.springblade.modules.core.dto.dapin.DayPriceDto">
+        SELECT
+        date_add( curdate(), INTERVAL ( cast( help_topic_id AS signed INTEGER ) - 30 ) DAY ) priceDay,
+        ifnull( am.price, 0 ) price
+        FROM
+        mysql.help_topic h
+        LEFT JOIN (
+
+        SELECT
+        DATE(day) AS priceDay,
+        fluid_name,
+        MAX(listed_price) AS price
+        FROM
+        fluid_listed_price
+        WHERE
+        day >= CURDATE() - INTERVAL 30 DAY
+        and fluid = #{fluid}
+        GROUP BY
+        DATE(day),fluid
+
+        ) am ON date_add( curdate(), INTERVAL ( cast( h.help_topic_id AS signed INTEGER ) - 30 ) DAY ) = am.priceDay
+        WHERE
+        h.help_topic_id &lt;= DAY (
+        last_day(
+        curdate()))
+        ORDER BY
+        h.help_topic_id
+
+    </select>
+
+    <update id="deleteBaseInfo">
+        update fluid_listed_price set is_deleted = 1 where id = #{ids}
+    </update>
 </mapper>

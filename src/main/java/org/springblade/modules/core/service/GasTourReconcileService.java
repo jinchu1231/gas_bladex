@@ -4,6 +4,7 @@ package org.springblade.modules.core.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
+import org.springblade.modules.core.dto.dapin.PriceServerTrendDto;
 import org.springblade.modules.core.dto.tour.GasTourReconcileSaveDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
 import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
@@ -64,4 +65,8 @@ public interface GasTourReconcileService extends IService<GasTourReconcile>
 
 
 	GasTourReconcileExcelDto writeNotice(MultipartFile file);
+
+	PriceServerTrendDto revenueTrend(String id);
+
+	PriceServerTrendDto inventoryTrend(String id);
 }

@@ -70,6 +70,64 @@
         where is_deleted = 0 order by create_time desc
     </select>
 
+    <select id="revenueTrend" resultType="org.springblade.modules.core.dto.dapin.DayPriceDto">
+        SELECT
+            date_add( curdate(), INTERVAL ( cast( help_topic_id AS signed INTEGER ) - 30 ) DAY ) priceDay,
+            ifnull( am.price, 0 ) price
+        FROM
+            mysql.help_topic h
+        LEFT JOIN (
+
+        SELECT
+            DATE(start_tour_time) AS date,
+            gas_name,
+            amount_count AS price
+        FROM
+            gas_tour_reconcile
+        WHERE
+            start_tour_time >= CURDATE() - INTERVAL 30 DAY
+            and gas_id = #{id}
+        GROUP BY
+        DATE(start_tour_time),gas_id
+
+        ) am ON date_add( curdate(), INTERVAL ( cast( h.help_topic_id AS signed INTEGER ) - 30 ) DAY ) = am.date
+        WHERE
+        h.help_topic_id &lt;= DAY (
+        last_day(
+        curdate()))
+        ORDER BY
+        h.help_topic_id
+    </select>
+
+    <select id="inventoryTrend" resultType="org.springblade.modules.core.dto.dapin.DayPriceDto">
+        SELECT
+            date_add( curdate(), INTERVAL ( cast( help_topic_id AS signed INTEGER ) - 30 ) DAY ) priceDay,
+            ifnull( am.inventory, 0 ) inventory
+        FROM
+            mysql.help_topic h
+        LEFT JOIN (
+
+        SELECT
+            DATE(start_tour_time) AS date,
+            gas_name,
+            inventory AS inventory
+        FROM
+            gas_tour_reconcile
+        WHERE
+            start_tour_time >= CURDATE() - INTERVAL 30 DAY
+            and gas_id = #{id}
+        GROUP BY
+        DATE(start_tour_time),gas_id
+
+        ) am ON date_add( curdate(), INTERVAL ( cast( h.help_topic_id AS signed INTEGER ) - 30 ) DAY ) = am.date
+        WHERE
+        h.help_topic_id &lt;= DAY (
+        last_day(
+        curdate()))
+        ORDER BY
+        h.help_topic_id
+    </select>
+
     <insert id="insertGasTourReconcile" parameterType="GasTourReconcile" useGeneratedKeys="true" keyProperty="id">
         insert into gas_tour_reconcile
         <trim prefix="(" suffix=")" suffixOverrides=",">

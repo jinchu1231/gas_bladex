@@ -19,7 +19,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springblade.core.mp.base.BaseEntity;
-import org.springblade.core.tenant.mp.TenantEntity;
 
 import java.util.Date;
 

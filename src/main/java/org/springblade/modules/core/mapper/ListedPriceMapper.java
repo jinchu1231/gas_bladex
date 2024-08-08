@@ -58,4 +58,10 @@ public interface ListedPriceMapper extends BaseMapper<ListedPriceEntity> {
 
 
 	Double recentQuotation(String fluid);
+
+	int deleteBaseInfo(String ids);
+
+	List<ListedPriceEntity> getDayList();
+
+	List<DayPriceDto> priceServerTrend(String fluid);
 }

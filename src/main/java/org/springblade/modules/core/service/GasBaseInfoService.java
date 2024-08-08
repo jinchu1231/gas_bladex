@@ -27,4 +27,6 @@ public interface GasBaseInfoService extends BaseService<GasBaseInfo> {
 	String selectNameByNumber(String gasNumber);
 
 	IPage<GasBaseInfo> selectGasBaseInfoList(IPage<GasBaseInfo> page, GasBaseInfo gasBaseInfo);
+
+	GasBaseInfo getDetailById(String id);
 }

@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface GasFluCorrelationService extends BaseService<GasFluCorrelation> {
 
-	List<GasFluCorrelationVO> detail(Long userId);
+	List<GasFluCorrelationVO> detail(String id);
 }
