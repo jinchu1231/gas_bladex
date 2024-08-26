@@ -1,9 +1,10 @@
 package org.springblade.modules.core.dto;
 
 import lombok.Data;
+import org.springblade.core.mp.support.Query;
 
 @Data
-public class CameraDto {
+public class CameraDto extends Query {
     private static final long serialVersionUID = 1L;
 
     /**

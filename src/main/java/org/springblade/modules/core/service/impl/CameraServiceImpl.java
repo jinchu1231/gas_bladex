@@ -12,10 +12,7 @@ import okhttp3.Response;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.core.dto.CameraDto;
-import org.springblade.modules.core.entity.Camera;
-import org.springblade.modules.core.entity.Cameras;
-import org.springblade.modules.core.entity.Device;
-import org.springblade.modules.core.entity.DeviceCamera;
+import org.springblade.modules.core.entity.*;
 import org.springblade.modules.core.service.CameraService;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +38,8 @@ public class CameraServiceImpl implements CameraService {
     private static final String getDeviceList = "https://open.ys7.com/api/lapp/device/list";
     //萤石分页查询设备通道列表
     private static final String getDeviceCameraList = "https://open.ys7.com/api/lapp/camera/list";
+    //萤石分页查询指定服务区设备通道列表
+    private static final String getAreaDeviceCameraList = "https://open.ys7.com/api/lapp/device/camera/list";
 
     @Override
     public StringBuilder getCameraInfo(CameraDto cameraDto) {
@@ -58,13 +57,13 @@ public class CameraServiceImpl implements CameraService {
 
     @Override
     public R getDeviceList(Query query) {
-        if(0 > query.getSize() || 400 < query.getSize()){
-            return R.fail("pageNum页码小于0或大于400");
-        }
+		if(0 > query.getCurrent()){
+			return R.fail("Current页码小于0");
+		}
 
-        if(10 > query.getCurrent() || 50 < query.getCurrent()){
-            return R.fail("pageSize页码小于10或大于50");
-        }
+		if(10 > query.getSize() || 50 < query.getSize()){
+			return R.fail("Size页码小于10或大于50");
+		}
 
         String token = getHkTokenApiInfo();
         List<Device> hkDeviceList = getHkDeviceList(query, token);
@@ -86,7 +85,22 @@ public class CameraServiceImpl implements CameraService {
         return R.data(hkDeviceList);
     }
 
-    //获取设备列表
+	@Override
+	public R getAreaDeviceCameraList(CameraDto cameraDto) {
+		if(0 > cameraDto.getCurrent()){
+			return R.fail("Current页码小于0");
+		}
+
+		if(10 > cameraDto.getSize() || 50 < cameraDto.getSize()){
+			return R.fail("Size页码小于10或大于50");
+		}
+
+		String token = getHkTokenApiInfo();
+		List<AssignDeviceCamera> hkDeviceList = getAreaDeviceCameraList(cameraDto, token);
+		return R.data(hkDeviceList);
+	}
+
+	//获取设备列表
     private List<Device> getHkDeviceList(Query query, String token) {
         List<Device> devices = new ArrayList<>();
         try {
@@ -270,4 +284,48 @@ public class CameraServiceImpl implements CameraService {
         }
         return token;
     }
+
+	//获取设备列表
+	private List<AssignDeviceCamera> getAreaDeviceCameraList(CameraDto dto, String token) {
+		List<AssignDeviceCamera> deviceCamera = new ArrayList<>();
+		try {
+			OkHttpClient client = new OkHttpClient.Builder()
+				.connectTimeout(30, TimeUnit.SECONDS) // 设置连接超时时间
+				.readTimeout(30, TimeUnit.SECONDS) // 设置读超时时间
+				.writeTimeout(30, TimeUnit.SECONDS) // 设置写超时时间
+				.retryOnConnectionFailure(true) // 是否自动重连
+				.build();
+
+			FormBody body = new FormBody.Builder()
+				.add("accessToken", token)
+				.add("deviceSerial", dto.getDeviceSerial())
+				.build();
+
+			// 创建Request对象
+			Request request = new Request.Builder()
+				.url(getAreaDeviceCameraList)
+				.post(body)
+				.build();
+
+			// 得到Response对象
+			Response response1 = client.newCall(request).execute();
+
+			ObjectMapper mapper = new ObjectMapper();
+
+			if(response1.isSuccessful()){
+				String string = response1.body().string();
+				JSONArray array = new JSONArray(string);
+				for(int i = 0; i<array.size();i++) {//循环打印
+					JSONObject obj = array.getJSONObject(i);
+					String data = obj.getString("data");
+					if (StringUtils.isNotEmpty(data)){
+						deviceCamera = mapper.readValue(data, new TypeReference<List<AssignDeviceCamera>>(){});
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return deviceCamera.stream().sorted(Comparator.comparingInt(AssignDeviceCamera::getChannelNo)).collect(Collectors.toList());
+	}
 }

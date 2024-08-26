@@ -53,7 +53,7 @@ public class LeaveController {
 	public R<ProcessLeave> detail(Long businessId) {
 		ProcessLeave detail = leaveService.getById(businessId);
 		detail.getFlow().setAssigneeName(UserCache.getUser(detail.getCreateUser()).getName());
-		detail.setLieferant(fluidFieldBaseInfoService.fluBaseInfo(detail.getLieferant()));
+//		detail.setLieferant(fluidFieldBaseInfoService.fluBaseInfo(detail.getLieferant()));
 		return R.data(detail);
 	}
 

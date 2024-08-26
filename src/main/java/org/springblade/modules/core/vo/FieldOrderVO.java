@@ -124,6 +124,18 @@ public class FieldOrderVO {
 	@ApiModelProperty(value = "购液负责人")
 	private String buyFieldPrincipal;
 
+	/**
+	 * 到货时间
+	 */
+	@ApiModelProperty(value = "到货时间")
+	private String arrivalTime;
+
+	/**
+	 * 采购方案
+	 */
+	@ApiModelProperty(value = "采购方案")
+	private String procurementScheme;
+
 	private String tenantId;
 	private String fileUrl;
 	private String pdfUrl;

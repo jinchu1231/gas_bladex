@@ -27,4 +27,11 @@ public interface CameraService {
      * @return 返回设备列表
      */
     R getDeviceCameraList(Query query);
+
+	/**
+	 * 获取指定服务区的设备通道列表
+	 * @param cameraDto 参数
+	 * @return 返回设备列表
+	 */
+	R getAreaDeviceCameraList(CameraDto cameraDto);
 }

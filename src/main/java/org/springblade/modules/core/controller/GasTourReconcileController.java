@@ -117,7 +117,8 @@ public class GasTourReconcileController {
 	}
 
 	/**
-	 * 大屏-加气站营收趋势图
+	 * 大屏首页-加气站营收趋势图
+	 * 获取单个加气站信息
 	 * @param id id
 	 */
 	@PostMapping("revenueTrend")
@@ -126,12 +127,44 @@ public class GasTourReconcileController {
 	}
 
 	/**
-	 * 大屏-加气站库存趋势图
+	 * 大屏首页-加气站库存趋势图
+	 * 获取单个加气站信息
 	 * @param id id
 	 */
 	@PostMapping("inventoryTrend")
 	public R inventoryTrend(String id) {
 		return R.data(gasTourReconcileService.inventoryTrend(id));
+	}
+
+
+	/**
+	 * 大屏-加气站管理-加气站营收趋势图
+	 * 获取所有加气站信息
+	 * @param type 类型
+	 */
+	@PostMapping("allRevenueTrend")
+	public R allRevenueTrend(String type) {
+		return R.data(gasTourReconcileService.allRevenueTrend(type));
+	}
+
+	/**
+	 * 大屏-加气站管理-加气站库存趋势图
+	 * 获取所有加气站信息
+	 * @param type 类型
+	 */
+	@PostMapping("allInventoryTrend")
+	public R allInventoryTrend(String type) {
+		return R.data(gasTourReconcileService.allInventoryTrend(type));
+	}
+
+	/**
+	 * 大屏-加气站管理-加气站储值金额趋势图
+	 * 获取所有加气站信息
+	 * @param type 类型
+	 */
+	@PostMapping("allStoredCalueTrend")
+	public R allStoredCalueTrend(String type) {
+		return R.data(gasTourReconcileService.allStoredCalueTrend(type));
 	}
 
 }

@@ -43,9 +43,9 @@ public class CameraController{
 
 
     /**
-     * 获取设备列表
+     * 获取所有的服务区设备序列号列表
      */
-    @ApiOperation("获取设备列表")
+    @ApiOperation("获取所有的服务区设备序列号列表")
     @PostMapping("/getDeviceList")
     public R getDeviceList(@RequestBody @Valid Query query){
         return cameraService.getDeviceList(query);
@@ -60,4 +60,14 @@ public class CameraController{
     {
         return cameraService.getDeviceCameraList(query);
     }
+
+	/*
+	 * 获取指定服务区的设备通道列表
+	 */
+	@ApiOperation("获取指定服务区的设备通道列表")
+	@PostMapping("/getAreaDeviceCameraList")
+	public R getAreaDeviceCameraList(@RequestBody @Valid CameraDto cameraDto)
+	{
+		return cameraService.getAreaDeviceCameraList(cameraDto);
+	}
 }

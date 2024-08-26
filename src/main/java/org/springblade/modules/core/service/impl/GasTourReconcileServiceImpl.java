@@ -7,10 +7,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spire.xls.Workbook;
+import org.json.JSONArray;
 import org.springblade.common.utils.FindAndReplaceData;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
 import org.springblade.modules.core.dto.dapin.DayPriceDto;
 import org.springblade.modules.core.dto.dapin.PriceServerTrendDto;
+import org.springblade.modules.core.dto.dapin.StoredValueDto;
 import org.springblade.modules.core.dto.tour.GasTourReconcileSaveDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
 import org.springblade.modules.core.entity.tour.*;
@@ -23,10 +25,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /**
  * 交班对账Service业务层处理
@@ -430,4 +433,148 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
 		dto.setDateList(day);
 		return dto;
 	}
+
+	@Override
+	public PriceServerTrendDto allRevenueTrend(String type) {
+		PriceServerTrendDto priceServerTrendDto = new PriceServerTrendDto();
+		List<StoredValueDto> storedValueDtos;
+		YearMonth currentMonth = YearMonth.now();
+		// 获取当前月份第一天的日期
+		String firstDayOfMonth = currentMonth.atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
+		if (type.equals("1")){
+			//本月
+			YearMonth nextMonth = YearMonth.now().plusMonths(1);
+			String firstDayOfNextMonth =  nextMonth.atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
+			storedValueDtos = baseMapper.allRevenueTrend(firstDayOfMonth, firstDayOfNextMonth);
+		}else if (type.equals("2")){
+			//上月
+			YearMonth lastMonth = YearMonth.now().minusMonths(1);
+			String firstDayOfLastMonth = lastMonth.atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
+			storedValueDtos = baseMapper.allRevenueTrend(firstDayOfLastMonth, firstDayOfMonth);
+		}else {
+			//今年
+			LocalDate today = LocalDate.now();
+			String todayAsString = today.format(DateTimeFormatter.ISO_LOCAL_DATE);
+			LocalDate firstDayOfYear = LocalDate.of(LocalDate.now().getYear(), 1, 1);
+			String firstDayOfYearAsString = firstDayOfYear.format(DateTimeFormatter.ISO_LOCAL_DATE);
+			storedValueDtos = baseMapper.allRevenueTrendYear(firstDayOfYearAsString, todayAsString);
+		}
+		List<String> inventory = new ArrayList<>();
+		List<String> day = new ArrayList<>();
+		storedValueDtos.forEach(dtos -> {
+			inventory.add(dtos.getStoredValue());
+			day.add(dtos.getPriceDay());
+		});
+		priceServerTrendDto.setPriceList(inventory);
+		priceServerTrendDto.setDateList(day);
+		return priceServerTrendDto;
+	}
+
+	@Override
+	public PriceServerTrendDto allInventoryTrend(String type) {
+		PriceServerTrendDto priceServerTrendDto = new PriceServerTrendDto();
+		List<StoredValueDto> storedValueDtos = new ArrayList<>();
+		YearMonth currentMonth = YearMonth.now();
+		// 获取当前月份第一天的日期
+		String firstDayOfMonth = currentMonth.atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
+		if (type.equals("1")){
+			//本月
+			YearMonth nextMonth = YearMonth.now().plusMonths(1);
+			String firstDayOfNextMonth =  nextMonth.atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
+			storedValueDtos = baseMapper.allInventoryTrend(firstDayOfMonth, firstDayOfNextMonth);
+		}else if (type.equals("2")){
+			//上月
+			YearMonth lastMonth = YearMonth.now().minusMonths(1);
+			String firstDayOfLastMonth = lastMonth.atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
+			storedValueDtos = baseMapper.allInventoryTrend(firstDayOfLastMonth, firstDayOfMonth);
+		}
+		List<String> inventory = new ArrayList<>();
+		List<String> day = new ArrayList<>();
+		storedValueDtos.forEach(dtos -> {
+			inventory.add(dtos.getStoredValue());
+			day.add(dtos.getPriceDay());
+		});
+		priceServerTrendDto.setPriceList(inventory);
+		priceServerTrendDto.setDateList(day);
+		return priceServerTrendDto;
+	}
+
+	@Override
+	public PriceServerTrendDto allStoredCalueTrend(String type) {
+		List<StoredValueDto> storedValueList = new ArrayList<>();
+		Map<LocalDate, Double> aggregatedData = new HashMap<>();
+		YearMonth currentMonth = YearMonth.now();
+		// 获取当前月份第一天的日期
+		String firstDayOfMonth = currentMonth.atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
+		LocalDate startDate = currentMonth.atDay(1);
+		LocalDate endDate = currentMonth.atEndOfMonth();
+		if (type.equals("1")){
+			//本月
+			YearMonth nextMonth = YearMonth.now().plusMonths(1);
+			String firstDayOfNextMonth =  nextMonth.atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
+			storedValueList = baseMapper.allStoredCalueTrend(firstDayOfMonth, firstDayOfNextMonth);
+		}else if (type.equals("2")){
+			//上月
+			YearMonth lastMonth = YearMonth.now().minusMonths(1);
+			startDate = lastMonth.atDay(1);
+			endDate = lastMonth.atEndOfMonth();
+			String firstDayOfLastMonth = lastMonth.atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
+			storedValueList = baseMapper.allStoredCalueTrend(firstDayOfLastMonth, firstDayOfMonth);
+		}
+		storedValueList.forEach(dto -> {
+			LocalDate date = LocalDate.parse(dto.getPriceDay());
+			Double sum = parseValues(dto.getStoredValue());
+
+			aggregatedData.merge(date, sum, Double::sum);
+		});
+
+		fillMissingDates(aggregatedData, startDate, endDate);
+
+		PriceServerTrendDto priceServerTrendDto = prepareTrendDto(aggregatedData);
+		return priceServerTrendDto;
+	}
+
+	private Double parseValues(String storedValue) {
+		// 将JSON字符串解析为JSONArray
+		JSONArray jsonArray = new JSONArray(storedValue);
+		// 初始化总和
+		double sum = 0;
+		// 遍历JSONArray，将每个元素转换为double并累加
+		for (int i = 0; i < jsonArray.length(); i++) {
+			sum += jsonArray.getDouble(i);
+		}
+		DecimalFormat df = new DecimalFormat("#.##");
+		return Double.parseDouble(df.format(sum));
+	}
+
+
+	private void fillMissingDates(Map<LocalDate, Double> aggregatedData, LocalDate start, LocalDate end) {
+		LocalDate current = start;
+		while (!current.isAfter(end)) {
+			if (!aggregatedData.containsKey(current)) {
+				aggregatedData.put(current, 0.0);
+			}
+			current = current.plusDays(1);
+		}
+	}
+
+	private PriceServerTrendDto prepareTrendDto(Map<LocalDate, Double> aggregatedData) {
+		PriceServerTrendDto trendDto = new PriceServerTrendDto();
+		List<String> dateList = new ArrayList<>();
+		List<String> priceList = new ArrayList<>();
+
+		// Iterate over the map and prepare the final lists
+		for (Map.Entry<LocalDate, Double> entry : aggregatedData.entrySet()) {
+			dateList.add(entry.getKey().toString());
+			priceList.add(String.valueOf(entry.getValue()));
+		}
+
+		Collections.reverse(dateList);
+		Collections.reverse(priceList);
+		trendDto.setDateList(dateList);
+		trendDto.setPriceList(priceList);
+
+		return trendDto;
+	}
+
 }

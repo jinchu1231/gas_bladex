@@ -24,6 +24,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -117,6 +118,26 @@ public class FieldOrderDto extends FieldOrderEntity {
 	 * 订单内部pdf文件
 	 */
 	private String pdfUrl;
+
+	/**
+	 * 到货时间
+	 */
+	private Date arrivalTime;
+
+	/**
+	 * 采购方案
+	 */
+	private String procurementScheme;
+
+	/**
+	 * 审核内容
+	 */
+	private String content;
+
+	/**
+	 * 备注
+	 */
+	private String comment;
 
 	private List<String> pdfUrlList;
 }

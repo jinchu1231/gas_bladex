@@ -17,6 +17,7 @@
 package org.springblade.flow.demo.leave.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springblade.flow.core.entity.FlowEntity;
@@ -79,5 +80,9 @@ public class ProcessLeave extends FlowEntity {
 	 * 流程申请时间
 	 */
 	private Date applyTime;
+	/**
+	 * 到货时间
+	 */
+	private Date arrivalTime;
 
 }

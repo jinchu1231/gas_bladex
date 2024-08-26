@@ -27,6 +27,11 @@ import lombok.AllArgsConstructor;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.flowable.engine.RepositoryService;
+import org.flowable.engine.impl.persistence.entity.ProcessDefinitionEntityImpl;
+import org.flowable.engine.repository.Deployment;
+import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.engine.repository.ProcessDefinitionQuery;
 import org.springblade.common.enums.OrderEnum;
 import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.secure.BladeUser;
@@ -35,7 +40,11 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.RandomType;
+import org.springblade.flow.demo.leave.entity.ProcessLeave;
+import org.springblade.flow.demo.leave.service.ILeaveService;
+import org.springblade.flow.engine.entity.FlowProcess;
 import org.springblade.modules.core.dto.FieldOrderDto;
+import org.springblade.modules.core.service.GasBaseInfoService;
 import org.springblade.modules.core.vo.OrderVO;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -53,9 +62,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Map;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -71,6 +78,10 @@ import javax.servlet.http.HttpServletResponse;
 public class FieldOrderController extends BladeController {
 
 	private final IFieldOrderService fieldOrderService;
+
+	private final ILeaveService leaveService;
+
+	private final GasBaseInfoService gasBaseInfoService;
 
 	/**
 	 * 液厂采购订单 详情
@@ -157,7 +168,20 @@ public class FieldOrderController extends BladeController {
 		if(!Objects.isNull(fieldOrder.getPdfUrlList()) && fieldOrder.getPdfUrlList().size() > 0){
 			fieldOrder.setFileUrl(JSON.toJSONString(fieldOrder.getPdfUrlList()));
 		}
+		fieldOrder.setGasName(gasBaseInfoService.selectNameByNumber(fieldOrder.getGasId()));
 		FieldOrderEntity entity = new FieldOrderEntity(fieldOrder);
+
+		//发起购液流程
+		ProcessLeave leave = new ProcessLeave();
+		leave.setProcurementScheme(fieldOrder.getProcurementScheme());
+		leave.setTaskUser(fieldOrder.getGasId());
+		leave.setStartTime(new Date());
+		leave.setEndTime(fieldOrder.getArrivalTime());
+		leave.setProcessDefinitionId("0efe54d9-5aaf-11ef-9f96-66554cf84848");
+		leave.setArrivalTime(fieldOrder.getArrivalTime());
+		leave.setComment(fieldOrder.getComment());
+		leave.setContent(fieldOrder.getContent());
+		leaveService.startProcess(leave);
 		return R.status(fieldOrderService.save(entity));
 	}
 

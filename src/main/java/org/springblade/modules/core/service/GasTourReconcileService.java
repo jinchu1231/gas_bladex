@@ -69,4 +69,10 @@ public interface GasTourReconcileService extends IService<GasTourReconcile>
 	PriceServerTrendDto revenueTrend(String id);
 
 	PriceServerTrendDto inventoryTrend(String id);
+
+	PriceServerTrendDto allRevenueTrend(String type);
+
+	PriceServerTrendDto allInventoryTrend(String type);
+
+	PriceServerTrendDto allStoredCalueTrend(String type);
 }

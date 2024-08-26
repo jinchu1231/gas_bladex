@@ -145,6 +145,18 @@ public class FieldOrderEntity extends BaseEntity {
 	@ApiModelProperty(value = "订单内部pdf文件")
 	private String pdfUrl;
 
+	/**
+	 * 到货时间
+	 */
+	@ApiModelProperty(value = "到货时间")
+	private Date arrivalTime;
+
+	/**
+	 * 采购方案
+	 */
+	@ApiModelProperty(value = "采购方案")
+	private String procurementScheme;
+
 	public FieldOrderEntity(){}
 
 	public FieldOrderEntity(FieldOrderDto dto){
@@ -168,5 +180,7 @@ public class FieldOrderEntity extends BaseEntity {
 		this.buyFieldPrincipal = dto.getBuyFieldPrincipal();
 		this.fileUrl = dto.getFileUrl();
 		this.pdfUrl = dto.getPdfUrl();
+		this.arrivalTime = dto.getArrivalTime();
+		this.procurementScheme = dto.getProcurementScheme();
 	}
 }

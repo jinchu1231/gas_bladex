@@ -115,6 +115,9 @@ public class LeaveServiceImpl extends BaseServiceImpl<LeaveMapper, ProcessLeave>
 		//获取订单创建人
 		Long createUser = detail.getCreateUser();
 		String gasName = gasBaseInfoService.selectNameByNumber(createUser.toString());
+		if (!StringUtil.isEmpty(gasName) && !gasName.contains("加气站")){
+			gasName = gasName + "LNG加气站";
+		}
 
 		//获取供货厂家名称
 		String fluName = fluidFieldBaseInfoService.fluBaseInfo(detail.getLieferant());
@@ -197,7 +200,7 @@ public class LeaveServiceImpl extends BaseServiceImpl<LeaveMapper, ProcessLeave>
 			table.addCell(cell1);
 
 
-			PdfPCell cell2 = new PdfPCell(new Paragraph(gasName + "LNG加气站进液价格确认", contentFont));
+			PdfPCell cell2 = new PdfPCell(new Paragraph(gasName + "进液价格确认", contentFont));
 			cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell2.setFixedHeight(60);
