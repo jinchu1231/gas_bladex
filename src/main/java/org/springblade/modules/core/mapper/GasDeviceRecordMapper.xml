@@ -29,7 +29,7 @@
         <include refid="selectGasDeviceRecordVo"/>
         where is_deleted = 0
             <if test="re.gasId != null  and re.gasId != ''"> and gas_id = #{re.gasId}</if>
-            <if test="re.gasName != null  and re.gasName != ''"> and gas_name = #{re.gasName}</if>
+            <if test="re.gasName != null  and re.gasName != ''"> and gas_name like concat(concat('%', #{re.gasName}),'%') </if>
             <if test="re.content != null  and re.content != ''"> and content = #{re.content}</if>
             <if test="re.inspectName != null  and re.inspectName != ''"> and inspect_name = #{re.inspectName}</if>
             <if test="re.inspectData != null  and re.inspectData != ''"> and inspect_data = #{re.inspectData}</if>

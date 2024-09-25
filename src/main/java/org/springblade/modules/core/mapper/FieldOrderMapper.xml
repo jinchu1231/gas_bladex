@@ -37,7 +37,7 @@
             and gas_id = #{vo.gasId}
         </if>
         <if test="vo.gasName != null and vo.gasName != ''">
-            and gas_name = #{vo.gasName}
+            and gas_name like concat(concat('%', #{vo.gasName}),'%')
         </if>
         <if test="vo.orderStatus != null and vo.orderStatus != ''">
             and order_status = #{vo.orderStatus}

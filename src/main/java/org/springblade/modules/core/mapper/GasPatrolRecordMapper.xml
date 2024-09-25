@@ -29,7 +29,7 @@
         <include refid="selectGasPatrolRecordVo"/>
         where is_deleted = 0
         <if test="gas.gasId != null  and gas.gasId != ''"> and gas_id = #{gas.gasId}</if>
-            <if test="gas.gasName != null  and gas.gasName != ''"> and gas_name = #{gas.gasName}</if>
+            <if test="gas.gasName != null  and gas.gasName != ''"> and gas_name like concat(concat('%', #{gas.gasName}),'%') </if>
             <if test="gas.fillDate != null  and gas.fillDate != ''"> and fill_date = #{gas.fillDate}</if>
             <if test="gas.fillPerson != null  and gas.fillPerson != ''"> and fill_person = #{gas.fillPerson}</if>
             <if test="gas.content != null  and gas.content != ''"> and content = #{gas.content}</if>

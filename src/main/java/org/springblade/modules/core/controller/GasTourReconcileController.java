@@ -112,8 +112,14 @@ public class GasTourReconcileController {
 	@SneakyThrows
 	@PostMapping("write-notice")
 	public R writeNotice(MultipartFile file) {
-		GasTourReconcileExcelDto dto = gasTourReconcileService.writeNotice(file);
-		return R.data(gasTourReconcileService.save(new GasTourReconcile(dto)));
+		GasTourReconcileExcelDto dto;
+		try {
+			dto = gasTourReconcileService.writeNotice(file);
+		}catch (Exception e){
+			return R.fail("上传失败");
+		}
+		gasTourReconcileService.save(new GasTourReconcile(dto));
+		return R.success("上传成功");
 	}
 
 	/**

@@ -149,15 +149,16 @@ public class FieldOrderController extends BladeController {
 	public R save(@Valid @RequestBody FieldOrderDto fieldOrder) {
 		String random = Func.random(15, RandomType.INT);
 		fieldOrder.setOrderId(random);
+		fieldOrder.setOrderStatus(OrderEnum.CREATE_UNAUDITED.getValue());
 		/*if (Objects.isNull(fieldOrder.getPrice())){
 			return R.fail("请输入每吨单价");
 		}*/
 		if (fieldOrder.getNum() <= 0){
 			return R.fail("请输入正确数量");
 		}
-		if (StringUtils.isEmpty(fieldOrder.getOrderStatus())){
+		/*if (StringUtils.isEmpty(fieldOrder.getOrderStatus())){
 			return R.fail("请输入订单状态");
-		}
+		}*/
 	/*	BigDecimal num = BigDecimal.valueOf(fieldOrder.getNum());
 		BigDecimal price = fieldOrder.getPrice();
 		fieldOrder.setTotalPrices(num.multiply(price));*/

@@ -38,10 +38,10 @@
         <include refid="selectGasTourReconcileVo"/>
         where  is_deleted = 0
             <if test="gas.gasId != null  and gas.gasId != ''"> and gas_id = #{gas.gasId}</if>
-            <if test="gas.gasName != null  and gas.gasName != ''"> and gas_name = #{gas.gasName}</if>
+            <if test="gas.gasName != null  and gas.gasName != ''"> and gas_name like concat(concat('%', #{gas.gasName}),'%') </if>
             <if test="gas.tourPerson != null  and gas.tourPerson != ''"> and tour_person = #{gas.tourPerson}</if>
-            <if test="gas.startTourTime != null  and gas.startTourTime != ''"> and start_tour_time = #{gas.startTourTime}</if>
-            <if test="gas.endTourTime != null  and gas.endTourTime != ''"> and end_tour_time = #{gas.endTourTime}</if>
+            <if test="gas.startTourTime != null  and gas.startTourTime != ''"> and start_tour_time &gt; #{gas.startTourTime}</if>
+            <if test="gas.endTourTime != null  and gas.endTourTime != ''"> and end_tour_time &lt; #{gas.endTourTime}</if>
             <if test="gas.addLiquidMeasureCount != null  and gas.addLiquidMeasureCount != ''"> and add_liquid_measure_count = #{gas.addLiquidMeasureCount}</if>
             <if test="gas.amountCount != null  and gas.amountCount != ''"> and amount_count = #{gas.amountCount}</if>
             <if test="gas.amountReceivable != null  and gas.amountReceivable != ''"> and amount_receivable = #{gas.amountReceivable}</if>

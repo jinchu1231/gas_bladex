@@ -178,7 +178,7 @@ public class ExcelUtil {
 
 		//获取模板
 //		ClassPathResource classPathResource = new ClassPathResource("/static/特种设备安全检查.xlsx");
-		InputStream inputStream = ResourceUtil.getResourceObj("static/特种设备安全检查.xlsx").getStream();
+		InputStream inputStream = ResourceUtil.getResourceObj("static/" + projectId).getStream();
 		//输入流
 //		InputStream inputStream = null;
 		//输出流

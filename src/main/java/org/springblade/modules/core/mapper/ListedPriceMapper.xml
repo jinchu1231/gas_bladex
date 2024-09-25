@@ -30,7 +30,7 @@
             and fluid = #{vo.fluid}
         </if>
         <if test="vo.fluidName != null and vo.fluidName != ''">
-            and fluid_name = #{vo.fluidName}
+            and fluid_name like concat(concat('%', #{vo.fluidName}),'%')
         </if>
         <if test="vo.day != null and vo.day != ''">
             and day = #{vo.day}
