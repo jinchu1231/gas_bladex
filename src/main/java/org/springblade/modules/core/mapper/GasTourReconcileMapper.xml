@@ -329,4 +329,17 @@
         where start_tour_time BETWEEN #{firstDayOfMonth} and #{firstDayOfNextMonth}
     </select>
 
+    <select id="getGasRevenue" resultType="org.springblade.modules.core.dto.dapin.GasRevenueDto">
+        SELECT
+            SUM( CAST(a.amount_count AS DECIMAL(10,2)) ) AS grossRevenue,
+            MAX( CAST(a.amount_count AS DECIMAL(10,2)) ) AS maxRevenue,
+            ( CAST( SUM( CAST(a.amount_count AS DECIMAL(10,2)) ) / ( DATEDIFF( CURDATE(), b.initial_operation_time ) + 1 ) AS DECIMAL(10,2)) ) AS averageDaily
+        FROM
+            gas_tour_reconcile a
+                left join gas_base_info b on b.gas_number = a.gas_id
+        WHERE
+            a.create_time >= b.initial_operation_time
+          and a.gas_id = #{gasId}
+    </select>
+
 </mapper>

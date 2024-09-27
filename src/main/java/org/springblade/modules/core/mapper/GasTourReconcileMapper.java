@@ -7,6 +7,7 @@ import liquibase.pro.packaged.P;
 import org.apache.ibatis.annotations.Param;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
 import org.springblade.modules.core.dto.dapin.DayPriceDto;
+import org.springblade.modules.core.dto.dapin.GasRevenueDto;
 import org.springblade.modules.core.dto.dapin.PriceServerTrendDto;
 import org.springblade.modules.core.dto.dapin.StoredValueDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
@@ -80,4 +81,6 @@ public interface GasTourReconcileMapper extends BaseMapper<GasTourReconcile>
 	List<StoredValueDto> allInventoryTrend(@Param("firstDayOfMonth") String firstDayOfMonth, @Param("todayAsString") String todayAsString);
 
 	List<StoredValueDto> allStoredCalueTrend(@Param("firstDayOfMonth") String firstDayOfMonth, @Param("firstDayOfNextMonth") String firstDayOfNextMonth);
+
+	GasRevenueDto getGasRevenue(String gasId);
 }

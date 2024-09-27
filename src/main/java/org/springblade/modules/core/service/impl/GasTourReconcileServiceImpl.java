@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.springblade.common.utils.FindAndReplaceData;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
 import org.springblade.modules.core.dto.dapin.DayPriceDto;
+import org.springblade.modules.core.dto.dapin.GasRevenueDto;
 import org.springblade.modules.core.dto.dapin.PriceServerTrendDto;
 import org.springblade.modules.core.dto.dapin.StoredValueDto;
 import org.springblade.modules.core.dto.tour.GasTourReconcileSaveDto;
@@ -532,6 +533,11 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
 
 		PriceServerTrendDto priceServerTrendDto = prepareTrendDto(aggregatedData);
 		return priceServerTrendDto;
+	}
+
+	@Override
+	public GasRevenueDto getGasRevenue(String gasId) {
+		return baseMapper.getGasRevenue(gasId);
 	}
 
 	private Double parseValues(String storedValue) {

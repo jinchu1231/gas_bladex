@@ -173,4 +173,12 @@ public class GasTourReconcileController {
 		return R.data(gasTourReconcileService.allStoredCalueTrend(type));
 	}
 
+	/**
+	 * 后台-获取加气站营收
+	 * @param gasId 加气站id
+	 */
+	@PostMapping("getGasRevenue")
+	public R getGasRevenue(String gasId) {
+		return R.data(gasTourReconcileService.getGasRevenue(gasId));
+	}
 }
