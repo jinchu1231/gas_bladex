@@ -20,6 +20,28 @@
         <result column="on_off" property="onOff"/>
     </resultMap>
 
+    <update id="updateBaseInfoById" parameterType="FluidFieldBaseInfo">
+        update fluid_field_base_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="info.fluName != null">flu_name = #{info.fluName},</if>
+            <if test="info.fluNumber != null">flu_number = #{info.fluNumber},</if>
+            <if test="info.fluProfile != null">flu_profile = #{info.fluProfile},</if>
+            <if test="info.fluImg != null">flu_img = #{info.fluImg},</if>
+            <if test="info.fluLong != null">flu_long = #{info.fluLong},</if>
+            <if test="info.fluLat != null">flu_lat = #{info.fluLat},</if>
+            <if test="info.remark != null">remark = #{info.remark},</if>
+            <if test="info.createUser != null">create_user = #{info.createUser},</if>
+            <if test="info.createTime != null">create_time = #{info.createTime},</if>
+            <if test="info.updateTime != null">update_time = #{info.updateTime},</if>
+            <if test="info.updateUser != null">update_user = #{info.updateUser},</if>
+            <if test="info.isDeleted != null">is_deleted = #{info.isDeleted},</if>
+            <if test="info.status != null">status = #{info.status},</if>
+            <if test="info.createDept != null">create_dept = #{info.createDept},</if>
+            <if test="info.onOff != null">on_off = #{info.onOff},</if>
+        </trim>
+        where id = #{info.id}
+    </update>
+
 
     <select id="getBaseInfoList" resultMap="baseInfoResultMap">
         select * from fluid_field_base_info where is_deleted = 0
@@ -35,7 +57,11 @@
     </select>
 
     <select id="getFluList" resultType="org.springblade.modules.core.entity.FluidFieldBaseInfo">
-        select id, flu_name from fluid_field_base_info where is_deleted = 0
+        select id,flu_number, flu_name from fluid_field_base_info where is_deleted = 0
+    </select>
+
+    <select id="selectInfoById" resultType="org.springblade.modules.core.dto.FluidFieldBaseInfoDto">
+        select * from fluid_field_base_info where id = #{id}
     </select>
 
 </mapper>

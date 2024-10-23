@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springblade.modules.core.entity.GasTourReconcile;
 import org.springblade.modules.core.entity.tour.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -41,43 +42,43 @@ public class GasTourReconcileDto {
 
     /** 总加液量(公斤) */
 	@ExcelProperty("总加液量(公斤)")
-    private String addLiquidMeasureCount;
+    private double addLiquidMeasureCount;
 
     /** 总金额(元) */
 	@ExcelProperty("总金额(元)")
-    private String amountCount;
+    private BigDecimal amountCount;
 
     /** 应收金额(元) */
 	@ExcelProperty("应收金额(元)")
-    private String amountReceivable;
+    private BigDecimal amountReceivable;
 
     /** 实收金额(元) */
 	@ExcelProperty("实收金额(元)")
-    private String fundsReceived;
+    private BigDecimal fundsReceived;
 
     /** 总交易数(笔) */
 	@ExcelProperty("总交易数(笔)")
-    private String dealCount;
+    private int dealCount;
 
 	/** 充值数据-总充值额(元)*/
 	@ExcelProperty("充值数据-总充值额(元)")
-	private String totalRechargeAmount;
+	private BigDecimal totalRechargeAmount;
 
 	/** 充充值数据-应收额(元)*/
 	@ExcelProperty("充值数据-应收额(元)")
-	private String amountReceivableT;
+	private BigDecimal amountReceivableT;
 
 	/** 充值数据-实收金额(元)*/
 	@ExcelProperty("充值数据-实收金额(元)")
-	private String fundsReceivedT;
+	private BigDecimal fundsReceivedT;
 
 	/** 充值数据-总交易数(笔)*/
 	@ExcelProperty("充值数据-总交易数(笔)")
-	private String dealCountT;
+	private int dealCountT;
 
 	/** 充值数据-扣款金额(元)*/
 	@ExcelProperty("充值数据-扣款金额(元)")
-	private String amountDeducted;
+	private BigDecimal amountDeducted;
 
     /** 收款渠道汇总 */
 	@ExcelProperty("收款渠道汇总")
@@ -106,7 +107,7 @@ public class GasTourReconcileDto {
 
     /** 库存 */
 	@ExcelProperty("库存")
-    private String inventory;
+    private double inventory;
 
     /** 班组长签字 */
 	@ExcelProperty("班组长签字")

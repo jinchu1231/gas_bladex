@@ -157,6 +157,12 @@ public class FieldOrderEntity extends BaseEntity {
 	@ApiModelProperty(value = "采购方案")
 	private String procurementScheme;
 
+	/**
+	 * 审核内容
+	 */
+	@ApiModelProperty(value = "审核内容")
+	private String content;
+
 	public FieldOrderEntity(){}
 
 	public FieldOrderEntity(FieldOrderDto dto){
@@ -182,5 +188,6 @@ public class FieldOrderEntity extends BaseEntity {
 		this.pdfUrl = dto.getPdfUrl();
 		this.arrivalTime = dto.getArrivalTime();
 		this.procurementScheme = dto.getProcurementScheme();
+		this.content = dto.getContent();
 	}
 }

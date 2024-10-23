@@ -108,4 +108,8 @@ public class ListedPriceServiceImpl extends BaseServiceImpl<ListedPriceMapper, L
 	}
 
 
+	@Override
+	public List<ListedPriceVO> selectListedPriceList() {
+		return baseMapper.selectListedPriceList();
+	}
 }

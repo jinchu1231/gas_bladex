@@ -9,6 +9,7 @@ import org.springblade.core.mp.base.BaseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 特种设备安全检查记录对象 gas_device_record
@@ -76,4 +77,5 @@ public class GasDeviceRecord {
 	/** 文件url */
 	@ExcelIgnore
     private String fileUrl;
+    private List<String> fileUrlList;
 }

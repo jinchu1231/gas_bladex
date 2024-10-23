@@ -66,5 +66,6 @@ public class FluidFieldBaseInfoDto {
 	 * 液厂状态
 	 */
 	private Byte onOff;
+	private String onOffName;
 
 }

@@ -59,4 +59,6 @@ public interface FieldOrderMapper extends BaseMapper<FieldOrderEntity> {
 	List<OrderTrendDto> orderTrend(String id);
 
 	FieldOrderVO getOrderById(String id);
+
+	int updatePdfurlById(@Param("id") Long id, @Param("url") String url);
 }

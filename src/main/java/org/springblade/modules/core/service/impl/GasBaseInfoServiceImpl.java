@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springblade.common.enums.GasStatusEnum;
 import org.springblade.common.enums.StatusEnum;
 import org.springblade.core.mp.base.BaseServiceImpl;
+import org.springblade.core.secure.utils.AuthUtil;
+import org.springblade.modules.core.constant.GasManageConstant;
 import org.springblade.modules.core.dto.GasBaseInfoDto;
 import org.springblade.modules.core.entity.GasBaseInfo;
 import org.springblade.modules.core.mapper.GasBaseInfoMapper;
@@ -27,8 +29,13 @@ public class GasBaseInfoServiceImpl extends BaseServiceImpl<GasBaseInfoMapper,Ga
 
     @Override
     public List<GasBaseInfoDto> getBaseInfoList(String type) {
-    	//type传入0查询父级站级信息
-		List<GasBaseInfoDto> baseInfoList = gasBaseInfoMapper.getBaseInfoList(type);
+		List<GasBaseInfoDto> baseInfoList;
+		//type传入0查询父级站级信息
+		if(!GasManageConstant.MANAGE_USERS.contains(AuthUtil.getUserName())) {
+			baseInfoList = gasBaseInfoMapper.getBaseInfoList(type, AuthUtil.getUserId().toString());
+		}else {
+			baseInfoList = gasBaseInfoMapper.getBaseInfoList(type, null);
+		}
 		baseInfoList.forEach(baseInfo -> {
 			baseInfo.setStatusName(Objects.requireNonNull(GasStatusEnum.getStatus(baseInfo.getStatus())).getName());
 		});
@@ -71,5 +78,15 @@ public class GasBaseInfoServiceImpl extends BaseServiceImpl<GasBaseInfoMapper,Ga
 			detail.setStatusName(Objects.requireNonNull(GasStatusEnum.getStatus(detail.getStatus())).getName());
 		}
 		return detail;
+	}
+
+	@Override
+	public boolean updateBaseInfo(GasBaseInfo baseInfo) {
+		return gasBaseInfoMapper.updateBaseInfo(baseInfo) > 0;
+	}
+
+	@Override
+	public List<GasBaseInfoDto> getList() {
+		return gasBaseInfoMapper.getList();
 	}
 }

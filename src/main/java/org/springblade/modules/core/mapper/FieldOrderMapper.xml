@@ -28,7 +28,12 @@
         <result column="update_time" property="updateTime"/>
         <result column="update_user" property="updateUser"/>
         <result column="is_deleted" property="isDeleted"/>
+        <result column="content" property="content"/>
     </resultMap>
+
+    <update id="updatePdfurlById">
+        update fluid_field_order set pdf_url = #{url} where id = #{id}
+    </update>
 
 
     <select id="selectFieldOrderPage" resultType="org.springblade.modules.core.vo.FieldOrderVO">
@@ -48,6 +53,7 @@
         <if test="vo.forwardingUnit != null and vo.forwardingUnit != ''">
             and forwarding_unit = #{vo.forwardingUnit}
         </if>
+        order by create_time desc
     </select>
 
 
@@ -61,14 +67,16 @@
     </select>
 
     <select id="orderTrend" resultType="org.springblade.modules.core.dto.dapin.OrderTrendDto">
-        select count(1) as orderNum,
-               ROUND(AVG(price),2) as price,
+        select order_data as orderDate,
+               count(1) as orderNum,
+               IFNULL(ROUND(AVG(price),2), 0) as price,
                SUM(num) as num
         from fluid_field_order
-        where gas_id = #{id}
+        where gas_id  = (select parent_id from gas_base_info where gas_number = #{id})
           and order_data &gt;= CURDATE() - INTERVAL 90 DAY
         GROUP BY order_data
     </select>
+
     <select id="getOrderById" resultType="org.springblade.modules.core.vo.FieldOrderVO">
         select * from fluid_field_order where id = #{id}
     </select>

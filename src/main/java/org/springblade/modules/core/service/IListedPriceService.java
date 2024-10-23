@@ -61,4 +61,6 @@ public interface IListedPriceService extends BaseService<ListedPriceEntity> {
 	List<ListedPriceEntity> getDayList();
 
 	PriceServerTrendDto priceServerTrend(String id);
+
+	List<ListedPriceVO> selectListedPriceList();
 }

@@ -136,6 +136,12 @@ public class FieldOrderVO {
 	@ApiModelProperty(value = "采购方案")
 	private String procurementScheme;
 
+	/**
+	 * 审核内容
+	 */
+	@ApiModelProperty(value = "审核内容")
+	private String content;
+
 	private String tenantId;
 	private String fileUrl;
 	private String pdfUrl;

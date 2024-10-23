@@ -7,7 +7,7 @@
         <result column="id" property="id"/>
         <result column="fluid" property="fluid"/>
         <result column="fluid_name" property="fluidName"/>
-        <result column="day" property="day"/>
+        <result column="day_time" property="dayTime"/>
         <result column="listed_price" property="listedPrice"/>
         <result column="create_user" property="createUser"/>
         <result column="create_time" property="createTime"/>
@@ -32,8 +32,8 @@
         <if test="vo.fluidName != null and vo.fluidName != ''">
             and fluid_name like concat(concat('%', #{vo.fluidName}),'%')
         </if>
-        <if test="vo.day != null and vo.day != ''">
-            and day = #{vo.day}
+        <if test="vo.dayTime != null and vo.dayTime != ''">
+            and day_time = #{vo.dayTime}
         </if>
         order by create_time desc
     </select>
@@ -44,15 +44,15 @@
 
     <select id="priceTrend" resultType="org.springblade.modules.core.dto.dapin.DayPriceDto">
         SELECT
-            DATE(flp.day)  as priceDay ,
+            DATE(flp.day_time)  as priceDay ,
             MAX(flp.listed_price) as price
         FROM
             fluid_listed_price flp
         WHERE
-            flp.day &gt;= CURDATE() - INTERVAL 90 DAY
+            flp.day_time &gt;= CURDATE() - INTERVAL 90 DAY
           and flp.fluid = #{id}
         GROUP BY
-            flp.day
+            flp.day_time
     </select>
 
     <select id="recentQuotation" resultType="java.lang.Double">
@@ -61,16 +61,25 @@
 
     <select id="getDayList" resultType="org.springblade.modules.core.entity.ListedPriceEntity">
         SELECT
-            fluid,
-            fluid_name,
-            day,
-            MAX(listed_price) as listedPrice
+            fluid, fluid_name, day_time AS dayTime, listed_price AS listedPrice
         FROM
             fluid_listed_price
         WHERE
-            day = CURDATE()
-        GROUP BY
-            fluid
+            is_deleted = 0
+          AND ( fluid, create_time ) IN ( SELECT fluid, MAX( create_time ) AS max_create_time FROM gas_bladex.fluid_listed_price GROUP BY fluid )
+        ORDER BY
+            create_time DESC
+
+
+        /*SELECT
+            f.fluid,
+            f.fluid_name,
+            f.day_time AS dayTime,
+            f.listed_price AS listedPrice
+        FROM
+            fluid_listed_price f
+                JOIN ( SELECT fluid, MAX( create_time ) AS max_create_time FROM fluid_listed_price WHERE DATE( create_time ) = CURDATE() AND is_deleted = 0 GROUP BY fluid ) AS subq ON f.fluid = subq.fluid
+            AND f.create_time = subq.max_create_time;*/
     </select>
 
     <select id="priceServerTrend" resultType="org.springblade.modules.core.dto.dapin.DayPriceDto">
@@ -82,16 +91,16 @@
         LEFT JOIN (
 
         SELECT
-        DATE(day) AS priceDay,
+        DATE(day_time) AS priceDay,
         fluid_name,
         MAX(listed_price) AS price
         FROM
         fluid_listed_price
         WHERE
-        day >= CURDATE() - INTERVAL 30 DAY
+            day_time >= CURDATE() - INTERVAL 30 DAY
         and fluid = #{fluid}
         GROUP BY
-        DATE(day),fluid
+        DATE(day_time),fluid
 
         ) am ON date_add( curdate(), INTERVAL ( cast( h.help_topic_id AS signed INTEGER ) - 30 ) DAY ) = am.priceDay
         WHERE
@@ -106,4 +115,16 @@
     <update id="deleteBaseInfo">
         update fluid_listed_price set is_deleted = 1 where id = #{ids}
     </update>
+
+    <select id="selectListedPriceList" resultMap="listedPriceResultMap">
+        select * from fluid_listed_price where is_deleted = 0
+        and  (fluid, create_time) IN (
+        SELECT
+        fluid,
+        MAX(create_time) AS max_create_time
+        FROM
+        gas_bladex.fluid_listed_price
+        GROUP BY fluid)
+        order by create_time desc
+    </select>
 </mapper>

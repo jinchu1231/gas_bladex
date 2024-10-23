@@ -66,6 +66,7 @@ public class GasTourReconcileSaveDto {
 								   TourManageSummary tourManageSummary){
 		this.id = gasTourReconcile.getId();
 		this.gasId = gasTourReconcile.getGasId();
+		this.gasName = gasTourReconcile.getGasName();
 		this.tourPerson = gasTourReconcile.getTourPerson();
 		this.tourTime = gasTourReconcile.getStartTourTime() + "至" + gasTourReconcile.getEndTourTime();
 		this.startTourTime = gasTourReconcile.getStartTourTime();

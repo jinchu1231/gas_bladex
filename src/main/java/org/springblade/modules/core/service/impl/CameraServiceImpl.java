@@ -13,7 +13,9 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.modules.core.dto.CameraDto;
 import org.springblade.modules.core.entity.*;
+import org.springblade.modules.core.mapper.GasCameraMapper;
 import org.springblade.modules.core.service.CameraService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -40,6 +42,9 @@ public class CameraServiceImpl implements CameraService {
     private static final String getDeviceCameraList = "https://open.ys7.com/api/lapp/camera/list";
     //萤石分页查询指定服务区设备通道列表
     private static final String getAreaDeviceCameraList = "https://open.ys7.com/api/lapp/device/camera/list";
+
+    @Autowired
+	private GasCameraMapper gasCameraMapper;
 
     @Override
     public StringBuilder getCameraInfo(CameraDto cameraDto) {
@@ -296,9 +301,14 @@ public class CameraServiceImpl implements CameraService {
 				.retryOnConnectionFailure(true) // 是否自动重连
 				.build();
 
+			//获取加气站对应设备序列号
+			String deviceSerial = gasCameraMapper.getDeviceSerial(dto.getGasId());
+			if (StringUtils.isEmpty(deviceSerial)){
+				return new ArrayList<>();
+			}
 			FormBody body = new FormBody.Builder()
 				.add("accessToken", token)
-				.add("deviceSerial", dto.getDeviceSerial())
+				.add("deviceSerial", deviceSerial)
 				.build();
 
 			// 创建Request对象

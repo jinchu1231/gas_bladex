@@ -1,6 +1,7 @@
 package org.springblade.modules.core.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -9,7 +10,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spire.xls.Workbook;
 import org.apache.commons.lang3.StringUtils;
 import org.springblade.common.utils.FindAndReplaceData;
+import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.modules.core.dto.GasDeviceRecordDto;
+import org.springblade.modules.core.entity.Camera;
+import org.springblade.modules.core.entity.DeviceCamera;
 import org.springblade.modules.core.entity.GasDeviceRecord;
 import org.springblade.modules.core.mapper.GasDeviceRecordMapper;
 import org.springblade.modules.core.service.GasBaseInfoService;
@@ -21,8 +25,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 特种设备安全检查记录Service业务层处理
@@ -75,7 +81,21 @@ public class GasDeviceRecordServiceImpl extends ServiceImpl<GasDeviceRecordMappe
     @Override
     public IPage<GasDeviceRecord> selectGasDeviceRecordList(IPage<GasDeviceRecord> page, GasDeviceRecord gasDeviceRecord)
     {
-        return page.setRecords(gasDeviceRecordMapper.selectGasDeviceRecordList(page,gasDeviceRecord));
+		IPage<GasDeviceRecord> gasDeviceRecordIPage = page.setRecords(gasDeviceRecordMapper.selectGasDeviceRecordList(page, gasDeviceRecord));
+		gasDeviceRecordIPage.getRecords().forEach(record -> {
+			if(!StringUtils.isEmpty(record.getFileUrl())){
+				ObjectMapper mapper = new ObjectMapper();
+				List<String> fileList = new ArrayList<>();
+				try {
+					fileList = mapper.readValue(record.getFileUrl(), new TypeReference<List<String>>(){});
+				} catch (JsonProcessingException e) {
+					e.printStackTrace();
+				}
+				record.setFileUrlList(fileList);
+			}
+
+		});
+		return gasDeviceRecordIPage;
     }
 
     /**
@@ -186,6 +206,7 @@ public class GasDeviceRecordServiceImpl extends ServiceImpl<GasDeviceRecordMappe
 		gasDeviceRecord.setTakeSteps(gasDeviceRecordDto.getTakeSteps());
 		gasDeviceRecord.setInspectData(gasDeviceRecordDto.getInspectData());
 		gasDeviceRecord.setInspectName(gasDeviceRecordDto.getInspectName());
+		gasDeviceRecord.setCreateUser(AuthUtil.getUserId().toString());
 		gasDeviceRecordMapper.insertGasDeviceRecord(gasDeviceRecord);
 		return 1;
 	}
@@ -204,8 +225,7 @@ public class GasDeviceRecordServiceImpl extends ServiceImpl<GasDeviceRecordMappe
 		gasDeviceRecord.setTakeSteps(gasDeviceRecordDto.getTakeSteps());
 		gasDeviceRecord.setInspectData(gasDeviceRecordDto.getInspectData());
 		gasDeviceRecord.setInspectName(gasDeviceRecordDto.getInspectName());
-		gasDeviceRecordMapper.updateGasDeviceRecord(gasDeviceRecord);
-		return 1;
+		return gasDeviceRecordMapper.updateGasDeviceRecord(gasDeviceRecord);
 	}
 
 	@Override
@@ -276,6 +296,19 @@ public class GasDeviceRecordServiceImpl extends ServiceImpl<GasDeviceRecordMappe
 
 	@Override
 	public int updateFileUrlById(GasDeviceRecordDto gasDeviceRecordDto) {
-		return gasDeviceRecordMapper.updateFileUrlById(gasDeviceRecordDto.getId(), gasDeviceRecordDto.getFileUrl());
+		GasDeviceRecord gasDeviceRecord = gasDeviceRecordMapper.selectGasDeviceRecordById(Long.valueOf(gasDeviceRecordDto.getId()));
+		String fileUrl = gasDeviceRecord.getFileUrl();
+		if (StringUtils.isEmpty(fileUrl)){
+			return gasDeviceRecordMapper.updateFileUrlById(gasDeviceRecordDto.getId(), JSON.toJSONString(gasDeviceRecordDto.getFileUrlList()));
+		}
+		ObjectMapper mapper = new ObjectMapper();
+		List<String> fileList = new ArrayList<>();
+		try {
+			fileList = mapper.readValue(fileUrl, new TypeReference<List<String>>(){});
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		fileList.addAll(gasDeviceRecordDto.getFileUrlList());
+		return gasDeviceRecordMapper.updateFileUrlById(gasDeviceRecordDto.getId(), JSON.toJSONString(fileList));
 	}
 }

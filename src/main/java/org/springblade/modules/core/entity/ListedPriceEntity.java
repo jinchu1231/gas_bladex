@@ -52,11 +52,11 @@ public class ListedPriceEntity extends BaseEntity {
 	 * 日期
 	 */
 	@ApiModelProperty(value = "日期")
-	private String day;
+	private String dayTime;
 	/**
 	 * 挂牌价格
 	 */
 	@ApiModelProperty(value = "挂牌价格")
-	private String listedPrice;
+	private BigDecimal listedPrice;
 
 }

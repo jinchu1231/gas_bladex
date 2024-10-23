@@ -82,6 +82,10 @@ public class GasBaseInfoDto {
      * 行车路线方向
      */
     private String drivingRoute;
+	/**
+	 * 气价
+	 */
+	private String currentGasPrice;
     /**
      * 是否出省口加气站
      */
@@ -152,7 +156,7 @@ public class GasBaseInfoDto {
      */
     private  Integer isDeleted;
     /**
-     * 状态(0-待建;1-建设中;2-已建成待运行;3-已运行;4-废弃)
+     * 状态(0-待建;1-在建;2-已建未开通;3-已开通运营;4-废弃)
      */
     private Integer status;
 

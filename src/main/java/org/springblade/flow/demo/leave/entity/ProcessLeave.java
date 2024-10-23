@@ -85,4 +85,14 @@ public class ProcessLeave extends FlowEntity {
 	 */
 	private Date arrivalTime;
 
+	/**
+	 * 数量
+	 */
+	private double num;
+
+	/**
+	 * 订单时间
+	 */
+	private String orderDate;
+
 }

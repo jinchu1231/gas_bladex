@@ -9,15 +9,18 @@ import org.springblade.core.boot.ctrl.BladeController;
 import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.RandomType;
+import org.springblade.modules.core.constant.GasManageConstant;
 import org.springblade.modules.core.entity.GasBaseInfo;
 import org.springblade.modules.core.service.GasBaseInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
 
 @RestController
 @RequestMapping(AppConstant.DEV_CODE + "/gas-service/baseinfo")
@@ -47,12 +50,25 @@ public class GasBaseInfoController extends BladeController {
     }
 
 	/**
+	 * 获取运营中的加气站列表
+	 */
+	@ApiOperation("获取运营中的加气站列表")
+	@PostMapping("/getList")
+	public R getList(){
+		return R.data(gasBaseInfoService.getList());
+	}
+
+	/**
 	 * 查询加气站巡查记录列表
 	 */
 	@PostMapping("/pageList")
 	public R<IPage<GasBaseInfo>> list(@RequestBody GasBaseInfo gasBaseInfo,
 										 @Valid @RequestBody Query query)
 	{
+		if(!GasManageConstant.MANAGE_USERS.contains(AuthUtil.getUserName())) {
+			gasBaseInfo.setCreateUser(AuthUtil.getUserId());
+			gasBaseInfo.setParentId(AuthUtil.getUserId().toString());
+		}
 		IPage<GasBaseInfo> list =
 			gasBaseInfoService.selectGasBaseInfoList(Condition.getPage(query),gasBaseInfo);
 		return R.data(list);
@@ -78,7 +94,7 @@ public class GasBaseInfoController extends BladeController {
 	@PostMapping("/update")
 	@ApiOperation(value = "修改", notes = "传入GasBaseInfo")
 	public R update(@Valid @RequestBody GasBaseInfo baseInfo) {
-		return R.status(gasBaseInfoService.updateById(baseInfo));
+		return R.status(gasBaseInfoService.updateBaseInfo(baseInfo));
 	}
 
 	/**

@@ -6,7 +6,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.api.R;
+import org.springblade.modules.core.constant.GasManageConstant;
 import org.springblade.modules.core.dto.GasPatrolRecordDto;
 import org.springblade.modules.core.entity.GasPatrolRecord;
 import org.springblade.modules.core.service.GasPatrolRecordService;
@@ -50,6 +52,9 @@ public class GasPatrolRecordController {
     public R<IPage<GasPatrolRecord>> list(@RequestBody @Valid GasPatrolRecord gasPatrolRecord,
 				  @Valid @RequestBody Query query)
     {
+		if(!GasManageConstant.MANAGE_USERS.contains(AuthUtil.getUserName())) {
+			gasPatrolRecord.setCreateUser(AuthUtil.getUserId().toString());
+		}
 		IPage<GasPatrolRecord> list =
 			gasPatrolRecordService.selectGasPatrolRecordList(Condition.getPage(query),gasPatrolRecord);
         return R.data(list);

@@ -23,7 +23,7 @@ import java.util.List;
 public class GasDeviceRecordDto {
     private static final long serialVersionUID = 1L;
 
-	/** 加气站ID */
+	/** ID */
 	private String id;
 	/** 加气站ID */
     private String gasId;
@@ -49,5 +49,10 @@ public class GasDeviceRecordDto {
 	 * 文件url
 	 */
 	private String fileUrl;
+
+	/**
+	 * 文件url
+	 */
+	private List<String> fileUrlList;
 
 }

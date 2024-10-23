@@ -29,4 +29,8 @@ public interface GasBaseInfoService extends BaseService<GasBaseInfo> {
 	IPage<GasBaseInfo> selectGasBaseInfoList(IPage<GasBaseInfo> page, GasBaseInfo gasBaseInfo);
 
 	GasBaseInfo getDetailById(String id);
+
+	boolean updateBaseInfo(GasBaseInfo baseInfo);
+
+	List<GasBaseInfoDto> getList();
 }

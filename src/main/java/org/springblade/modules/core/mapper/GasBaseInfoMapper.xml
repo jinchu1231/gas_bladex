@@ -42,6 +42,52 @@
         <result column="manage_company" property="manageCompany"/>
     </resultMap>
 
+    <update id="updateBaseInfo" parameterType="gasBaseInfo">
+        update gas_base_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gas.gasNumber != null">gas_number = #{gas.gasNumber},</if>
+            <if test="gas.parentId != null">parent_id = #{gas.parentId},</if>
+            <if test="gas.gasName != null">gas_name = #{gas.gasName},</if>
+            <if test="gas.gasLocation != null">gas_location = #{gas.gasLocation},</if>
+            <if test="gas.gasCity != null">gas_city = #{gas.gasCity},</if>
+            <if test="gas.gasCount != null">gas_count = #{gas.gasCount},</if>
+            <if test="gas.gasDivision != null">gas_division = #{gas.gasDivision},</if>
+            <if test="gas.gasAddress != null">gas_address = #{gas.gasAddress},</if>
+            <if test="gas.roadType != null">road_type = #{gas.roadType},</if>
+            <if test="gas.gasType != null">gas_type = #{gas.gasType},</if>
+            <if test="gas.propertyRight != null">property_right = #{gas.propertyRight},</if>
+            <if test="gas.sectionName != null">section_name = #{gas.sectionName},</if>
+            <if test="gas.sectionNumber != null">section_number = #{gas.sectionNumber},</if>
+            <if test="gas.lineNumber != null">line_number = #{gas.lineNumber},</if>
+            <if test="gas.lineName != null">line_name = #{gas.lineName},</if>
+            <if test="gas.stakeNumber != null">stake_number = #{gas.stakeNumber},</if>
+            <if test="gas.gasDirection != null">gas_direction = #{gas.gasDirection},</if>
+            <if test="gas.drivingRoute != null">driving_route = #{gas.drivingRoute},</if>
+            <if test="gas.currentGasPrice != null">current_gas_price = #{gas.currentGasPrice},</if>
+            <if test="gas.outProvincial != null">out_provincial = #{gas.outProvincial},</if>
+            <if test="gas.inProvincial != null">in_provincial = #{gas.inProvincial},</if>
+            <if test="gas.neighboringProvinces != null">neighboring_provinces = #{gas.neighboringProvinces},</if>
+            <if test="gas.completionTime != null">completion_time = #{gas.completionTime},</if>
+            <if test="gas.initialOperationTime != null">initial_operation_time = #{gas.initialOperationTime},</if>
+            <if test="gas.gasLong != null">gas_long = #{gas.gasLong},</if>
+            <if test="gas.gasLat != null">gas_lat = #{gas.gasLat},</if>
+            <if test="gas.gasImg != null">gas_img = #{gas.gasImg},</if>
+            <if test="gas.remark != null">remark = #{gas.remark},</if>
+            <if test="gas.createUser != null">create_user = #{gas.createUser},</if>
+            <if test="gas.createTime != null">create_time = #{gas.createTime},</if>
+            <if test="gas.updateTime != null">update_time = #{gas.updateTime},</if>
+            <if test="gas.updateUser != null">update_user = #{gas.updateUser},</if>
+            <if test="gas.isDeleted != null">is_deleted = #{gas.isDeleted},</if>
+            <if test="gas.status != null">status = #{gas.status},</if>
+            <if test="gas.dept != null">dept = #{gas.dept},</if>
+            <if test="gas.createDept != null">create_dept = #{gas.createDept},</if>
+            <if test="gas.onOff != null">on_off = #{gas.onOff},</if>
+            <if test="gas.cause != null">cause = #{gas.cause},</if>
+            <if test="gas.manageCompany != null">manage_company = #{gas.manageCompany},</if>
+        </trim>
+        where id = #{gas.id}
+    </update>
+
 
     <select id="getBaseInfoList" resultType="org.springblade.modules.core.dto.GasBaseInfoDto">
         select * from gas_base_info where is_deleted = 0
@@ -51,6 +97,9 @@
             </when>
             <when test="type == 1">
                 and parent_id != 0
+                <if test="gasId != null and gasId != ''">
+                    and parent_id = #{gasId}
+                </if>
             </when>
             <otherwise>
             </otherwise>
@@ -63,6 +112,9 @@
 
     <select id="selectGasBaseInfoList" resultType="org.springblade.modules.core.entity.GasBaseInfo">
         select * from gas_base_info where is_deleted = 0
+        <if test="gas.parentId != null and gas.parentId != ''">
+            and parent_id = #{gas.parentId}
+        </if>
     </select>
 
     <select id="selectNameByNumber" resultType="java.lang.String">
@@ -71,6 +123,10 @@
 
     <select id="getDetailById" resultType="org.springblade.modules.core.entity.GasBaseInfo">
         select * from gas_base_info where gas_number = #{id}
+    </select>
+
+    <select id="getList" resultType="org.springblade.modules.core.dto.GasBaseInfoDto">
+        select * from gas_base_info where is_deleted = 0 and status = 3
     </select>
 
 </mapper>

@@ -7,11 +7,12 @@ import lombok.SneakyThrows;
 import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.api.R;
+import org.springblade.modules.core.constant.GasManageConstant;
 import org.springblade.modules.core.dto.tour.GasTourReconcileSaveDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
 import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
-import org.springblade.modules.core.service.GasBaseInfoService;
 import org.springblade.modules.core.service.GasTourReconcileService;
 import org.springblade.modules.core.util.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,6 @@ public class GasTourReconcileController {
 
     @Autowired
     private GasTourReconcileService gasTourReconcileService;
-    @Autowired
-    private GasBaseInfoService gasBaseInfoService;
 
 	/**
 	 * 查询交班对账详情
@@ -52,6 +51,9 @@ public class GasTourReconcileController {
      */
     @PostMapping("/list")
     public R list(@RequestBody GasTourReconcile gasTourReconcile, @RequestBody Query query) {
+    	if(!GasManageConstant.MANAGE_USERS.contains(AuthUtil.getUserName())){
+			gasTourReconcile.setCreateUser(AuthUtil.getUserId().toString());
+		}
 		IPage<GasTourReconcile> list =
 			gasTourReconcileService.selectGasTourReconcileList(Condition.getPage(query),gasTourReconcile);
         return R.data(list);
@@ -149,8 +151,8 @@ public class GasTourReconcileController {
 	 * @param type 类型
 	 */
 	@PostMapping("allRevenueTrend")
-	public R allRevenueTrend(String type) {
-		return R.data(gasTourReconcileService.allRevenueTrend(type));
+	public R allRevenueTrend(@RequestParam("type") String type, @RequestParam("gasId") String gasId) {
+		return R.data(gasTourReconcileService.allRevenueTrend(type, gasId));
 	}
 
 	/**
@@ -180,5 +182,73 @@ public class GasTourReconcileController {
 	@PostMapping("getGasRevenue")
 	public R getGasRevenue(String gasId) {
 		return R.data(gasTourReconcileService.getGasRevenue(gasId));
+	}
+
+	/**
+	 * 大屏-加气运营状态
+	 * @param
+	 */
+	@PostMapping("statusOfOperation")
+	public R statusOfOperation() {
+		return R.data(gasTourReconcileService.statusOfOperation());
+	}
+
+	/**
+	 * 下载Excel模板-龙门
+	 *
+	 * @param response response
+	 */
+	@GetMapping(value = "/downloadTemplate-longmen", produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "下载模板", httpMethod = "GET")
+	public void downloadTemplateLongmen(HttpServletResponse response) {
+		ExcelUtil.download(response, "交班对账-龙门.xlsx");
+	}
+
+	/**
+	 * 导入-龙门
+	 * @param file file
+	 * @return boolean
+	 */
+	@SneakyThrows
+	@PostMapping("write-notice-longmen")
+	public R writeNoticeLongmen(MultipartFile file) {
+		GasTourReconcileExcelDto dto;
+		try {
+			dto = gasTourReconcileService.writeNoticeLongmen(file);
+		}catch (Exception e){
+			return R.fail("上传失败");
+		}
+		gasTourReconcileService.save(new GasTourReconcile(dto));
+		return R.success("上传成功");
+	}
+
+
+	/**
+	 * 下载Excel模板-垣曲
+	 *
+	 * @param response response
+	 */
+	@GetMapping(value = "/downloadTemplate-yuanqu", produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "下载模板", httpMethod = "GET")
+	public void downloadTemplateYuanqu(HttpServletResponse response) {
+		ExcelUtil.download(response, "交班对账-垣曲.xlsx");
+	}
+
+	/**
+	 * 导入-垣曲
+	 * @param file file
+	 * @return boolean
+	 */
+	@SneakyThrows
+	@PostMapping("write-notice-yuanqu")
+	public R writeNoticeYuanqu(MultipartFile file) {
+		GasTourReconcileExcelDto dto;
+		try {
+			dto = gasTourReconcileService.writeNoticeYuanqu(file);
+		}catch (Exception e){
+			return R.fail("上传失败");
+		}
+		gasTourReconcileService.save(new GasTourReconcile(dto));
+		return R.success("上传成功");
 	}
 }

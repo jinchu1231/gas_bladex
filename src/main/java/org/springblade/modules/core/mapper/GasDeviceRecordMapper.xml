@@ -38,6 +38,7 @@
             <if test="re.createUser != null  and re.createUser != ''"> and create_user = #{re.createUser}</if>
             <if test="re.updateUser != null  and re.updateUser != ''"> and update_user = #{re.updateUser}</if>
             <if test="re.isDeleted != null "> and is_deleted = #{re.isDeleted}</if>
+        order by create_time desc
     </select>
 
     <select id="selectGasDeviceRecordById" parameterType="Long" resultMap="GasDeviceRecordResult">

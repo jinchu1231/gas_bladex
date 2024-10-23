@@ -1,19 +1,16 @@
 package org.springblade.modules.core.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spire.xls.Workbook;
+import jodd.util.StringUtil;
 import org.json.JSONArray;
 import org.springblade.common.utils.FindAndReplaceData;
-import org.springblade.modules.core.dto.GasTourReconcileDto;
-import org.springblade.modules.core.dto.dapin.DayPriceDto;
-import org.springblade.modules.core.dto.dapin.GasRevenueDto;
-import org.springblade.modules.core.dto.dapin.PriceServerTrendDto;
-import org.springblade.modules.core.dto.dapin.StoredValueDto;
+import org.springblade.core.secure.utils.AuthUtil;
+import org.springblade.modules.core.dto.dapin.*;
 import org.springblade.modules.core.dto.tour.GasTourReconcileSaveDto;
 import org.springblade.modules.core.entity.GasTourReconcile;
 import org.springblade.modules.core.entity.tour.*;
@@ -26,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -121,6 +119,7 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
     public int insertGasTourReconcile(GasTourReconcileSaveDto dto) {
         GasTourReconcile gasTourReconcile = new GasTourReconcile(dto);
         gasTourReconcile.setCreateTime(new Date());
+        gasTourReconcile.setCreateUser(AuthUtil.getUserId().toString());
         return gasTourReconcileMapper.insertGasTourReconcile(gasTourReconcile);
     }
 
@@ -265,46 +264,50 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
 			for (int j = 0; j < string.length; j++) {
 				if ("站点".equals(string[j])) {
 					dto.setGasName(string[j + 1]);
-					dto.setGasId(gasBaseInfoService.selectIdByName(dto.getGasName()));
+					if (!StringUtil.isEmpty(dto.getGasName())){
+						dto.setGasId(gasBaseInfoService.selectIdByName(dto.getGasName()));
+					}
 				}
 				if ("交班人".equals(string[j])){
 					dto.setTourPerson(string[j + 1]);
 				}
 				if ("时间".equals(string[j])){
-					String[] split = string[j + 1].split("至");
-					dto.setStartTourTime(split[0]);
-					dto.setEndTourTime(split[1]);
+					if (!StringUtil.isEmpty(string[j + 1])){
+						String[] split = string[j + 1].split("至");
+						dto.setStartTourTime(split[0]);
+						dto.setEndTourTime(split[1]);
+					}
 				}
 				if ("总加液量(公斤)".equals(string[j])){
-					dto.setAddLiquidMeasureCount(string[j + 1]);
+					dto.setAddLiquidMeasureCount(Double.parseDouble(Objects.isNull(string[j + 1])?"0":string[j + 1]));
 				}
 				if ("总金额(元)".equals(string[j])){
-					dto.setAmountCount(string[j + 1]);
+					dto.setAmountCount(new BigDecimal(Objects.isNull(string[j + 1])?"0":string[j + 1]));
 				}
 				if ("应收金额(元)".equals(string[j])){
-					dto.setAmountReceivable(string[j + 1]);
+					dto.setAmountReceivable(new BigDecimal(Objects.isNull(string[j + 1])?"0":string[j + 1]));
 				}
 				if (i == 3 && "实收金额(元)".equals(string[j])){
-					dto.setFundsReceived(string[j + 1]);
+					dto.setFundsReceived(new BigDecimal(Objects.isNull(string[j + 1])?"0":string[j + 1]));
 				}
 				if (i == 3 && "总交易数(笔)".equals(string[j])){
-					dto.setDealCount(string[j + 1]);
+					dto.setDealCount(Integer.parseInt(Objects.isNull(string[j + 1])?"0":string[j + 1]));
 				}
 
 				if ("总充值额(元)".equals(string[j])){
-					dto.setTotalRechargeAmount(string[j + 1]);
+					dto.setTotalRechargeAmount(new BigDecimal(Objects.isNull(string[j + 1])?"0":string[j + 1]));
 				}
 				if ("应收额(元)".equals(string[j])){
-					dto.setAmountReceivableT(string[j + 1]);
+					dto.setAmountReceivableT(new BigDecimal(Objects.isNull(string[j + 1])?"0":string[j + 1]));
 				}
 				if (i == 5 && "实收金额(元)".equals(string[j])){
-					dto.setFundsReceivedT(string[j + 1]);
+					dto.setFundsReceivedT(new BigDecimal(Objects.isNull(string[j + 1])?"0":string[j + 1]));
 				}
 				if (i == 5 && "总交易数(笔)".equals(string[j])){
-					dto.setDealCountT(string[j + 1]);
+					dto.setDealCountT(Integer.parseInt(Objects.isNull(string[j + 1])?"0":string[j + 1]));
 				}
 				if ("扣款金额(元)".equals(string[j])){
-					dto.setAmountDeducted(string[j + 1]);
+					dto.setAmountDeducted(new BigDecimal(Objects.isNull(string[j + 1])?"0":string[j + 1]));
 				}
 
 				if (string[j].contains("收款渠道汇总")){
@@ -391,7 +394,7 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
 				}
 
 				if ("库存".equals(string[j])){
-					dto.setInventory(string[j + 1]);
+					dto.setInventory(Double.parseDouble(Objects.isNull(string[j + 1])?"0":string[j + 1]));
 				}
 				if ("班组长签字".equals(string[j])){
 					dto.setLeaderSignature(string[j + 1]);
@@ -436,7 +439,7 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
 	}
 
 	@Override
-	public PriceServerTrendDto allRevenueTrend(String type) {
+	public PriceServerTrendDto allRevenueTrend(String type, String gasId) {
 		PriceServerTrendDto priceServerTrendDto = new PriceServerTrendDto();
 		List<StoredValueDto> storedValueDtos;
 		YearMonth currentMonth = YearMonth.now();
@@ -446,19 +449,19 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
 			//本月
 			YearMonth nextMonth = YearMonth.now().plusMonths(1);
 			String firstDayOfNextMonth =  nextMonth.atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
-			storedValueDtos = baseMapper.allRevenueTrend(firstDayOfMonth, firstDayOfNextMonth);
+			storedValueDtos = baseMapper.allRevenueTrend(firstDayOfMonth, firstDayOfNextMonth, gasId);
 		}else if (type.equals("2")){
 			//上月
 			YearMonth lastMonth = YearMonth.now().minusMonths(1);
 			String firstDayOfLastMonth = lastMonth.atDay(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
-			storedValueDtos = baseMapper.allRevenueTrend(firstDayOfLastMonth, firstDayOfMonth);
+			storedValueDtos = baseMapper.allRevenueTrend(firstDayOfLastMonth, firstDayOfMonth, gasId);
 		}else {
 			//今年
 			LocalDate today = LocalDate.now();
 			String todayAsString = today.format(DateTimeFormatter.ISO_LOCAL_DATE);
 			LocalDate firstDayOfYear = LocalDate.of(LocalDate.now().getYear(), 1, 1);
 			String firstDayOfYearAsString = firstDayOfYear.format(DateTimeFormatter.ISO_LOCAL_DATE);
-			storedValueDtos = baseMapper.allRevenueTrendYear(firstDayOfYearAsString, todayAsString);
+			storedValueDtos = baseMapper.allRevenueTrendYear(firstDayOfYearAsString, todayAsString, gasId);
 		}
 		List<String> inventory = new ArrayList<>();
 		List<String> day = new ArrayList<>();
@@ -537,7 +540,11 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
 
 	@Override
 	public GasRevenueDto getGasRevenue(String gasId) {
-		return baseMapper.getGasRevenue(gasId);
+		GasRevenueDto gasRevenue = baseMapper.getGasRevenue(gasId);
+		if (StringUtil.isEmpty(gasId)){
+			gasRevenue.setGasName("加气站");
+		}
+		return gasRevenue;
 	}
 
 	private Double parseValues(String storedValue) {
@@ -545,6 +552,9 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
 		JSONArray jsonArray = new JSONArray(storedValue);
 		// 初始化总和
 		double sum = 0;
+		if(StringUtil.isEmpty(jsonArray.get(0).toString())){
+			return 0.0;
+		}
 		// 遍历JSONArray，将每个元素转换为double并累加
 		for (int i = 0; i < jsonArray.length(); i++) {
 			sum += jsonArray.getDouble(i);
@@ -583,4 +593,127 @@ public class GasTourReconcileServiceImpl extends ServiceImpl<GasTourReconcileMap
 		return trendDto;
 	}
 
+	@Override
+	public List<GasOperationDto> statusOfOperation() {
+		return baseMapper.statusOfOperation();
+	}
+
+	@Override
+	public GasTourReconcileExcelDto writeNoticeLongmen(MultipartFile file) {
+		Workbook workbook = new Workbook();
+		try {
+			// 创建一个临时文件
+			File tempFile = File.createTempFile("temp", ".xlsx");
+			tempFile.deleteOnExit(); // 确保程序结束后删除临时文件
+
+			// 将 MultipartFile 的内容写入临时文件
+			try (InputStream inputStream = file.getInputStream();
+				 OutputStream outputStream = new FileOutputStream(tempFile)) {
+				byte[] buffer = new byte[1024];
+				int bytesRead;
+				while ((bytesRead = inputStream.read(buffer)) != -1) {
+					outputStream.write(buffer, 0, bytesRead);
+				}
+			}
+			// 使用 Spire.XLS 加载临时文件
+			workbook.loadFromFile(tempFile.getAbsolutePath());
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		GasTourReconcileExcelDto dto = new GasTourReconcileExcelDto();
+
+		ArrayList<String[]> strings = FindAndReplaceData.readRows(workbook, 0);
+		for (int i = 0; i < strings.size(); i++) {
+			String[] string = strings.get(i);
+//			System.out.println("第一层数据打印：" + JSON.toJSONString(string));
+			for (int j = 0; j < string.length; j++) {
+				if (string[j].contains("站点")) {
+					String[] split = string[j].split("站点：");
+					dto.setGasName(split[1]);
+					if (!StringUtil.isEmpty(dto.getGasName())){
+						dto.setGasId(gasBaseInfoService.selectIdByName(dto.getGasName()));
+					}
+				}
+				if (string[j].contains("合计日期段：")){
+					if (!StringUtil.isEmpty(string[j])){
+						String[] split = string[j].split("-");
+						dto.setStartTourTime(split[0].split("：")[1]+"-"+split[1]+"-"+split[2]);
+						if (" ".contains(split[5])){
+							dto.setEndTourTime(split[3]+"-"+split[4]+"-"+split[5].split(" ")[0]);
+						}else {
+							dto.setEndTourTime(split[3]+"-"+split[4]+"-"+split[5]);
+						}
+					}
+				}
+				if ("合计".equals(string[j])){
+					dto.setAddLiquidMeasureCount(Double.parseDouble(Objects.isNull(string[j + 5])?"0":string[j+5]));
+					dto.setAmountCount(new BigDecimal(Objects.isNull(string[j + 7])?"0":string[j+7]));
+					BigDecimal bigDecimal = new BigDecimal(Objects.isNull(string[j + 9]) ? "0" : string[j + 9]);
+					dto.setAmountReceivable(bigDecimal);
+					dto.setAmountReceivableT(bigDecimal);
+					dto.setFundsReceivedT(bigDecimal);
+				}
+//				System.out.println("第二次数据打印：" + string[j]);
+			}
+		}
+		return dto;
+	}
+
+	@Override
+	public GasTourReconcileExcelDto writeNoticeYuanqu(MultipartFile file) {
+		Workbook workbook = new Workbook();
+		try {
+			// 创建一个临时文件
+			File tempFile = File.createTempFile("temp", ".xlsx");
+			tempFile.deleteOnExit(); // 确保程序结束后删除临时文件
+
+			// 将 MultipartFile 的内容写入临时文件
+			try (InputStream inputStream = file.getInputStream();
+				 OutputStream outputStream = new FileOutputStream(tempFile)) {
+				byte[] buffer = new byte[1024];
+				int bytesRead;
+				while ((bytesRead = inputStream.read(buffer)) != -1) {
+					outputStream.write(buffer, 0, bytesRead);
+				}
+			}
+			// 使用 Spire.XLS 加载临时文件
+			workbook.loadFromFile(tempFile.getAbsolutePath());
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		GasTourReconcileExcelDto dto = new GasTourReconcileExcelDto();
+
+		ArrayList<String[]> strings = FindAndReplaceData.readRows(workbook, 0);
+		for (int i = 0; i < strings.size(); i++) {
+			String[] string = strings.get(i);
+			int num = 0;
+//			System.out.println("第一层数据打印：" + JSON.toJSONString(string));
+			for (int j = 0; j < string.length; j++) {
+				if (string[j].contains("站名")) {
+					if (!StringUtil.isEmpty(string[j])){
+						String[] split = string[j].split(":");
+						dto.setGasName(split[1]);
+						dto.setGasId(gasBaseInfoService.selectIdByName(dto.getGasName()));
+					}
+				}
+				if (string[j].contains("至:")){
+					String[] split = string[j].split("至:");
+					dto.setStartTourTime(split[0]);
+					dto.setEndTourTime(split[1]);
+				}
+				if ("合计".equals(string[j])){
+					if (num == 1){
+						dto.setAddLiquidMeasureCount(Double.parseDouble(Objects.isNull(string[j + 1]) ? "0" :string[j+1]));
+						dto.setAmountCount(new BigDecimal(Objects.isNull(string[j + 2]) ? "0" :string[j+2]));
+						dto.setDealCount(Integer.parseInt(Objects.isNull(string[j + 3]) ? "0" :string[j+3]));
+					}
+					num++;
+				}
+//				System.out.println("第二次数据打印：" + string[j]);
+			}
+		}
+		return dto;
+	}
 }

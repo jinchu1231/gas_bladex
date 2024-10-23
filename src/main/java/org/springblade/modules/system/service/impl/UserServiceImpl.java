@@ -291,6 +291,10 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 		return this.update(Wrappers.<User>update().lambda().set(User::getPassword, DigestUtil.hex(newPassword)).eq(User::getId, userId));
 	}
 
+	public static void main(String[] args) {
+		System.out.println(DigestUtil.encrypt("JQZ@Password"));
+	}
+
 	@Override
 	public boolean removeUser(String userIds) {
 		if (Func.contains(Func.toLongArray(userIds), AuthUtil.getUserId())) {

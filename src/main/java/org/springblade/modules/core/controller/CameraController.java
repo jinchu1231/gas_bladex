@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
@@ -68,6 +69,9 @@ public class CameraController{
 	@PostMapping("/getAreaDeviceCameraList")
 	public R getAreaDeviceCameraList(@RequestBody @Valid CameraDto cameraDto)
 	{
+		if(StringUtils.isEmpty(cameraDto.getGasId())){
+			return null;
+		}
 		return cameraService.getAreaDeviceCameraList(cameraDto);
 	}
 }

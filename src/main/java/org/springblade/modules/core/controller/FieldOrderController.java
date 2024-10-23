@@ -150,25 +150,10 @@ public class FieldOrderController extends BladeController {
 		String random = Func.random(15, RandomType.INT);
 		fieldOrder.setOrderId(random);
 		fieldOrder.setOrderStatus(OrderEnum.CREATE_UNAUDITED.getValue());
-		/*if (Objects.isNull(fieldOrder.getPrice())){
-			return R.fail("请输入每吨单价");
-		}*/
 		if (fieldOrder.getNum() <= 0){
 			return R.fail("请输入正确数量");
 		}
-		/*if (StringUtils.isEmpty(fieldOrder.getOrderStatus())){
-			return R.fail("请输入订单状态");
-		}*/
-	/*	BigDecimal num = BigDecimal.valueOf(fieldOrder.getNum());
-		BigDecimal price = fieldOrder.getPrice();
-		fieldOrder.setTotalPrices(num.multiply(price));*/
-		fieldOrder.setPrice(BigDecimal.valueOf(0));
-		fieldOrder.setTotalPrices(BigDecimal.valueOf(0));
-		//todo 等订单做完对比后，再把多个附件上传这里修改一下
-		fieldOrder.setFileUrl("http://220.194.189.169:9000/bladex/upload/20240702/81d8e5ebbda41143ef9641fbda732cc4.docx");
-		if(!Objects.isNull(fieldOrder.getPdfUrlList()) && fieldOrder.getPdfUrlList().size() > 0){
-			fieldOrder.setFileUrl(JSON.toJSONString(fieldOrder.getPdfUrlList()));
-		}
+
 		fieldOrder.setGasName(gasBaseInfoService.selectNameByNumber(fieldOrder.getGasId()));
 		FieldOrderEntity entity = new FieldOrderEntity(fieldOrder);
 
@@ -178,10 +163,14 @@ public class FieldOrderController extends BladeController {
 		leave.setTaskUser(fieldOrder.getGasId());
 		leave.setStartTime(new Date());
 		leave.setEndTime(fieldOrder.getArrivalTime());
-		leave.setProcessDefinitionId("0efe54d9-5aaf-11ef-9f96-66554cf84848");
+		//每次发布新流程需要更新ProcessDefinitionId
+		//todo 需要关联最新流程id
+		leave.setProcessDefinitionId("2f32c194-8c37-11ef-a28e-66554cf84848");
 		leave.setArrivalTime(fieldOrder.getArrivalTime());
 		leave.setComment(fieldOrder.getComment());
 		leave.setContent(fieldOrder.getContent());
+		leave.setNum(fieldOrder.getNum());
+		leave.setOrderDate(fieldOrder.getOrderData());
 		leaveService.startProcess(leave);
 		return R.status(fieldOrderService.save(entity));
 	}
@@ -202,12 +191,11 @@ public class FieldOrderController extends BladeController {
 		if (StringUtils.isEmpty(fieldOrder.getOrderStatus())){
 			return R.fail("请输入订单状态");
 		}
-		fieldOrder.setPrice(BigDecimal.valueOf(0));
-		fieldOrder.setTotalPrices(BigDecimal.valueOf(0));
-		//todo 等订单做完对比后，再把多个附件上传这里修改一下
-		fieldOrder.setFileUrl("http://220.194.189.169:9000/bladex/upload/20240702/81d8e5ebbda41143ef9641fbda732cc4.docx");
-		if(!Objects.isNull(fieldOrder.getPdfUrlList()) && fieldOrder.getPdfUrlList().size() > 0){
-			fieldOrder.setFileUrl(JSON.toJSONString(fieldOrder.getPdfUrlList()));
+		if (null == fieldOrder.getPrice()){
+			fieldOrder.setPrice(BigDecimal.valueOf(0));
+		}
+		if (null == fieldOrder.getTotalPrices()){
+			fieldOrder.setTotalPrices(BigDecimal.valueOf(0));
 		}
 		FieldOrderEntity entity = new FieldOrderEntity(fieldOrder);
 		return R.status(fieldOrderService.updateById(entity));
@@ -242,9 +230,6 @@ public class FieldOrderController extends BladeController {
 	@ApiOperation(value = "导出数据", notes = "传入fieldOrder")
 	public void exportFieldOrder(@ApiIgnore @RequestParam Map<String, Object> fieldOrder, BladeUser bladeUser, HttpServletResponse response) {
 		QueryWrapper<FieldOrderEntity> queryWrapper = Condition.getQueryWrapper(fieldOrder, FieldOrderEntity.class);
-		//if (!AuthUtil.isAdministrator()) {
-		//	queryWrapper.lambda().eq(FieldOrder::getTenantId, bladeUser.getTenantId());
-		//}
 		queryWrapper.lambda().eq(FieldOrderEntity::getIsDeleted, BladeConstant.DB_NOT_DELETED);
 		List<FieldOrderExcel> list = fieldOrderService.exportFieldOrder(queryWrapper);
 		ExcelUtil.export(response, "液厂采购订单数据" + DateUtil.time(), "液厂采购订单数据表", list, FieldOrderExcel.class);
@@ -258,6 +243,16 @@ public class FieldOrderController extends BladeController {
 	@ApiOperation(value = "大屏-液厂订单情况统计图", notes = "传入液厂id")
 	public R orderTrend(@ApiParam(value = "液厂id", required = true) @RequestParam String id) {
 		return R.data(fieldOrderService.orderTrend(id));
+	}
+
+	/**
+	 * 修改订单pdfurl
+	 */
+	@PostMapping("/updatePdfurlById")
+	@ApiOperationSupport(order = 11)
+	@ApiOperation(value = "修改订单pdfurl", notes = "传入订单id")
+	public R updatePdfurlById(@Valid @RequestBody FieldOrderDto fieldOrder) {
+		return R.data(fieldOrderService.updatePdfurlById(fieldOrder));
 	}
 
 }

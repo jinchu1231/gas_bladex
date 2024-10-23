@@ -88,6 +88,7 @@ public class FluidFieldBaseInfo extends BaseEntity {
 	 * 液厂状态
 	 */
 	private Byte onOff;
+	private String onOffName;
 
 
 }

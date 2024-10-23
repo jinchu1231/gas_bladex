@@ -123,8 +123,8 @@ public class LeaveServiceImpl extends BaseServiceImpl<LeaveMapper, ProcessLeave>
 		String fluName = fluidFieldBaseInfoService.fluBaseInfo(detail.getLieferant());
 
 		String manage = "刘帅";
-		String incharge = "白瑞";
-		String generalmanager = "总经理";
+		String incharge = "冯燕根";
+		String generalmanager = "白瑞";
 		String chairman = "王永生";
 
 		//获取订单审核信息
@@ -231,7 +231,7 @@ public class LeaveServiceImpl extends BaseServiceImpl<LeaveMapper, ProcessLeave>
 			cell6.setFixedHeight(60);
 			table.addCell(cell6);
 
-			PdfPCell cell7 = new PdfPCell(new Paragraph("供货厂家：" + fluName, contentFont));
+			PdfPCell cell7 = new PdfPCell(new Paragraph("液厂：" + fluName, contentFont));
 			cell7.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell7.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell7.setFixedHeight(60);
@@ -261,17 +261,17 @@ public class LeaveServiceImpl extends BaseServiceImpl<LeaveMapper, ProcessLeave>
 			cell11.setFixedHeight(70);
 			table.addCell(cell11);
 
-			/*PdfPCell cell12 = new PdfPCell(new Paragraph("总经理审批", contentFont));
+			PdfPCell cell12 = new PdfPCell(new Paragraph("总经理审批", contentFont));
 			cell12.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell12.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell12.setFixedHeight(70);
-			table.addCell(cell12);*//*
+			table.addCell(cell12);
 
-			*//*PdfPCell cell13 = new PdfPCell(new Paragraph(generalmanager, contentFont));
+			PdfPCell cell13 = new PdfPCell(new Paragraph(generalmanager, contentFont));
 			cell13.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell13.setHorizontalAlignment(Element.ALIGN_CENTER);
 			cell13.setFixedHeight(70);
-			table.addCell(cell13);*/
+			table.addCell(cell13);
 
 			PdfPCell cell14 = new PdfPCell(new Paragraph("董事长审批", contentFont));
 			cell14.setVerticalAlignment(Element.ALIGN_MIDDLE);

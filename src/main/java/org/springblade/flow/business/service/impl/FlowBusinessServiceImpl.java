@@ -312,7 +312,7 @@ public class FlowBusinessServiceImpl implements FlowBusinessService {
 			flow.setCategory(processDefinition.getCategory());
 			flow.setCategoryName(FlowCache.getCategoryName(processDefinition.getCategory()));
 			flow.setProcessDefinitionId(processDefinition.getId());
-			flow.setProcessDefinitionName(processDefinition.getName());
+			flow.setProcessDefinitionName("液价审批");
 			flow.setProcessDefinitionKey(processDefinition.getKey());
 			flow.setProcessDefinitionVersion(processDefinition.getVersion());
 			flow.setProcessInstanceId(task.getProcessInstanceId());

@@ -16,5 +16,10 @@ public class CameraDto extends Query {
      */
     private String channelNo;
 
+	/**
+	 * 加气站Id
+	 */
+	private String gasId;
+
     public CameraDto(){}
 }

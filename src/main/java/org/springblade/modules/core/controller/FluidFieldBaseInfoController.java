@@ -13,6 +13,7 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.RandomType;
+import org.springblade.modules.core.dto.FluidFieldBaseInfoDto;
 import org.springblade.modules.core.entity.FluidFieldBaseInfo;
 import org.springblade.modules.core.entity.GasBaseInfo;
 import org.springblade.modules.core.entity.GasListedPriceEntity;
@@ -37,8 +38,8 @@ public class FluidFieldBaseInfoController extends BladeController {
 	@GetMapping("/detail")
 	@ApiOperationSupport(order = 1)
 	@ApiOperation(value = "详情", notes = "传入fieldOrder")
-	public R<FluidFieldBaseInfo> detail(String id) {
-		return R.data(fluidFieldBaseInfoService.getById(id));
+	public R<FluidFieldBaseInfoDto> detail(String id) {
+		return R.data(fluidFieldBaseInfoService.selectInfoById(id));
 	}
 
     /**
@@ -88,7 +89,7 @@ public class FluidFieldBaseInfoController extends BladeController {
 	@ApiOperationSupport(order = 4)
 	@ApiOperation(value = "修改", notes = "传入listedPrice")
 	public R update(@Valid @RequestBody FluidFieldBaseInfo baseInfo) {
-		return R.status(fluidFieldBaseInfoService.updateById(baseInfo));
+		return R.status(fluidFieldBaseInfoService.updateBaseInfoById(baseInfo));
 	}
 
 	/**

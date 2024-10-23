@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.modules.core.dto.GasPatrolRecordDto;
 import org.springblade.modules.core.dto.patrol.RecordDto;
 import org.springblade.modules.core.entity.GasPatrolRecord;
@@ -90,6 +91,7 @@ public class GasPatrolRecordServiceImpl extends ServiceImpl<GasPatrolRecordMappe
 		gasPatrolRecord.setCreateTime(new Date());
 		gasPatrolRecord.setContent(JSON.toJSONString(gasPatrolRecords.getRecordDtoList()));
 		gasPatrolRecord.setFileUrl(gasPatrolRecords.getFileUrl());
+		gasPatrolRecord.setCreateUser(AuthUtil.getUserId().toString());
 		return gasPatrolRecordMapper.insertGasPatrolRecord(gasPatrolRecord);
     }
 

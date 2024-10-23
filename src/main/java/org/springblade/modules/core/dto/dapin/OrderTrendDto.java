@@ -12,4 +12,6 @@ public class OrderTrendDto {
 	private BigDecimal price;
 	/** 数量(吨) */
 	private int num;
+	/** 时间 */
+	private String orderDate;
 }

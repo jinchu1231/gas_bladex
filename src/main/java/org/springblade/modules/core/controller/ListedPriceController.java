@@ -183,4 +183,14 @@ public class ListedPriceController extends BladeController {
 		return R.data(listedPriceService.priceServerTrend(id));
 	}
 
+	/**
+	 * 后台-液厂报价数据
+	 */
+	@PostMapping("/selectListedPriceList")
+	@ApiOperationSupport(order = 3)
+	@ApiOperation(value = "液厂报价信息", notes = "")
+	public R<List<ListedPriceVO>> selectListedPriceList() {
+		List<ListedPriceVO> lists = listedPriceService.selectListedPriceList();
+		return R.data(lists);
+	}
 }

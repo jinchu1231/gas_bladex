@@ -16,12 +16,14 @@
  */
 package org.springblade.modules.core.service.impl;
 
+import com.alibaba.fastjson2.JSON;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springblade.common.cache.DictCache;
 import org.springblade.common.enums.DictEnum;
 import org.springblade.common.enums.OrderEnum;
+import org.springblade.modules.core.dto.FieldOrderDto;
 import org.springblade.modules.core.dto.dapin.OrderTrendDto;
 import org.springblade.modules.core.entity.FieldOrderEntity;
 import org.springblade.modules.core.vo.FieldOrderVO;
@@ -89,6 +91,11 @@ public class FieldOrderServiceImpl extends BaseServiceImpl<FieldOrderMapper, Fie
 	@Override
 	public FieldOrderVO getOrderById(String id) {
 		return baseMapper.getOrderById(id);
+	}
+
+	@Override
+	public boolean updatePdfurlById(FieldOrderDto fieldOrder) {
+		return baseMapper.updatePdfurlById(fieldOrder.getId(),JSON.toJSONString(fieldOrder.getPdfUrlList())) > 0;
 	}
 
 }

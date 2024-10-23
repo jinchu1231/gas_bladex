@@ -17,6 +17,7 @@
 package org.springblade.modules.core.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import org.springblade.modules.core.dto.FieldOrderDto;
 import org.springblade.modules.core.dto.dapin.OrderTrendDto;
 import org.springblade.modules.core.entity.FieldOrderEntity;
 import org.springblade.modules.core.vo.FieldOrderVO;
@@ -57,4 +58,6 @@ public interface IFieldOrderService extends BaseService<FieldOrderEntity> {
 	List<OrderTrendDto> orderTrend(String id);
 
 	FieldOrderVO getOrderById(String id);
+
+	boolean updatePdfurlById(FieldOrderDto fieldOrder);
 }

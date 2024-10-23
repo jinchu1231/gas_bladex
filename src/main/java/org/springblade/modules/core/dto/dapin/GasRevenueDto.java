@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class GasRevenueDto {
+	private String gasName;
 	/** 日均 */
 	private double averageDaily;
 	/** 最高 */

@@ -45,6 +45,12 @@ public interface ListedPriceMapper extends BaseMapper<ListedPriceEntity> {
 	 */
 	List<ListedPriceVO> selectListedPricePage(IPage page,@Param("vo") ListedPriceVO listedPrice);
 
+	/**
+	 * 最新液厂报价list
+	 * @return list
+	 */
+	List<ListedPriceVO> selectListedPriceList();
+
 
 	/**
 	 * 获取导出数据

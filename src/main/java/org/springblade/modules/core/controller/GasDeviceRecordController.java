@@ -10,7 +10,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
+import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.core.tool.api.R;
+import org.springblade.modules.core.constant.GasManageConstant;
 import org.springblade.modules.core.dto.GasDeviceRecordDto;
 import org.springblade.modules.core.entity.GasDeviceRecord;
 import org.springblade.modules.core.service.GasBaseInfoService;
@@ -59,6 +61,9 @@ public class GasDeviceRecordController {
      */
     @PostMapping("/list")
     public R<IPage<GasDeviceRecord>> list(@RequestBody GasDeviceRecord gasDeviceRecord,@RequestBody Query query) {
+		if(!GasManageConstant.MANAGE_USERS.contains(AuthUtil.getUserName())) {
+			gasDeviceRecord.setCreateUser(AuthUtil.getUserId().toString());
+		}
 		IPage<GasDeviceRecord> gasDeviceRecordIPage =
 			gasDeviceRecordService.selectGasDeviceRecordList(Condition.getPage(query), gasDeviceRecord);
 		return R.data(gasDeviceRecordIPage);

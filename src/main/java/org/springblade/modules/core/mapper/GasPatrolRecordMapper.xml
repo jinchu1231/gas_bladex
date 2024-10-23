@@ -53,36 +53,36 @@
     <insert id="insertGasPatrolRecord" parameterType="GasPatrolRecord" useGeneratedKeys="true" keyProperty="id">
         insert into gas_patrol_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="gasId != null">gas_id,</if>
-            <if test="gasName != null">gas_name,</if>
-            <if test="fillDate != null">fill_date,</if>
-            <if test="fillPerson != null">fill_person,</if>
-            <if test="content != null">content,</if>
-            <if test="principal != null">principal,</if>
-            <if test="abarbeitung != null">abarbeitung,</if>
-            <if test="reviewPerson != null">review_person,</if>
-            <if test="createUser != null">create_user,</if>
-            <if test="createTime != null">create_time,</if>
-            <if test="updateTime != null">update_time,</if>
-            <if test="updateUser != null">update_user,</if>
-            <if test="isDeleted != null">is_deleted,</if>
-            <if test="fileUrl != null">file_url,</if>
+            <if test="gas.gasId != null">gas_id,</if>
+            <if test="gas.gasName != null">gas_name,</if>
+            <if test="gas.fillDate != null">fill_date,</if>
+            <if test="gas.fillPerson != null">fill_person,</if>
+            <if test="gas.content != null">content,</if>
+            <if test="gas.principal != null">principal,</if>
+            <if test="gas.abarbeitung != null">abarbeitung,</if>
+            <if test="gas.reviewPerson != null">review_person,</if>
+            <if test="gas.createUser != null">create_user,</if>
+            <if test="gas.createTime != null">create_time,</if>
+            <if test="gas.updateTime != null">update_time,</if>
+            <if test="gas.updateUser != null">update_user,</if>
+            <if test="gas.isDeleted != null">is_deleted,</if>
+            <if test="gas.fileUrl != null">file_url,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="gasId != null">#{gasId},</if>
-            <if test="gasName != null">#{gasName},</if>
-            <if test="fillDate != null">#{fillDate},</if>
-            <if test="fillPerson != null">#{fillPerson},</if>
-            <if test="content != null">#{content},</if>
-            <if test="principal != null">#{principal},</if>
-            <if test="reviewPerson != null">#{reviewPerson},</if>
-            <if test="abarbeitung != null">#{abarbeitung},</if>
-            <if test="createUser != null">#{createUser},</if>
-            <if test="createTime != null">#{createTime},</if>
-            <if test="updateTime != null">#{updateTime},</if>
-            <if test="updateUser != null">#{updateUser},</if>
-            <if test="isDeleted != null">#{isDeleted},</if>
-            <if test="fileUrl != null">#{fileUrl},</if>
+            <if test="gas.gasId != null">#{gas.gasId},</if>
+            <if test="gas.gasName != null">#{gas.gasName},</if>
+            <if test="gas.fillDate != null">#{gas.fillDate},</if>
+            <if test="gas.fillPerson != null">#{gas.fillPerson},</if>
+            <if test="gas.content != null">#{gas.content},</if>
+            <if test="gas.principal != null">#{gas.principal},</if>
+            <if test="gas.reviewPerson != null">#{gas.reviewPerson},</if>
+            <if test="gas.abarbeitung != null">#{gas.abarbeitung},</if>
+            <if test="gas.createUser != null">#{gas.createUser},</if>
+            <if test="gas.createTime != null">#{gas.createTime},</if>
+            <if test="gas.updateTime != null">#{gas.updateTime},</if>
+            <if test="gas.updateUser != null">#{gas.updateUser},</if>
+            <if test="gas.isDeleted != null">#{gas.isDeleted},</if>
+            <if test="gas.fileUrl != null">#{gas.fileUrl},</if>
         </trim>
     </insert>
 

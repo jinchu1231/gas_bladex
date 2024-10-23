@@ -5,10 +5,12 @@ import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
+import org.springblade.core.secure.utils.AuthUtil;
 import org.springblade.modules.core.dto.GasTourReconcileDto;
 import org.springblade.modules.core.dto.tour.GasTourReconcileSaveDto;
 import org.springblade.modules.core.excel.GasTourReconcileExcelDto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -42,34 +44,34 @@ public class GasTourReconcile {
 	private String endTourTime;
 
     /** 总加液量(公斤) */
-    private String addLiquidMeasureCount;
+    private double addLiquidMeasureCount;
 
     /** 总金额(元) */
-    private String amountCount;
+    private BigDecimal amountCount;
 
     /** 应收金额(元) */
-    private String amountReceivable;
+    private BigDecimal amountReceivable;
 
     /** 实收金额(元) */
-    private String fundsReceived;
+    private BigDecimal fundsReceived;
 
     /** 总交易数(笔) */
-    private String dealCount;
+    private int dealCount;
 
 	/** 充值数据-总充值额(元)*/
-	private String totalRechargeAmount;
+	private BigDecimal totalRechargeAmount;
 
 	/** 充充值数据-应收额(元)*/
-	private String amountReceivableT;
+	private BigDecimal amountReceivableT;
 
 	/** 充值数据-实收金额(元)*/
-	private String fundsReceivedT;
+	private BigDecimal fundsReceivedT;
 
 	/** 充值数据-总交易数(笔)*/
-	private String dealCountT;
+	private int dealCountT;
 
 	/** 充值数据-扣款金额(元)*/
-	private String amountDeducted;
+	private BigDecimal amountDeducted;
 
     /** 收款渠道汇总 */
     private String collectionChannelSummary;
@@ -87,7 +89,7 @@ public class GasTourReconcile {
     private String unitPriceSummary;
 
     /** 库存 */
-    private String inventory;
+    private double inventory;
 
     /** 班组长签字 */
     private String leaderSignature;
@@ -168,7 +170,7 @@ public class GasTourReconcile {
 		this.inventory = dto.getInventory();
 		this.leaderSignature = dto.getLeaderSignature();
 		this.agentSignature = dto.getAgentSignature();
-		this.createUser = dto.getCreateUser();
+		this.createUser = AuthUtil.getUserId().toString();
 		this.updateUser = dto.getUpdateUser();
 		this.isDeleted = dto.getIsDeleted();
 	}

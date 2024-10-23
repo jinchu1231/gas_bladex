@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class TourManageSummary {
 	/** 库存 */
-	private String inventory;
+	private double inventory;
 
 	/** 班组长签字 */
 	private String leaderSignature;

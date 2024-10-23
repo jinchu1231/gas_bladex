@@ -26,4 +26,8 @@ public interface FluidFieldBaseInfoService extends BaseService<FluidFieldBaseInf
 	String fluBaseInfo(String fluId);
 
 	List<FluidFieldBaseInfo> getFluList();
+
+	boolean updateBaseInfoById(FluidFieldBaseInfo baseInfo);
+
+	FluidFieldBaseInfoDto selectInfoById(String id);
 }

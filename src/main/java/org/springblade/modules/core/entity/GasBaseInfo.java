@@ -25,6 +25,7 @@ import org.springblade.core.tenant.mp.TenantEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -129,6 +130,13 @@ public class GasBaseInfo extends BaseEntity {
      */
     @ApiModelProperty(value = "行车路线方向")
     private String drivingRoute;
+
+    /**
+     * 气价
+     */
+    @ApiModelProperty(value = "气价")
+    private String currentGasPrice;
+
     /**
      * 是否出省口加气站
      */
@@ -150,14 +158,14 @@ public class GasBaseInfo extends BaseEntity {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(shape=JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "建成时间")
-    private LocalDate completionTime;
+    private LocalDateTime completionTime;
     /**
      * 初始运营时间
      */
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "初始运营时间")
-    private LocalDate initialOperationTime;
+    private LocalDateTime initialOperationTime;
     /**
      * 经度
      */
@@ -211,9 +219,9 @@ public class GasBaseInfo extends BaseEntity {
 	@TableLogic
     private Integer isDeleted;
     /**
-     * 状态(0-待建;1-建设中;2-已建成待运行;3-已运行;4-废弃)
+     * 状态(0-待建;1-在建;2-已建未开通;3-已开通运营;4-废弃)
      */
-    @ApiModelProperty(value = "状态(0-待建;1-建设中;2-已建成待运行;3-已运行;4-废弃)")
+    @ApiModelProperty(value = "状态(0-待建;1-在建;2-已建未开通;3-已开通运营;4-废弃)")
     private Integer status;
     private String statusName;
 	/**

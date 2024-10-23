@@ -11,17 +11,17 @@ public enum GasStatusEnum {
 	 */
 	TO_BE_BUILT("待建",0),
 	/**
-	 * 建设中
+	 * 在建
 	 */
-	IN_CONSTRUCTION("建设中",1),
+	IN_CONSTRUCTION("在建",1),
 	/**
-	 * 已建成待运行
+	 * 已建未开通
 	 */
-	TO_BE_RUN("已建成待运行",2),
+	TO_BE_RUN("已建未开通",2),
 	/**
-	 * 已运行
+	 * 已开通运营
 	 */
-	RUN("已运行",3),
+	RUN("已开通运营",3),
 	/**
 	 * 废弃
 	 */
